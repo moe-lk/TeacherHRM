@@ -19,10 +19,9 @@ $NICUser = $id;
                         </td>
                         <td>
                             <select id="medium1" name="medium1" onchange="changetxt()">
-                                <option value="volvo">Volvo</option>
-                                <option value="saab">Saab</option>
-                                <option value="fiat">Fiat</option>
-                                <option value="audi">Audi</option>
+                                <option value="1">Sinhala</option>
+                                <option value="2">English</option>
+                                <option value="3">Tamil</option>
                             </select>
                         </td>
                     </tr>
@@ -30,10 +29,10 @@ $NICUser = $id;
                         <td>Grade Span</td>
                         <td>
                             <select id="grade1" name="grade1">
-                                <option value="volvo">Volvo</option>
-                                <option value="saab">Saab</option>
-                                <option value="fiat">Fiat</option>
-                                <option value="audi">Audi</option>
+                                <option value="g1">1-5</option>
+                                <option value="g2">5-11</option>
+                                <option value="g3">10/11</option>
+                                <option value="g4">12/13</option>
                             </select>
                         </td>
                     </tr>
@@ -65,10 +64,10 @@ $NICUser = $id;
         var medium = document.getElementById("medium1").value
         var subject = document.getElementById("subject1").value
         var grade = document.getElementById("grade1").value
-        // console.log(medium)
-        // console.log(subject)
-        // console.log(grade)
+        console.log(medium)
+        console.log(subject)
+        console.log(grade)
 
-        
+
     }
 </script>
