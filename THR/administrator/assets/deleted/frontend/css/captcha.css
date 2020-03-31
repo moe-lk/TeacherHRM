@@ -1,0 +1,50 @@
+@charset "utf-8";
+/* CSS Document */
+
+.fieldBoxOutcaptch {
+	/*width: 100%;*/
+	height: auto;
+	float: left;
+	margin-bottom: 10px;
+	text-transform:none !important;
+	
+	}
+	
+	.cptchText {
+		
+    float: left;
+    height: 38px;
+    width: 160px;
+    margin-left: 5px;
+	text-align:center;
+	
+	background-image: url(../images/cptcha-bg.png);
+	font-size:25px;
+	font-weight:bold;
+	border:1px solid #666666;
+    }
+	
+	.fieldBoxOutcaptch {
+	/*width: 100%;*/
+	height: auto;
+	float: left;
+	margin-bottom: 10px;
+	text-transform:none !important;
+	
+	}
+	
+	.innerTextBoxFieldcap {
+	font-family: 'Roboto', sans-serif;
+	box-shadow: inset 0px 0px 7px 2px #C9C9C9,5px 5px 5px -28px #242424;
+	-webkit-box-shadow: inset 0px 0px 7px 2px #C9C9C9,5px 5px 5px -28px #242424;
+	-moz-box-shadow: inset 0px 0px 7px 2px #C9C9C9,5px 5px 5px -28px #242424;
+	-o-box-shadow: inset 0px 0px 7px 2px #C9C9C9 5px 5px -28px #242424;
+	background-color: #FFF;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	border: 1px solid #b9b9b9;
+	color: #4b4b4b;
+	padding-left: 10px;
+		
+}

@@ -1,0 +1,120 @@
+@charset "utf-8";
+/* CSS Document */
+
+@font-face {
+	font-family: 'Conv_iskpota';
+	src: url('fonts/iskpota.eot');
+	src: local('☺'), url('../font/sinhala/iskpota.woff') format('woff'), url('fonts/iskpota.ttf') format('truetype'), url('fonts/iskpota.svg') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+.aboutus_button{
+	font-family: 'Conv_iskpota';
+	font-size:22px;
+	color:#15b3b8;
+	text-transform:uppercase;
+	text-align:center;
+	
+}
+
+
+.founder_text{
+	text-align:justify;
+	font-family: 'Conv_iskpota';
+	font-size:16px;
+	color:#ffffff;
+	
+}
+
+
+.pro_name{
+	font-size:32px;
+	font-family: 'Conv_iskpota';
+}
+
+.pro_post{
+	font-size:18px;
+	font-family: 'Conv_iskpota';
+	padding-bottom:2px;
+}
+
+.tittle_inner{
+	font-family: 'Conv_iskpota';
+	font-size:18px;
+	color:#282929;
+	text-transform:uppercase;
+	font-weight: bold;
+}
+
+.container_text{
+	font-family: 'Conv_iskpota';
+	font-size:14px;
+	color:#535455;
+	text-align:justify;
+	line-height:20px;
+	
+}
+
+
+.container_text ul li{
+	font-family: 'Conv_iskpota';
+	font-size:14px;
+	color:#535455;
+	text-align:justify;
+	line-height:20px;
+}
+
+
+
+.vision{
+	font-family: 'Conv_iskpota';
+	font-size:26px;
+	color:#0076c0;
+	text-align:center;
+	text-transform:uppercase;
+}
+
+
+.vision_text{
+	font-family: 'Conv_iskpota';
+	font-size:15px;
+	color:#373737;
+	text-align:center;
+}
+
+
+.mission{
+	font-family: 'Conv_iskpota';
+	font-size:26px;
+	color:#0076c0;
+	text-align:center;
+	text-transform:uppercase;
+}
+
+
+.mission_text{
+	font-family: 'Conv_iskpota';
+	font-size:15px;
+	color:#373737;
+	text-align:center;
+}
+
+
+.objectives_tittle{
+	font-family: 'Conv_iskpota';
+	font-size:26px;
+	color:#0076c0;
+	text-align:center;
+	text-transform:uppercase;
+	
+}
+
+
+.objectives_text ul li{
+	text-align:justify;
+	font-family: 'Conv_iskpota';
+	font-size:14px;
+	color:#4e4e4f;
+}
+

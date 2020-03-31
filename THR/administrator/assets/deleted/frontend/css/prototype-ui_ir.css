@@ -1,0 +1,82 @@
+/* Horizontal Carousel */
+#horizontal_carousel {
+	width: 830px;
+	height:75px;
+	padding: 10px;
+	/*background: #f6f6f6;
+	border: solid 1px #e9e9e9;*/
+	float: left;
+	margin-left:75px;
+}
+
+#horizontal_carousel .container {
+	width: 640px;
+	overflow: hidden;
+	float: left;
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+
+#horizontal_carousel ul {
+  margin: 0;
+  padding:0;
+  /*  width:830px;*/
+  width:100000px;
+  position: relative;
+  top: 0;
+  height: 75px;
+}                      
+
+#horizontal_carousel ul li {
+  width: 80px;
+  height: 75px;
+  text-align: center; 
+  list-style:none;   
+  float:left;
+}
+
+
+#horizontal_carousel ul li:last {
+	display:block;
+}
+
+#horizontal_carousel .buttons{
+	display:block;
+ 	clear:both;
+}
+#horizontal_carousel .previous_button {
+  float:left;  
+  width: 80px;
+  height: 75px;
+  background: url(../images/newsimg/but_prev.png) no-repeat;
+  z-index: 100;
+  cursor: pointer;
+
+}
+
+#horizontal_carousel .previous_button_over {
+  background: url(../images/newsimg/but_prev_hover.png) no-repeat;}
+
+#horizontal_carousel .previous_button_disabled {
+  background: url(../images/newsimg/but_prev_dis.png) no-repeat;
+  cursor: default;
+}
+
+#horizontal_carousel .next_button {
+  float:right;  
+  width: 80px;
+  height: 75px;
+  background: url(../images/newsimg/but_next.png) no-repeat;
+  z-index: 100;
+  cursor: pointer;
+}
+
+#horizontal_carousel .next_button_over {
+  background: url(../images/newsimg/but_next_hover.png) no-repeat;
+}
+
+#horizontal_carousel .next_button_disabled {
+  background: url(../images/newsimg/but_next_dis.png) no-repeat;
+  cursor: default;
+}

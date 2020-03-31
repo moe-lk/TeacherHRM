@@ -1,0 +1,2 @@
+1.Refer index.php for single and bulk SMS send sample code. Change recipient mobile number.
+2.Refer sms.php to configure custom SOPA header and department code. 

@@ -1,0 +1,66 @@
+@charset "utf-8";
+/* CSS Document */
+
+.grid_search_container{
+	width:189px;
+	height:30px;
+	float:right;
+	background:url(../images/fixed_images/grid_search_back.png) no-repeat;
+	}
+	
+#grid_search_input{
+	width:140px;
+	height:20px;
+	padding:5px;
+	float:left;
+	font-size:12px;
+	line-height:20px;
+	color:#666666;
+	border:none;
+	background:none;
+	}
+	
+#grid_search_button{
+	width:30px;
+	height:30px;
+	float:right;
+	border:none;
+	background:url(../images/fixed_images/grid_search_button.png) no-repeat;
+	cursor:pointer;
+	}
+
+#alphabet_sort{
+	width:588px;
+	height:20px;
+	float:right;
+	}
+	
+#alphabet_sort ul{
+	margin:0;
+	padding:0;
+	list-style:none;
+	}
+	
+#alphabet_sort ul li{
+	display:block;
+	margin:0;
+	padding:3px;
+	float:right;
+	color:#2a619b;
+	font-size:12px;
+	font-weight:bold;
+	line-height:12px;
+	cursor:pointer;
+	margin-left:5px;
+	border:1px solid #CCC;
+	}
+	
+#alphabet_sort ul li.active{
+	color:#FFF;
+	background:#2a619b;
+	}
+	
+#alphabet_sort ul li:hover{
+	color:#FFF;
+	background:#2a619b;
+	}

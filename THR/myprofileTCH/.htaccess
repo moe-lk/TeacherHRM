@@ -1,0 +1,12 @@
+RewriteEngine on
+Options +FollowSymLinks
+#php_value max_execution_time -1
+#RewriteBase ~/
+#RewriteBase /~tgorg/amanamotor
+
+RewriteRule ^(.*)-(.*)-(.*)-(.*)-(.*)-(.*)-(.*)\.html index_inner.php?pageid=$2&tpe=$6&id=$4&fm=$5&ttle=$1&curPage=$7&menu=$3
+RewriteRule ^(.*)-(.*)-(.*)-(.*)-(.*)-(.*).html index_inner.php?pageid=$2&tpe=$6&id=$4&fm=$5&ttle=$1&menu=$3
+RewriteRule ^(.*)-(.*)-(.*)-(.*)-(.*).html index_inner.php?pageid=$2&fm=$5&id=$4&ttle=$1&menu=$3
+RewriteRule ^(.*)-(.*)-(.*)-(.*).html index_inner.php?pageid=$2&ttle=$1&id=$4&menu=$3
+RewriteRule ^(.*)-(.*)-(.*).html index_inner.php?pageid=$2&ttle=$1&menu=$3
+RewriteRule ^(.*)-(.*)\.html index_inner.php?pageid=$2&ttle=$1

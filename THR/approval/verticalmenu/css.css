@@ -1,0 +1,12 @@
+@font-face {
+  font-family: 'Merienda';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Merienda'), local('Merienda-Regular_0_wt'), url(http://fonts.gstatic.com/s/merienda/v4/jzdtQ30m6V77-C5vjVpEXPesZW2xOQ-xsNqO47m55DA.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Merienda';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Merienda Bold'), local('Merienda-Bold'), url(http://fonts.gstatic.com/s/merienda/v4/mbcww3uvDIvQ0VClREeMdI4P5ICox8Kq3LLUNMylGO4.woff2) format('woff2');
+}

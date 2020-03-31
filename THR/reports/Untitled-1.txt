@@ -1,0 +1,95 @@
+SELECT DISTINCT
+TeacherMast.NIC,
+TeacherMast.SurnameWithInitials,
+CD_CensesNo.InstitutionName
+FROM
+TeacherMast
+join StaffServiceHistory on TeacherMast.NIC = StaffServiceHistory.NIC
+join CD_CensesNo on StaffServiceHistory.InstCode = CD_CensesNo.CenCode
+join CD_Positions on StaffServiceHistory.PositionCode = CD_Positions.Code
+JOIN CD_Districts ON CD_CensesNo.DistrictCode = CD_Districts.DistCode
+JOIN CD_Zone ON CD_CensesNo.ZoneCode = CD_Zone.CenCode
+JOIN CD_Division ON CD_CensesNo.DivisionCode = CD_Division.CenCode
+JOIN CD_Provinces ON CD_Districts.ProCode = CD_Provinces.ProCode
+LEFT JOIN CD_CensesCategory ON CD_CensesNo.SchoolType = CD_CensesCategory.ID
+WHERE
+  StaffServiceHistory.ServiceRecTypeCode IN (
+  'NA01', 'TR02')
+AND
+TeacherMast.NIC = '733041617V'
+
+SELECT
+TeacherMast.NIC,
+CD_CensesNo.InstitutionName,
+MAX(AppDate) AS x,
+DATEDIFF(year, Appdate, LEAD(Appdate,1) 
+OVER (
+	PARTITION BY TeacherMast.NIC
+	ORDER BY AppDate
+)) AS Duration
+FROM
+TeacherMast
+join StaffServiceHistory on TeacherMast.NIC = StaffServiceHistory.NIC
+join CD_CensesNo on StaffServiceHistory.InstCode = CD_CensesNo.CenCode
+join CD_Positions on StaffServiceHistory.PositionCode = CD_Positions.Code
+JOIN CD_Districts ON CD_CensesNo.DistrictCode = CD_Districts.DistCode
+JOIN CD_Zone ON CD_CensesNo.ZoneCode = CD_Zone.CenCode
+JOIN CD_Division ON CD_CensesNo.DivisionCode = CD_Division.CenCode
+JOIN CD_Provinces ON CD_Districts.ProCode = CD_Provinces.ProCode
+LEFT JOIN CD_CensesCategory ON CD_CensesNo.SchoolType = CD_CensesCategory.ID
+WHERE
+  StaffServiceHistory.ServiceRecTypeCode IN (
+  'NA01', 'TR02')
+AND
+TeacherMast.NIC = '196569510083'
+group by AppDate, TeacherMast.NIC,CD_CensesNo.InstitutionName
+
+SELECT
+TeacherMast.NIC,
+Max(AppDate) AS x
+FROM TeacherMast
+join StaffServiceHistory on TeacherMast.NIC = StaffServiceHistory.NIC 
+WHERE 
+StaffServiceHistory.ServiceRecTypeCode IN ('NA01', 'TR02')
+
+group by TeacherMast.NIC
+
+USE MOENational
+SELECT DISTINCT
+TeacherMast.NIC, StaffServiceHistory.AppDate
+FROM TeacherMast
+join StaffServiceHistory on TeacherMast.NIC = StaffServiceHistory.NIC 
+WHERE TeacherMast.NIC <> '' AND
+StaffServiceHistory.ServiceRecTypeCode IN ('NA01', 'TR02') AND 
+TeacherMast.NIC IN (SELECT TOP 1 NIC FROM StaffServiceHistory)
+
+
+this----->
+USE MOENational
+SELECT
+TeacherMast.NIC,
+Max(AppDate) 
+FROM
+TeacherMast
+join StaffServiceHistory on TeacherMast.NIC = StaffServiceHistory.NIC
+join CD_CensesNo on StaffServiceHistory.InstCode = CD_CensesNo.CenCode
+join CD_Positions on StaffServiceHistory.PositionCode = CD_Positions.Code
+JOIN CD_Districts ON CD_CensesNo.DistrictCode = CD_Districts.DistCode
+JOIN CD_Zone ON CD_CensesNo.ZoneCode = CD_Zone.CenCode
+JOIN CD_Division ON CD_CensesNo.DivisionCode = CD_Division.CenCode
+JOIN CD_Provinces ON CD_Districts.ProCode = CD_Provinces.ProCode
+LEFT JOIN CD_CensesCategory ON CD_CensesNo.SchoolType = CD_CensesCategory.ID
+WHERE
+StaffServiceHistory.ServiceRecTypeCode IN('NA01','TR02') AND TeacherMast.NIC = '711292551V'
+AND
+TeacherMast.NIC IN ( SELECT TeacherMast.NIC FROM TeacherMast 
+JOIN StaffServiceHistory on TeacherMast.CurServiceRef = StaffServiceHistory.ID
+join CD_CensesNo on StaffServiceHistory.InstCode = CD_CensesNo.CenCode
+join CD_Positions on StaffServiceHistory.PositionCode = CD_Positions.Code
+JOIN CD_Districts ON CD_CensesNo.DistrictCode = CD_Districts.DistCode
+JOIN CD_Zone ON CD_CensesNo.ZoneCode = CD_Zone.CenCode
+JOIN CD_Division ON CD_CensesNo.DivisionCode = CD_Division.CenCode
+JOIN CD_Provinces ON CD_Districts.ProCode = CD_Provinces.ProCode
+LEFT JOIN CD_CensesCategory ON CD_CensesNo.SchoolType = CD_CensesCategory.ID
+WHERE TeacherMast.NIC <> '')
+group by TeacherMast.NIC
