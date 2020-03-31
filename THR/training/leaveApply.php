@@ -1,0 +1,270 @@
+<link href="../cms/css/screen.css" rel="stylesheet" type="text/css" />
+<?php 
+include_once '../approveProcessfunction.php';
+
+$msg="";
+$tblNam="StaffLeaveDetail";
+$countTotal="SELECT        StaffLeaveDetail.ID, StaffLeaveDetail.NIC, CONVERT(varchar(20),StaffLeaveDetail.StartDate,121) AS FromDate,CONVERT(varchar(20),StaffLeaveDetail.EndDate,121) AS ToDate, StaffLeaveDetail.LastUpdate, StaffLeaveDetail.UpdateBy, 
+                         StaffLeaveDetail.Reference, StaffLeaveDetail.RecordLog, TeacherMast.SurnameWithInitials, CD_LeaveType.Description, CD_CensesNo.CenCode, 
+                         CD_CensesNo.InstitutionName
+FROM            StaffLeaveDetail INNER JOIN
+                         StaffServiceHistory ON StaffLeaveDetail.ServiceRecRef = StaffServiceHistory.ID INNER JOIN
+                         TeacherMast ON StaffLeaveDetail.NIC = TeacherMast.NIC INNER JOIN
+                         CD_LeaveType ON StaffLeaveDetail.LeaveType = CD_LeaveType.LeaveCode INNER JOIN
+                         CD_CensesNo ON StaffServiceHistory.InstCode = CD_CensesNo.CenCode
+						 where StaffLeaveDetail.NIC='$NICUser'";//$NICUser
+
+if(isset($_POST["FrmSubmit"])){	
+	//echo "hi";
+	$NIC=$_REQUEST['NIC'];
+	//echo "<br>";
+	$ServiceRecRef=$_REQUEST['ServiceRecRef'];
+	//echo "<br>";
+	$LeaveType=$_REQUEST['LeaveType'];	
+	//echo "<br>";
+	$StartDate=$_REQUEST['StartDate'];
+	//echo "<br>";
+	$EndDate=$_REQUEST['EndDate'];
+	//echo "<br>";
+	$LastUpdate=date('Y-m-d H:i:s');
+	//echo "<br>";
+	$UpdateBy=$NICUser;
+	$Reference="test";
+	$RecordLog="Insert";
+	//exit();
+	$queryGradeSave="INSERT INTO $tblNam
+           (NIC,ServiceRecRef,LeaveType,StartDate,EndDate,LastUpdate,UpdateBy,Reference,RecordLog)
+     VALUES
+           ('$NIC','$ServiceRecRef','$LeaveType','$StartDate','$EndDate','$LastUpdate','$UpdateBy','$Reference','$RecordLog')";
+		   
+	$countSql="SELECT * FROM $tblNam where NIC='$NIC' and StartDate='$StartDate' and EndDate='$EndDate'";
+	echo $isAvailable=$db->rowAvailable($countSql);
+	if($isAvailable==1){
+		$msg="Already exist.";
+	}else{ 
+		$newID=$db->runMsSqlQueryInsert($queryGradeSave);
+		//$msg="Successfully Updated.";
+		/* 
+		
+		$sqlMax = "SELECT MAX(ID) AS rRequestMaxID
+FROM $tblNam
+WHERE (NIC = N'$NIC') and (StartDate='$StartDate') and (EndDate='$EndDate')";
+
+        $resMax = $db->runMsSqlQuery($sqlMax);
+        $rowMax = sqlsrv_fetch_array($resMax, SQLSRV_FETCH_ASSOC);
+        $requestID = $rowMax['rRequestMaxID'];    */     
+        $processType = 'Leave';
+
+        $msg = getApproveList($processType, $newID);
+		
+		
+	}
+	//sqlsrv_query($queryGradeSave);
+}
+$TotaRows=$db->rowCount($countTotal);
+?>
+
+
+<div class="main_content_inner_block">
+    <form method="post" action="" name="frmSave" id="frmSave" enctype="multipart/form-data" onSubmit="return check_form(frmSave);">
+        <?php if($msg!=''){//if($_SESSION['success_update']!='' || $_SESSION['success_update']!=''){  ?>   
+   	  <div class="mcib_middle1">
+          <div class="mcib_middle_full">
+          <div class="form_error"><?php echo $msg; echo $_SESSION['success_update'];$_SESSION['success_update']="";?><?php echo $_SESSION['fail_update'];$_SESSION['fail_update']="";?></div>
+        </div>
+        <?php }?>
+        <table width="945" cellpadding="0" cellspacing="0">
+			  <tr>
+                  <td width="56%" valign="top"><table width="100%" cellspacing="2" cellpadding="2">
+                    <tr>
+                      <td>Teacher :</td>
+                      <td><?php //echo $NICUser ?><select class="select2a_n" id="NIC" name="NIC">
+                            <?php
+                            $sql = "SELECT NIC, SurnameWithInitials      
+  FROM TeacherMast
+  where NIC='$NICUser'";
+                            $stmt = $db->runMsSqlQuery($sql);
+                            while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                echo '<option value=' . $row['NIC'] . '>' . $row['SurnameWithInitials'] . '</option>';
+                            }
+                            ?>
+                      </select>
+                      <?php 
+					  $sql = "SELECT CurServiceRef FROM TeacherMast where NIC='$NICUser'";
+                            $stmt = $db->runMsSqlQuery($sql);
+                            while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                $CurResRef=$row['CurServiceRef'];
+                            }
+					  ?>
+                        <input type="hidden" name="ServiceRecRef" value="<?php echo $CurResRef; ?>" />
+                        </td>
+                    </tr>
+                    <tr>
+                      <td>Leave Type :</td>
+                      <td><select class="select5" id="LeaveType" name="LeaveType">
+                        <option value="">-Select-</option>
+                        <?php
+                            $sql = "SELECT LeaveCode,Description FROM CD_LeaveType order by Description";
+                            $stmt = $db->runMsSqlQuery($sql);
+                            while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                echo '<option value=' . $row['LeaveCode'] . '>' . $row['Description'] . '</option>';
+                            }
+                            ?>
+                      </select></td>
+                    </tr>
+                    <tr>
+                      <td>From Date :</td>
+                      <td>
+                        <table width="100%" cellspacing="0" cellpadding="0">
+                          <tr>
+                            <td width="13%"><input name="StartDate" type="text" class="input3new" id="StartDate" value="<?php echo $FromDate; ?>" size="10" style="height:20px; line-height:20px;" readonly/>
+                      </td>
+                            <td width="87%">
+                      <input name="f_trigger_1" type="image" id="f_trigger_1" src="../cms/images/calender_icon.gif" align="top" width="16" height="16"  />
+                  <script type="text/javascript">
+                            //2005-10-03 11:46:00 
+                                Calendar.setup({
+                                inputField     :    "StartDate",      // id of the input field
+                                ifFormat       :    "%Y-%m-%d",       // format of the input field
+                                showsTime      :    false,            // will display a time selector
+                                button         :    "f_trigger_1",   // trigger for the calendar (button ID)
+                                singleClick    :    true,           // double-click mode
+                                step           :    1                // show all years in drop-down boxes (instead of every other year as default)
+                            });
+                          </script>
+                </td>
+                          </tr>
+                      </table></td>
+                    </tr>
+                    <tr>
+                      <td>To Date :</td>
+                      <td><table width="100%" cellspacing="0" cellpadding="0">
+                          <tr>
+                            <td width="13%"><input name="EndDate" type="text" class="input3new" id="EndDate" value="<?php echo $ToDate; ?>" size="10" style="height:20px; line-height:20px;" readonly/>
+                      </td>
+                            <td width="87%">
+                      <input name="f_trigger_2" type="image" id="f_trigger_2" src="../cms/images/calender_icon.gif" align="top" width="16" height="16"  />
+                  <script type="text/javascript">
+                            //2005-10-03 11:46:00 
+                                Calendar.setup({
+                                inputField     :    "EndDate",      // id of the input field
+                                ifFormat       :    "%Y-%m-%d",       // format of the input field
+                                showsTime      :    false,            // will display a time selector
+                                button         :    "f_trigger_2",   // trigger for the calendar (button ID)
+                                singleClick    :    true,           // double-click mode
+                                step           :    1                // show all years in drop-down boxes (instead of every other year as default)
+                            });
+                          </script>
+                </td>
+                          </tr>
+                      </table></td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td><input name="FrmSubmit" type="submit" id="FrmSubmit" style="background-image: url(../cms/images/saveform.jpg); width:98px; height:26px; background-color:transparent; border:none;" value="" /></td>
+                    </tr>
+                    </table>
+        </td>
+        <td width="44%" valign="top"><table width="100%" cellspacing="2" cellpadding="2">
+                <tr>
+                  <td width="43%" align="left" valign="top">&nbsp;</td>
+                  <td width="57%">&nbsp;</td>
+                </tr>
+                <tr>
+                  <td colspan="2">&nbsp;</td>
+                </tr>
+          </table></td>
+          </tr>
+          <?php if($fm=='DAD'){?>
+                <tr>
+                  <td><?php echo $TotaRows ?> Record(s) found.</td>
+                  <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td colspan="2" bgcolor="#CCCCCC"><table width="100%" cellspacing="1" cellpadding="1">
+                      <tr>
+                        <td width="3%" height="25" align="center" bgcolor="#999999">#</td>
+                        <td width="24%" align="center" bgcolor="#999999">Work Place</td>
+                        <td width="24%" align="center" bgcolor="#999999">Leave Type</td>
+                        <td width="10%" align="center" bgcolor="#999999">From Date</td>
+                        <td width="9%" align="center" bgcolor="#999999">To Date</td>
+                        <td width="14%" align="center" bgcolor="#999999">Status</td>
+                        <td width="16%" align="center" bgcolor="#999999">Delete</td>
+                      </tr>
+                      <?php 
+					 /* $sqlList="SELECT        StaffLeaveDetail.ID, StaffLeaveDetail.NIC, CONVERT(varchar(20),StaffLeaveDetail.StartDate,121) AS FromDate,CONVERT(varchar(20),StaffLeaveDetail.EndDate,121) AS ToDate, StaffLeaveDetail.LastUpdate, StaffLeaveDetail.UpdateBy, 
+                         StaffLeaveDetail.Reference, StaffLeaveDetail.RecordLog, TeacherMast.SurnameWithInitials, CD_LeaveType.Description, CD_CensesNo.CenCode, 
+                         CD_CensesNo.InstitutionName
+FROM            StaffLeaveDetail INNER JOIN
+                         StaffServiceHistory ON StaffLeaveDetail.ServiceRecRef = StaffServiceHistory.ID INNER JOIN
+                         TeacherMast ON StaffLeaveDetail.NIC = TeacherMast.NIC INNER JOIN
+                         CD_LeaveType ON StaffLeaveDetail.LeaveType = CD_LeaveType.LeaveCode INNER JOIN
+                         CD_CensesNo ON StaffServiceHistory.InstCode = CD_CensesNo.CenCode
+						 where StaffLeaveDetail.NIC='640830646v'";*///$NICUser
+					  /*$sqlList="SELECT [ID]
+      ,[SchoolID]
+      ,[GradeID]
+  FROM [dbo].[TG_SchoolGradeMaster]
+  where SchoolID='SC05428'";*/
+  $i=1;
+   $stmt = $db->runMsSqlQuery($countTotal);
+                            while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+					  
+					  $Expr1=$row['ID'];
+					  
+					  ?>
+                      <tr>
+                        <td height="20" bgcolor="#FFFFFF"><?php echo $i++ ?></td>
+                        <td bgcolor="#FFFFFF"><?php echo $row['InstitutionName']; ?></td>
+                        <td bgcolor="#FFFFFF"><?php echo $row['Description']; ?></td>
+                        <td bgcolor="#FFFFFF"><?php echo $row['FromDate']; ?></td>
+                        <td bgcolor="#FFFFFF"><?php echo $row['ToDate']; ?></td>
+                        <td bgcolor="#FFFFFF">&nbsp;</td>
+                        <td bgcolor="#FFFFFF" align="center"><a href="javascript:aedWin('<?php echo $Expr1 ?>','D','Leave','<?php echo $tblNam ?>','<?php echo "$ttle-$pageid.html";?>')">Delete <?php //echo $Expr1 ?></a></td>
+                      </tr>
+                      <?php }?>
+                      <tr>
+                        <td bgcolor="#FFFFFF">&nbsp;</td>
+                        <td bgcolor="#FFFFFF">&nbsp;</td>
+                        <td bgcolor="#FFFFFF">&nbsp;</td>
+                        <td bgcolor="#FFFFFF">&nbsp;</td>
+                        <td bgcolor="#FFFFFF">&nbsp;</td>
+                        <td bgcolor="#FFFFFF">&nbsp;</td>
+                        <td bgcolor="#FFFFFF">&nbsp;</td>
+                      </tr>
+                    </table></td>
+          </tr>
+                <tr>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                </tr>
+                <?php }?>
+              </table>
+    </div>
+    
+    </form>
+</div><!--
+<div style="width:945px; width: auto; float: left;">
+    <div style="width: 150px; float: left; margin-left: 50px;">
+        School
+    </div>
+    <div style="width: 745px; float: left;">
+        <select name="teachingSubject" class="select2a_n" id="teachingSubject" style="width: auto;" onchange="">
+            <option value="">School Name</option>
+           
+        </select>
+    </div>
+    <div style="width: 150px; float: left;margin-left: 50px;">
+        Grade
+    </div>
+    <div style="width: 745px; float: left;">
+        <select name="teachingSubject" class="select2a_n" id="teachingSubject" style="width: auto;" onchange="">
+            <option value="">Grade</option>
+           
+        </select>
+    </div>
+    <div style="width: 200px; float: left;margin-left: 50px;">
+        
+    </div>
+    
+</div>-->

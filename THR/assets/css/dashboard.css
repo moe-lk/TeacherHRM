@@ -1,0 +1,225 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+
+
+
+
+.input2{
+    width:310px;
+    height:28px;
+    font-size:13px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border:1px #CCCCCC solid;}	
+	
+.input2_error{
+    width: 295px;
+    height: 28px;
+    font-size: 13px;
+    border: 1px #AA0000 solid;
+    background-image: url(../images/error.png);
+    background-repeat: no-repeat;
+    background-position: 5px 6px;
+    padding-left: 25px;
+    background-color:#EEE;
+}
+.input2_error_b{
+    width: 294px;
+    height: 28px;
+    font-size: 13px;
+    border: 1px #AA0000 solid;
+    background-image: url(../images/error.png);
+    background-repeat: no-repeat;
+    background-position: 5px 6px;
+    padding-left: 25px;
+    background-color:#EEE;
+}	
+/*.input2_error{
+    width:320px;
+    height:28px;
+    font-size:13px;
+    border:1px #F00 solid;}
+*/
+
+
+
+.select1{
+    float: left;
+    width:322px;
+    font-size: 13px;
+    line-height: 24px;
+    height:34px}
+
+/*.select1_error{
+    float: left;
+    width:322px;
+    font-size: 13px;
+    line-height: 24px;
+    height:34px;
+    border:1px #F00 solid;
+}
+*/
+
+
+
+.errormsg{
+    width:395px;
+    height:25px;
+    float:left;
+    font-size:14px;
+    color: #F00;
+}
+
+
+
+
+.error{
+    width:555px;
+    height:auto;
+    float:left;
+    margin-left:30px;
+    padding-bottom:5px;
+}
+
+
+
+.saveerror{
+    width:693px;
+    float:left;
+    height:auto;
+    padding-bottom:5px;
+    padding-left: 20px;
+    font-size:14px;
+    border: 1px solid #95B959;
+    background-color: #E1F0BD;
+    border-radius: 5px;
+}
+
+.fail{
+    width:693px;
+    float:left;
+    height:auto;
+    font-size:14px;
+    border: 1px solid #DC7273;
+    background-color: #E6C0C0;
+    border-radius: 5px;
+    padding-left: 20px;
+    padding-bottom: 3px;
+}
+
+
+
+
+.select2a_n_error{ 
+	
+	
+	 width: 220px;
+    height: 28px;
+    font-size: 13px;
+	font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+    border: 1px #AA0000 solid;
+    background-image: url(../images/error.png);
+    background-repeat: no-repeat;
+    background-position: 5px 6px;
+    padding-left: 25px;
+    background-color:#EEE;
+	
+	}
+
+.input3new_error{
+	width: 100px;
+	height: 28px;
+	font-size: 13px;
+	border: 1px #AA0000 solid;
+	background-image: url(../images/error.png);
+	background-repeat: no-repeat;
+	background-position: 5px 6px;
+	padding-left: 25px;
+	background-color:#EEE;
+}
+
+
+.textarea2_ero{
+    width: 295px;
+    height:190px;
+    font-size: 13px;
+    border: 1px #AA0000 solid;
+    background-image: url(../images/error.png);
+    background-repeat: no-repeat;
+    background-position: 5px 6px;
+    padding-left: 25px;
+    background-color:#EEE;
+    padding-top:10px;}
+
+.textarea1_ero{
+    width: 295px;
+    height: 70px;
+    font-size: 13px;
+    border: 1px #AA0000 solid;
+    background-image: url(../images/error.png);
+    background-repeat: no-repeat;
+    background-position: 5px 6px;
+    padding-left: 25px;
+    background-color:#EEE}
+
+.input3_ero{
+    width: 258px;
+    height: 28px;
+    font-size: 13px;
+    border: 1px #AA0000 solid;
+    background-image: url(../images/error.png);
+    background-repeat: no-repeat;
+    background-position: 5px 6px;
+    padding-left: 25px;
+    background-color:#EEE;}
+
+.select1_error{
+    width: 322px;
+    height: 28px;
+    font-size: 13px;
+    border: 1px #AA0000 solid;
+    background-image: url(../images/error.png);
+    background-repeat: no-repeat;
+    background-position: 5px 6px;
+    padding-left: 25px;
+    background-color:#EEE;
+}
+
+.img{
+    width:30px;
+    height:28px;
+    float:left;}
+
+
+.textarea2_property {
+    float: left;
+    width: 706px;
+    height: 200px;
+    font-weight:600;
+    font-size: 13px;
+    line-height: 24px;}
+
+.textarea2_ero_property{
+    width: 710px;
+    height:190px;
+    font-size: 13px;
+    border: 1px #AA0000 solid;
+    background-image: url(../images/error.png);
+    background-repeat: no-repeat;
+    background-position: 5px 6px;
+    padding-left: 25px;
+    background-color:#EEE;
+    padding-top:10px;}
+
+/*end dashboard*/
+.captch_div {
+    width:auto;
+    height: auto;
+    float: left;
+	margin-top: 5px;
+}
+.contact_data{
+	padding-bottom:5px;
+}

@@ -1,0 +1,84 @@
+@charset "utf-8";
+/* CSS Document */
+html {	
+	font-size: 10pt;
+}
+.container {   
+    width: 980px;
+    height: auto;
+    top: 2%;
+	margin-left:auto;
+	margin-right:auto;
+	margin-bottom: auto;
+    
+	background: #fff;
+}
+.containerHeader {
+    width: 980px;
+    height: 150px;
+	float:left; 
+	background: #fff;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .1);
+}
+.loginform{
+	width: 310px;
+	background-color:rgba(192,192,192,0.3);
+	border: 1px solid rgba(0, 0, 0, 0.3);
+	border-radius: 5px;
+	height:120px;
+	algin:center;
+	}
+	
+.divStyle{
+	margin-top:20px;
+	margin-bottom: 5px;
+	
+	margin-left:0px;
+	}
+
+.loginButton input[type=submit]{
+	float: right;
+    margin-right: 32px;
+    margin-top: 15px;
+    width: 90px;
+    height: 27px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #acd6ef; /*IE fallback*/
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#acd6ef), to(#6ec2e8));
+    background-image: -moz-linear-gradient(top left 90deg, #acd6ef 0%, #6ec2e8 100%);
+    background-image: linear-gradient(top left 90deg, #acd6ef 0%, #6ec2e8 100%);
+    border-radius: 30px;
+    border: 1px solid #66add6;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .3), inset 0 1px 0 rgba(255, 255, 255, .5);
+    cursor: pointer;
+	}
+	
+.regiDiv{
+	background-color:rgba(192,192,192,0.3);
+	border: 1px solid rgba(0, 0, 0, 0.3);
+	border-radius: 5px;
+	height:160px;
+	margin-top: 70px;
+	}
+	
+.labelU{
+	display: inline-block;
+	width: 130px;
+	font-weight: bold;
+	text-align:left;
+	}
+	
+.containerLogin {
+    width: 980px; 
+	background: #fff;
+	float:left;
+	margin-top:1px;
+	background: #fff;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .1);
+}

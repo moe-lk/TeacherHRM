@@ -1,0 +1,68 @@
+﻿ul#navlist { 
+font-family: sans-serif; 
+font-size:14px;
+}
+
+ul#navlist a
+{
+font-weight: bold;
+text-decoration: none;
+}
+
+ul#navlist, ul#navlist ul, ul#navlist li
+{
+margin: 0px;
+padding: 0px;
+list-style-type: none;
+}
+
+ul#navlist li { float: left; }
+
+ul#navlist li a
+{
+color: #ffffff;
+background-color: #2E66A1;
+padding: 10px;
+border-left:1px solid #1A1A1A;
+}
+
+ul#navlist li a:hover
+{
+color: #000;
+background-color: #003366;
+}
+
+ul#navlist li a.active
+{
+color: #ffffff;
+background-color: #003366;
+border-left:1px solid #1A1A1A;
+}
+
+ul#subnavlist { display: none; }
+ul#subnavlist li { float: none; }
+
+ul#subnavlist li a
+{
+padding: 0px;
+margin: 0px;
+}
+
+ul#navlist li:hover ul#subnavlist
+{
+display: block;
+position: absolute;
+font-size: 8pt;
+padding-top: 0px;
+z-index: 1000;
+}
+
+ul#navlist li:hover ul#subnavlist li a
+{
+display: block;
+width: 10em;
+border: none;
+padding: 2px;
+}
+
+ul#navlist li:hover ul#subnavlist li a:before { content: " >> "; }

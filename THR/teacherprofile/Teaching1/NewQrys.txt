@@ -1,0 +1,159 @@
+CREATE TABLE [MOENational].[dbo].[CD_AppSubCategory](
+	ID nchar(3) PRIMARY KEY,
+	AppoinmentName nvarchar(20) NOT NULL,
+	);
+
+CREATE TABLE [MOENational].[dbo].[CD_AppSubjects](
+	ID nchar(3) PRIMARY KEY,
+	Category nchar(3) NOT NULL,
+	SubjectName nvarchar(20) NOT NULL,
+	RecordLog varchar(MAX) NOT NULL
+	);
+
+CREATE TABLE [MOENational].[dbo].[CD_TeachSubCategory](
+	ID nchar(3) PRIMARY KEY,
+	CategoryName nchar(3) NOT NULL,
+	RecordLog varchar(MAX) NOT NULL
+	);
+
+CREATE TABLE [MOENational].[dbo].[CD_TeachSubjects](
+	ID nchar(3) PRIMARY KEY,
+	Category nchar(3) NOT NULL,
+	SubjectName nvarchar(20) NOT NULL,
+	RecordLog varchar(MAX) NOT NULL
+	);
+
+------------------------Pirivena-------------------------
+CREATE TABLE [MOENational].[dbo].[CD_PV_AppSubCategory](
+	ID nchar(3) PRIMARY KEY,
+	AppoinmentName nvarchar(20) NOT NULL,
+	);
+
+CREATE TABLE [MOENational].[dbo].[CD_PV_TeachSubCategory](
+	ID nchar(3) PRIMARY KEY,
+	CategoryName nchar(3) NOT NULL,
+	RecordLog varchar(MAX) NOT NULL
+	);
+	 
+CREATE TABLE [MOENational].[dbo].[CD_PV_TeachSubjects](
+	ID nchar(3) PRIMARY KEY,
+	Category nchar(3) NOT NULL,
+	SubjectName nvarchar(20) NOT NULL,
+	RecordLog varchar(MAX) NOT NULL
+	);
+
+--------------------------AppoinmentDetails--------------------
+CREATE TABLE [MOENational].[dbo].[CD_AppoinmentDetails](
+	ID nchar(3) PRIMARY KEY,
+	[NIC] [nchar](12) NOT NULL,
+	AppCategory nchar(3) NOT NULL,
+	AppSubject nvarchar(20) NOT NULL,
+	[Medium] [nvarchar](150) NULL,
+	[SchoolType] [nchar](2) NULL,
+	OtherSub nvarchar(20) NULL,
+	RecordLog varchar(MAX) NOT NULL
+	);
+
+--------------------------TeachingDetails--------------------
+CREATE TABLE [MOENational].[dbo].[CD_TeachingDetails](
+	ID nchar(3) PRIMARY KEY,
+	[NIC] [nchar](12) NOT NULL,
+	TchCategory nchar(3) NOT NULL,
+	TchSubject nvarchar(20) NOT NULL,
+	OtherSub nvarchar(20) NOT NULL,
+	[Medium] [nvarchar](150) NULL,
+	[GradeName] [nvarchar](150) NULL,
+	[SchoolType] [nchar](2) NULL,
+	RecordLog varchar(MAX) NOT NULL,
+	LastUpdate datetime NULL
+);
+
+--------------------------TeachingDetailsTemp--------------------
+CREATE TABLE [MOENational].[dbo].[TeachingDetailsTemp](
+	ID nchar(3) PRIMARY KEY,
+	[NIC] [nchar](12) NOT NULL,
+	TchCategory nchar(3) NOT NULL,
+	TchSubject nvarchar(20) NOT NULL,
+	OtherSub nvarchar(20) NOT NULL,
+	[Medium] [nvarchar](150) NULL,
+	[GradeName] [nvarchar](150) NULL,
+	[SchoolType] [nchar](2) NULL,
+	RecordLog varchar(MAX) NOT NULL,
+	LastUpdate datetime NULL,
+	[IsApproved] [char](10) NULL,
+	[ApproveDate] [datetime] NULL,
+	[ApprovedBy] [varchar](50) NULL
+);
+-----------------------------DynMenu---------------------------------
+USE [MOENational]
+GO
+
+INSERT INTO [dbo].[TG_DynMenu]
+           ([Icon]
+           ,[Title]
+           ,[PageID]
+           ,[Url]
+           ,[ParentID]
+           ,[IsParent]
+           ,[ShowMenu]
+           ,[ParentOrder]
+           ,[ChildOrder]
+           ,[FOrder]
+           ,[PHPPage]
+           ,[IsSubParent])
+     VALUES
+           (
+           NULL,
+           'Teaching1',
+		   26,
+		   'teaching-15--NIC.html',
+           15,
+           0,
+           1,
+           NULL,
+           NULL,
+           15.8,
+           'Teaching1/index.php',
+           0)
+GO
+
+--------------------------------Adding Appointment12 page--------------------------
+USE [MOENational]
+GO
+
+INSERT INTO [dbo].[TG_DynMenu]
+           ([Icon]
+           ,[Title]
+           ,[PageID]
+           ,[Url]
+           ,[ParentID]
+           ,[IsParent]
+           ,[ShowMenu]
+           ,[ParentOrder]
+           ,[ChildOrder]
+           ,[FOrder]
+           ,[PHPPage]
+           ,[IsSubParent])
+     VALUES
+           (NULL
+           ,'Appointment12'
+           ,'31'
+           ,'Appointment12-31--NIC.html'
+           ,9
+           ,0
+           ,'1'
+           ,NULL
+           ,NULL
+           ,9.25
+           ,'Appointment12.php'
+           ,'0')
+GO
+
+------------------------------AlterTable---------------------------
+ALTER TABLE CD_TeachingDetails
+ADD TchSubject2 nvarchar(20), OtherSub2 nvarchar(20),
+           Medium2 nvarchar(150),
+           GradeName2 nvarchar(150),
+		   TchSubject3 nvarchar(20), OtherSub3 nvarchar(20),
+           Medium3 nvarchar(150),
+           GradeName3 nvarchar(150);

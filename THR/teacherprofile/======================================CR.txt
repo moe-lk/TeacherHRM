@@ -1,0 +1,6 @@
+======================================CREATE SUBJECTS TABLE==================================================
+CREATE TABLE TG_TeachSubjects (
+	Id int IDENTITY(1,1) PRIMARY KEY,
+	Subject_name varchar(255) NOT NULL,
+	Subject_Type varchar(255)
+	)
