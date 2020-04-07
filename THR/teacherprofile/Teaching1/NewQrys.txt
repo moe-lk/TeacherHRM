@@ -55,35 +55,42 @@ CREATE TABLE [MOENational].[dbo].[CD_AppoinmentDetails](
 	);
 
 --------------------------TeachingDetails--------------------
-CREATE TABLE [MOENational].[dbo].[CD_TeachingDetails](
-	ID nchar(3) PRIMARY KEY,
+CREATE TABLE [dbo].[TempTeachingDetailsTemp](
+	[ID] [nchar](3) NOT NULL PRIMARY KEY,
 	[NIC] [nchar](12) NOT NULL,
-	TchCategory nchar(3) NOT NULL,
-	TchSubject nvarchar(20) NOT NULL,
-	OtherSub nvarchar(20) NOT NULL,
-	[Medium] [nvarchar](150) NULL,
-	[GradeName] [nvarchar](150) NULL,
+	[TchCategory] [nchar](3) NOT NULL,
+	[TchSubject1] [nvarchar](50) NOT NULL,
+	[TchSubject2] [nvarchar](50) NOT NULL,
+	[TchSubject3] [nvarchar](50) NULL,
+	[Medium1] [nvarchar](10) NULL,
+	[Medium2] [nvarchar](10) NULL,
+	[Medium3] [nvarchar](10) NULL,
+	[GradeCode1] [nvarchar](10) NULL,
+	[GradeCode2] [nvarchar](10) NULL,
+	[GradeCode3] [nvarchar](10) NULL,
 	[SchoolType] [nchar](2) NULL,
-	RecordLog varchar(MAX) NOT NULL,
-	LastUpdate datetime NULL
-);
+	[RecStatus] [int] NULL,
+	[RecordLog] [varchar](max) NOT NULL,
+	[LastUpdate] [datetime] NULL,
 
---------------------------TeachingDetailsTemp--------------------
-CREATE TABLE [MOENational].[dbo].[TeachingDetailsTemp](
-	ID nchar(3) PRIMARY KEY,
+--------------------------TempTeachingDetailsTemp--------------------
+CREATE TABLE [dbo].[TempTeachingDetailsTemp](
+	[ID] [nchar](3) NOT NULL PRIMARY KEY,
 	[NIC] [nchar](12) NOT NULL,
-	TchCategory nchar(3) NOT NULL,
-	TchSubject nvarchar(20) NOT NULL,
-	OtherSub nvarchar(20) NOT NULL,
-	[Medium] [nvarchar](150) NULL,
-	[GradeName] [nvarchar](150) NULL,
+	[TchCategory] [nchar](3) NOT NULL,
+	[TchSubject1] [nvarchar](50) NOT NULL,
+	[TchSubject2] [nvarchar](50) NOT NULL,
+	[TchSubject3] [nvarchar](50) NULL,
+	[Medium1] [nvarchar](10) NULL,
+	[Medium2] [nvarchar](10) NULL,
+	[Medium3] [nvarchar](10) NULL,
+	[GradeCode1] [nvarchar](10) NULL,
+	[GradeCode2] [nvarchar](10) NULL,
+	[GradeCode3] [nvarchar](10) NULL,
 	[SchoolType] [nchar](2) NULL,
-	RecordLog varchar(MAX) NOT NULL,
-	LastUpdate datetime NULL,
-	[IsApproved] [char](10) NULL,
-	[ApproveDate] [datetime] NULL,
-	[ApprovedBy] [varchar](50) NULL
-);
+	[RecStatus] [int] NULL,
+	[RecordLog] [varchar](max) NOT NULL,
+	[LastUpdate] [datetime] NULL,)
 -----------------------------DynMenu---------------------------------
 USE [MOENational]
 GO
