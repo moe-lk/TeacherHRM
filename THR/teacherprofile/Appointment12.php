@@ -63,7 +63,8 @@ WHERE        (TeacherMast.NIC = '$NICUser')";
         $success = "Your update request submitted successfully. Data will be displaying after the approvals.";
     }
 }
-
+// $dateNow = date("Y/m/d");
+// echo $dateNow;
 ?>
 <style>
     input[type=text],
@@ -90,6 +91,7 @@ WHERE        (TeacherMast.NIC = '$NICUser')";
 </style>
 <div class="main_content_inner_block">
     <div class="mcib_middle1">
+
         <form method="POST" name="AppFrmDetails" id="AppFrmDetails" action="AppSubmit.php">
             <table>
                 <tr>

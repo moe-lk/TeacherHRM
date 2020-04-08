@@ -135,16 +135,18 @@ if ($_REQUEST["SubTch3"] != 'Select') {
 } else {
     $SubTch3 = $_REQUEST["otherTch3"];
 }
-var_dump($SubTch3);
+// var_dump($SubTch3);
 $id = $_REQUEST["id"];
 // echo "gg" . $MedTch1;
 $today = date("Y/m/d");
 
-$SQL1 = "SELECT TOP(1) * FROM StaffServiceHistory FROM
+$SQL1 = "SELECT TOP(1)
+*
+FROM
 TeacherMast
-join StaffServiceHistory on TeacherMast.NIC = StaffServiceHistory.NIC
+join StaffServiceHistory on TeacherMast.CurServiceRef = StaffServiceHistory.ID
 join CD_CensesNo on StaffServiceHistory.InstCode = CD_CensesNo.CenCode 
-WHERE StaffServiceHistory.NIC = '$nicNO'";
+WHERE StaffServiceHistory.NIC = '$nicNO' ORDER BY StaffServiceHistory.AppDate DESC";
 
 $stmt1 = $db->runMsSqlQuery($SQL1);
 while ($row1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
@@ -184,11 +186,11 @@ VALUES(
 )";
 
 $stmt = $db->runMsSqlQuery($sql);
-sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC));
- 
-    echo ("<script LANGUAGE='JavaScript'>
+sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC);
+
+echo ("<script LANGUAGE='JavaScript'>
     window.alert('Succesfully Updated');
-    window.location.href='Location: teaching_subj-12--NIC.html';
+    window.location.href='teaching_subj-12--$nicNO.html';
     </script>");
     // // } else {
     // //     echo ("<script LANGUAGE='JavaScript'>

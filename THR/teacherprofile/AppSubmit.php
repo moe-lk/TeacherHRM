@@ -108,3 +108,72 @@ $dateNow = date("Y/m/d");
 
 var_dump($_REQUEST);
 $nicNO = $_REQUEST['id'];
+$AppCat = $_REQUEST["AppCat"];
+$MedApp = $_REQUEST["MedApp"];
+$SubApp = $_REQUEST["SubApp"];
+$otherSub = $_REQUEST["otherSub"];
+
+$SQL1 = "SELECT TOP(1)
+*
+FROM
+TeacherMast
+join StaffServiceHistory on TeacherMast.CurServiceRef = StaffServiceHistory.ID
+join CD_CensesNo on StaffServiceHistory.InstCode = CD_CensesNo.CenCode 
+WHERE StaffServiceHistory.NIC = '$nicNO' ORDER BY StaffServiceHistory.AppDate DESC";
+
+$stmt1 = $db->runMsSqlQuery($SQL1);
+while ($row1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
+    $SchType = $row['SchoolType'];
+}
+
+if ($SubApp != 'Select') {
+    $sql = "INSERT INTO [dbo].[TempAppoinmentDetails]
+([NIC]
+,[AppCategory]
+,[AppSubject]
+,[Medium]
+,[SchoolType]
+,[OtherSub]
+,[RecordStatus]
+,[LastUpdate]
+,[RecordLog])
+VALUES
+('$nicNO', 
+'$AppCat', 
+'$SubApp', 
+'$MedApp', 
+'$SchType',
+NULL, 
+'0',
+'$dateNow',
+'$NICUser')";
+} else {
+    $sql = "INSERT INTO [dbo].[TempAppoinmentDetails]
+([NIC]
+,[AppCategory]
+,[AppSubject]
+,[Medium]
+,[SchoolType]
+,[OtherSub]
+,[RecordStatus]
+,[LastUpdate]
+,[RecordLog])
+VALUES
+('$nicNO', 
+'$AppCat', 
+NULL, 
+'$MedApp', 
+'$SchType',
+'$otherSub', 
+'0',
+'$dateNow',
+'$NICUser')";
+}
+
+$stmt = $db->runMsSqlQuery($sql);
+sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC);
+
+echo ("<script LANGUAGE='JavaScript'>
+    window.alert('Succesfully Updated');
+    window.location.href='Appoint_subj-13--$nicNO.html';
+    </script>");
