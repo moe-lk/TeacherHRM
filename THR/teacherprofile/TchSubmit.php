@@ -150,7 +150,7 @@ WHERE StaffServiceHistory.NIC = '$nicNO' ORDER BY StaffServiceHistory.AppDate DE
 
 $stmt1 = $db->runMsSqlQuery($SQL1);
 while ($row1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
-    $SchType = $row['SchoolType'];
+    $SchType = Trim($row1['SchoolType']);
 }
 
 $sql = " INSERT INTO [dbo].[TempTeachingDetailsTemp]

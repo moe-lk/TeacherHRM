@@ -106,7 +106,7 @@ if ($pageid == 30) {
 }
 $dateNow = date("Y/m/d");
 
-var_dump($_REQUEST);
+// var_dump($_REQUEST);
 $nicNO = $_REQUEST['id'];
 $AppCat = $_REQUEST["AppCat"];
 $MedApp = $_REQUEST["MedApp"];
@@ -123,9 +123,10 @@ WHERE StaffServiceHistory.NIC = '$nicNO' ORDER BY StaffServiceHistory.AppDate DE
 
 $stmt1 = $db->runMsSqlQuery($SQL1);
 while ($row1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
-    $SchType = $row['SchoolType'];
+    $SchType = Trim($row1['SchoolType']);
+    // var_dump($SchType);
 }
-
+// var_dump($SchType);
 if ($SubApp != 'Select') {
     $sql = "INSERT INTO [dbo].[TempAppoinmentDetails]
 ([NIC]

@@ -63,15 +63,23 @@ WHERE        (TeacherMast.NIC = '$NICUser')";
         $success = "Your update request submitted successfully. Data will be displaying after the approvals.";
     }
 }
-
-?>
-<?php
 $pageid = $_GET["pageid"];
 $menu = $_GET['menu'];
 $tpe = $_GET['tpe'];
 $id = $_GET['id'];
 
+$SQL1 = "SELECT TOP(1) * FROM TeacherMast
+join StaffServiceHistory on TeacherMast.CurServiceRef = StaffServiceHistory.ID
+join CD_CensesNo on StaffServiceHistory.InstCode = CD_CensesNo.CenCode 
+WHERE StaffServiceHistory.NIC = '$id' ORDER BY StaffServiceHistory.AppDate DESC";
+
+$stmt1 = $db->runMsSqlQuery($SQL1);
+while ($row1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
+    $SchType = Trim($row1['SchoolType']);
+    // var_dump($SchType);
+}
 ?>
+
 <style>
     input[type=text],
     select {

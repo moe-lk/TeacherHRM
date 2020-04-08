@@ -63,6 +63,23 @@ WHERE        (TeacherMast.NIC = '$NICUser')";
         $success = "Your update request submitted successfully. Data will be displaying after the approvals.";
     }
 }
+$pageid = $_GET["pageid"];
+$menu = $_GET['menu'];
+$tpe = $_GET['tpe'];
+$id = $_GET['id'];
+
+$SQL1 = "SELECT TOP(1)
+*
+FROM
+TeacherMast
+join StaffServiceHistory on TeacherMast.CurServiceRef = StaffServiceHistory.ID
+join CD_CensesNo on StaffServiceHistory.InstCode = CD_CensesNo.CenCode 
+WHERE StaffServiceHistory.NIC = '$id' ORDER BY StaffServiceHistory.AppDate DESC";
+
+$stmt1 = $db->runMsSqlQuery($SQL1);
+while ($row1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
+    $SchType = Trim($row1['SchoolType']);
+}
 // $dateNow = date("Y/m/d");
 // echo $dateNow;
 ?>
@@ -91,7 +108,8 @@ WHERE        (TeacherMast.NIC = '$NICUser')";
 </style>
 <div class="main_content_inner_block">
     <div class="mcib_middle1">
-
+        <?php // var_dump($SchType); 
+        ?>
         <form method="POST" name="AppFrmDetails" id="AppFrmDetails" action="AppSubmit.php">
             <table>
                 <tr>
@@ -105,12 +123,22 @@ WHERE        (TeacherMast.NIC = '$NICUser')";
                         <select id="AppCat" name="AppCat">
                             <option>Select</option>
                             <?php // for apponment category combo box
-                            $sql = "SELECT ID, AppointmentName FROM CD_AppSubCategory WHERE ID IS NOT NULL";
-                            $stmt = $db->runMsSqlQuery($sql);
-                            while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-                                $AppId = $row['ID'];
-                                $AppName = $row['AppointmentName'];
-                                echo "<option value=" . $AppId . ">" . $AppId . "- " . $AppName . "</option>";
+                            if ($SchType == '6') {
+                                $sql = "SELECT ID, AppointmentName FROM CD_PV_AppSubCategory WHERE ID IS NOT NULL";
+                                $stmt = $db->runMsSqlQuery($sql);
+                                while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                    $AppId = $row['ID'];
+                                    $AppName = $row['AppointmentName'];
+                                    echo "<option value=" . $AppId . ">" . $AppId . "- " . $AppName . "</option>";
+                                }
+                            } else {
+                                $sql = "SELECT ID, AppointmentName FROM CD_AppSubCategory WHERE ID IS NOT NULL";
+                                $stmt = $db->runMsSqlQuery($sql);
+                                while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                    $AppId = $row['ID'];
+                                    $AppName = $row['AppointmentName'];
+                                    echo "<option value=" . $AppId . ">" . $AppId . "- " . $AppName . "</option>";
+                                }
                             }
                             ?>
 
@@ -143,12 +171,23 @@ WHERE        (TeacherMast.NIC = '$NICUser')";
                             <select id="SubApp" onchange="show_otherdiv()" name="SubApp">
                                 <option>Select</option>
                                 <?php
-                                if ($AppId != '') {
-                                    $sql = "SELECT * FROM CD_AppSubjects";
-                                    $stmt = $db->runMsSqlQuery($sql);
-                                    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-                                        $AppSubject = $row['SubjectName'];
-                                        echo "<option value=" . $AppSubject . ">" . $AppSubject . "</option>";
+                                if ($SchType == '6') {
+                                    if ($AppId != '') {
+                                        $sql = "SELECT * FROM CD_PV_TeachSubjects";
+                                        $stmt = $db->runMsSqlQuery($sql);
+                                        while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                            $AppSubject = $row['SubjectName'];
+                                            echo "<option value=" . $AppSubject . ">" . $AppSubject . "</option>";
+                                        }
+                                    }
+                                } else {
+                                    if ($AppId != '') {
+                                        $sql = "SELECT * FROM CD_AppSubjects";
+                                        $stmt = $db->runMsSqlQuery($sql);
+                                        while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                            $AppSubject = $row['SubjectName'];
+                                            echo "<option value=" . $AppSubject . ">" . $AppSubject . "</option>";
+                                        }
                                     }
                                 }
                                 ?>
