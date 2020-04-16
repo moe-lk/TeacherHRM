@@ -176,8 +176,9 @@ while ($row1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
                                         $sql = "SELECT * FROM CD_PV_TeachSubjects";
                                         $stmt = $db->runMsSqlQuery($sql);
                                         while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                            $AppSubjectID = $row['ID'];
                                             $AppSubject = $row['SubjectName'];
-                                            echo "<option value=" . $AppSubject . ">" . $AppSubject . "</option>";
+                                            echo "<option value=" . $AppSubjectID . ">" . $AppSubjectID . "-" . $AppSubject . "</option>";
                                         }
                                     }
                                 } else {
@@ -185,8 +186,9 @@ while ($row1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
                                         $sql = "SELECT * FROM CD_AppSubjects";
                                         $stmt = $db->runMsSqlQuery($sql);
                                         while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                            $AppSubjectID = $row['ID'];
                                             $AppSubject = $row['SubjectName'];
-                                            echo "<option value=" . $AppSubject . ">" . $AppSubject . "</option>";
+                                            echo "<option value=" . $AppSubjectID . ">" . $AppSubjectID . "-" . $AppSubject . "</option>";
                                         }
                                     }
                                 }
@@ -195,9 +197,11 @@ while ($row1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
                         </div>
                     </td>
                 </tr>
-
+                <!-- <tr>
+                    <td><button onclick="show_otherdiv()">Other</button></td>
+                </tr> -->
                 <tr>
-                    <div id="otherdiv">
+                    <div id="otherdiv" style="display: none">
                         <td>If Other Please Specify: </td>
                         <td>
 
@@ -220,7 +224,7 @@ while ($row1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
         </form>
     </div>
 </div>
-<!-- <script>
+<script>
     function show_otherdiv() {
         var x = document.getElementById("otherdiv");
 
@@ -231,7 +235,7 @@ while ($row1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
             x.style.display = "none";
         }
     }
-</script> -->
+</script>
 <?php
 $AppCat = $_POST["AppCat"];
 $MedApp = $_POST["MedApp"];

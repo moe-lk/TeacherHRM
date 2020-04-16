@@ -158,12 +158,23 @@ while ($row1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
                         <select id="SubTch1" name="SubTch1">
                             <option>Select</option>
                             <?php
-                            $sql = "SELECT * FROM CD_TeachSubjects";
-                            $stmt = $db->runMsSqlQuery($sql);
-                            while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-                                $TchSubject = $row['SubjectName'];
-                                $TchSubCode = $row['ID'];
-                                echo "<option value=" . $TchSubCode  . ">" . $TchSubject . "</option>";
+                            if ($SchType == '6') {
+
+                                $sql = "SELECT * FROM CD_PV_TeachSubjects";
+                                $stmt = $db->runMsSqlQuery($sql);
+                                while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                    $TchSubject = $row['SubjectName'];
+                                    $TchSubCode = $row['ID'];
+                                    echo "<option value=" . $TchSubCode  . ">" . $TchSubCode . " - " . $TchSubject . "</option>";
+                                }
+                            } else {
+                                $sql = "SELECT * FROM CD_TeachSubjects";
+                                $stmt = $db->runMsSqlQuery($sql);
+                                while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                    $TchSubject = $row['SubjectName'];
+                                    $TchSubCode = $row['ID'];
+                                    echo "<option value=" . $TchSubCode  . ">" . $TchSubCode . " - " . $TchSubject . "</option>";
+                                }
                             }
                             ?>
                         </select>
@@ -225,12 +236,23 @@ while ($row1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
                         <select id="SubTch2" name="SubTch2">
                             <option>Select</option>
                             <?php
-                            $sql = "SELECT * FROM CD_TeachSubjects";
-                            $stmt = $db->runMsSqlQuery($sql);
-                            while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-                                $TchSubject = $row['SubjectName'];
-                                $TchSubCode = $row['ID'];
-                                echo "<option value=" . $TchSubCode  . ">" . $TchSubject . "</option>";
+                            if ($SchType == '6') {
+
+                                $sql = "SELECT * FROM CD_PV_TeachSubjects";
+                                $stmt = $db->runMsSqlQuery($sql);
+                                while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                    $TchSubject = $row['SubjectName'];
+                                    $TchSubCode = $row['ID'];
+                                    echo "<option value=" . $TchSubCode  . ">" . $TchSubCode . " - " . $TchSubject . "</option>";
+                                }
+                            } else {
+                                $sql = "SELECT * FROM CD_TeachSubjects";
+                                $stmt = $db->runMsSqlQuery($sql);
+                                while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                    $TchSubject = $row['SubjectName'];
+                                    $TchSubCode = $row['ID'];
+                                    echo "<option value=" . $TchSubCode  . ">" . $TchSubCode . " - " . $TchSubject . "</option>";
+                                }
                             }
                             ?>
                         </select>
@@ -294,12 +316,23 @@ while ($row1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
                         <select id="SubTch3" name="SubTch3">
                             <option>Select</option>
                             <?php
-                            $sql = "SELECT * FROM CD_TeachSubjects";
-                            $stmt = $db->runMsSqlQuery($sql);
-                            while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-                                $TchSubject = $row['SubjectName'];
-                                $TchSubCode = $row['ID'];
-                                echo "<option value=" . $TchSubCode  . ">" . $TchSubject . "</option>";
+                            if ($SchType == '6') {
+
+                                $sql = "SELECT * FROM CD_PV_TeachSubjects";
+                                $stmt = $db->runMsSqlQuery($sql);
+                                while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                    $TchSubject = $row['SubjectName'];
+                                    $TchSubCode = $row['ID'];
+                                    echo "<option value=" . $TchSubCode  . ">" . $TchSubCode . " - " . $TchSubject . "</option>";
+                                }
+                            } else {
+                                $sql = "SELECT * FROM CD_TeachSubjects";
+                                $stmt = $db->runMsSqlQuery($sql);
+                                while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                    $TchSubject = $row['SubjectName'];
+                                    $TchSubCode = $row['ID'];
+                                    echo "<option value=" . $TchSubCode  . ">" . $TchSubCode . " - " . $TchSubject . "</option>";
+                                }
                             }
                             ?>
                         </select>

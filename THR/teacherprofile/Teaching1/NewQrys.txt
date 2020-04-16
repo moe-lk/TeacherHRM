@@ -124,6 +124,82 @@ INSERT INTO [dbo].[TG_DynMenu]
            0)
 GO
 
+INSERT INTO [dbo].[TG_DynMenu]
+           ([Icon]
+           ,[Title]
+           ,[PageID]
+           ,[Url]
+           ,[ParentID]
+           ,[IsParent]
+           ,[ShowMenu]
+           ,[ParentOrder]
+           ,[ChildOrder]
+           ,[FOrder]
+           ,[PHPPage]
+           ,[IsSubParent])
+     VALUES
+           (NULL
+           ,'Teaching Subjects'
+           ,'23'
+           ,'teachingSubjects-23.html'
+           ,27
+           ,0
+           ,'1'
+           ,NULL
+           ,NULL
+           ,2.20
+           ,'teachingSubjects.php'
+           ,'0')
+GO
+
+INSERT INTO [dbo].[TG_DynMenu]
+           ([Icon]
+           ,[Title]
+           ,[PageID]
+           ,[Url]
+           ,[ParentID]
+           ,[IsParent]
+           ,[ShowMenu]
+           ,[ParentOrder]
+           ,[ChildOrder]
+           ,[FOrder]
+           ,[PHPPage]
+           ,[IsSubParent])
+     VALUES
+           (NULL
+           ,'Appointment Subjects'
+           ,'24'
+           ,'appointmentSubjects-23.html'
+           ,27
+           ,0
+           ,'1'
+           ,NULL
+           ,NULL
+           ,2.21
+           ,'appointmentSubjects.php'
+           ,'0')
+GO
+
+--------------------------------TG_Privilage Insert-----------------------------------
+INSERT INTO [dbo].[TG_Privilage]
+           ([AccessRoleID]
+           ,[FormID]
+           ,[Privilage])
+     VALUES
+           (39
+           ,2073
+           ,'1,2,3')
+GO
+
+INSERT INTO [dbo].[TG_Privilage]
+           ([AccessRoleID]
+           ,[FormID]
+           ,[Privilage])
+     VALUES
+           (39
+           ,2074
+           ,'1,2,3')
+GO
 --------------------------------Adding Appointment12 page--------------------------
 USE [MOENational]
 GO
