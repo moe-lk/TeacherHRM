@@ -75,138 +75,130 @@ $ModuleFolder = $exUrl[$folderLocation];
 
 <!DOCTYPE html>
 <html>
-    <head>
 
-        <link rel="icon" 
-              type="image/png" 
-              href="images/favicon.png">
+<head>
+
+    <link rel="icon" type="image/png" href="images/favicon.png">
 
 
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
-        <title>National Education Management Information System | Ministry of Education Sri Lanka</title>
-        <!--<link href="css/emis.css" rel="stylesheet" type="text/css">-->
-        <link href="css/emis.css" rel="stylesheet" type="text/css">
-        <link href="../css/mStyle.css" rel="stylesheet" type="text/css" />
-        <link href="css/category_tab.css" rel="stylesheet" type="text/css" />
-        <!--<link href="../cms/css/main_menu1.css" rel="stylesheet" type="text/css" />-->
-        <link href="../cms/css/screen.css" rel="stylesheet" type="text/css" />
-        <link href="../cms/css/grid_style.css" rel="stylesheet" type="text/css" />
-        <link href="../cms/css/flexigrid.css" rel="stylesheet" type="text/css"/>
+    <title>National Education Management Information System | Ministry of Education Sri Lanka</title>
+    <!--<link href="css/emis.css" rel="stylesheet" type="text/css">-->
+    <link href="css/emis.css" rel="stylesheet" type="text/css">
+    <link href="../css/mStyle.css" rel="stylesheet" type="text/css" />
+    <link href="css/category_tab.css" rel="stylesheet" type="text/css" />
+    <!--<link href="../cms/css/main_menu1.css" rel="stylesheet" type="text/css" />-->
+    <link href="../cms/css/screen.css" rel="stylesheet" type="text/css" />
+    <link href="../cms/css/grid_style.css" rel="stylesheet" type="text/css" />
+    <link href="../cms/css/flexigrid.css" rel="stylesheet" type="text/css" />
 
-        <style type="text/css">
-
-            /*menu style*/
+    <style type="text/css">
+        /*menu style*/
 
 
 
-            .mcib_top{
-                width:960px;
-                height:33px;
-                float:left;
-                padding:1px 10px 1px 10px;
-                font-size:12px;
-                color:#FFF;
-                font-weight:bold;
-                line-height:34px;
-                background:url(<?php echo $theamPath ?><?php echo $theam ?>/backgrounds/block_inner_back.png);
+        .mcib_top {
+            width: 960px;
+            height: 33px;
+            float: left;
+            padding: 1px 10px 1px 10px;
+            font-size: 12px;
+            color: #FFF;
+            font-weight: bold;
+            line-height: 34px;
+            background: url(<?php echo $theamPath ?><?php echo $theam ?>/backgrounds/block_inner_back.png);
+        }
+
+        .link1 {
+            color: <?php echo $theamMenuFontColor ?>;
+            cursor: pointer;
+        }
+    </style>
+
+
+    <script src="js/jquery-1.9.1.js"></script>
+    <script src="js/jquery.tabify.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/FilterDB.js" language="javascript"></script>
+    <script type="text/javascript">
+
+    </script>
+    <script type="text/javascript">
+        // IE9 fix
+        if (!window.console) {
+            var console = {
+                log: function() {},
+                warn: function() {},
+                error: function() {},
+                time: function() {},
+                timeEnd: function() {}
             }
-            .link1{
-                color:<?php echo $theamMenuFontColor ?>;
-                cursor: pointer;
-            }
+        }
+    </script>
+    <script language="javascript" type="text/javascript">
+        function popitup(url) {
 
+            newwindow = window.open(url, 'name', 'height=700,width=1000,scrollbars=yes');
 
-        </style>
-
-
-        <script src="js/jquery-1.9.1.js"></script>
-        <script src="js/jquery.tabify.js" type="text/javascript" charset="utf-8"></script>
-        <script src="js/FilterDB.js"  language="javascript"></script>
-        <script type="text/javascript">
-
-        </script>
-        <script type="text/javascript">
-            // IE9 fix
-            if (!window.console) {
-                var console = {
-                    log: function () {
-                    },
-                    warn: function () {
-                    },
-                    error: function () {
-                    },
-                    time: function () {
-                    },
-                    timeEnd: function () {
-                    }
-                }
-            }
-        </script>
-        <script language="javascript" type="text/javascript">
-
-            function popitup(url) {
-
-                newwindow = window.open(url, 'name', 'height=700,width=1000,scrollbars=yes');
-
-                if (window.focus) {
-                    newwindow.focus()
-                }
-
-                return false;
-
+            if (window.focus) {
+                newwindow.focus()
             }
 
-        </script>
-    </head>
-    <body>
-        <!-- Begin Page Content -->
+            return false;
 
-        <div class="container">
-            <form id="form1" name="form1" action="" method="POST">
-                <div id="header_outer" style="background:url(<?php echo $theamPath ?><?php echo $theam ?>/backgrounds/menu_back.gif) repeat-x">
-                    <div id="header_inner">
-                        <div id="header_top">
-                            <div class="header_top_left">&nbsp;&nbsp; </div>
-                            <div class="header_top_right">
-                                <div id="admin_button" style="cursor:default;"><a href="#" id="admin_link" style="cursor:default;"><span style="cursor:default;"><?php echo $loggedPositionName; ?></span></a></div>
-                                <!-- <div id="mail_button"><a href="#"></a><div id="mail_alert" class="alert">05</div></div>-->
-                                <div id="user_welcome">Welcome <?php echo $_SESSION["fullName"]; ?>, &nbsp;&nbsp; <span class="link1" onClick="logoutForm('mail');">Logout?</span></div>
-                            </div>
+        }
+    </script>
+</head>
+
+<body>
+    <!-- Begin Page Content -->
+
+    <div class="container">
+        <form id="form1" name="form1" action="" method="POST">
+            <div id="header_outer" style="background:url(<?php echo $theamPath ?><?php echo $theam ?>/backgrounds/menu_back.gif) repeat-x">
+                <div id="header_inner">
+                    <div id="header_top">
+                        <div class="header_top_left">&nbsp;&nbsp; </div>
+                        <div class="header_top_right">
+                            <div id="admin_button" style="cursor:default;"><a href="#" id="admin_link" style="cursor:default;"><span style="cursor:default;"><?php echo $loggedPositionName; ?></span></a></div>
+                            <!-- <div id="mail_button"><a href="#"></a><div id="mail_alert" class="alert">05</div></div>-->
+                            <div id="user_welcome">Welcome <?php echo $_SESSION["fullName"]; ?>, &nbsp;&nbsp; <span class="link1" onClick="logoutForm('mail');">Logout?</span></div>
                         </div>
-                        <div id="header_logo" style="margin-top:0px;"><img src="../images/header.png" width="960" height="150" /></div>
-
-                        <div style="clear:both"></div>
                     </div>
-                </div>
-            </form>
+                    <div id="header_logo" style="margin-top:0px;"><img src="../images/header.png" width="960" height="150" /></div>
 
-            <div id="main_content_outer">
-                <div id="main_content_inner">
-
-                    <div class="main_content_inner_block">
-<?php include('../mainmenu.php') ?>
-                        <div class="mcib_middle">
-
-                            <div class="containerHeaderOne">
-
-
-
-                                <div style="width:960px; height:auto; float:left; margin-left:10px;">
-                                    <?php
-                                    include("index1.php");
-                                    
-                                    ?>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mcib_bottom"></div>
-                    </div>
+                    <div style="clear:both"></div>
                 </div>
             </div>
-            <!--/ container-->
-            <!-- End Page Content -->
-        </div>
+        </form>
 
-    </body>
+        <div id="main_content_outer">
+            <div id="main_content_inner">
+
+                <div class="main_content_inner_block">
+                    <?php include('../mainmenu.php') ?>
+                    <div class="mcib_middle">
+
+                        <div class="containerHeaderOne">
+
+
+
+                            <div style="width:960px; height:auto; float:left; margin-left:10px;">
+                                <?php
+                                include("index1.php");
+
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mcib_bottom"></div>
+                </div>
+            </div>
+        </div>
+        <!--/ container-->
+        <!-- End Page Content -->
+    </div>
+
+</body>
+
 </html>

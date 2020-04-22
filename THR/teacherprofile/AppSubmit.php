@@ -108,37 +108,10 @@ $dateNow = date("Y/m/d");
 
 // var_dump($_REQUEST);
 $nicNO = $_REQUEST['id'];
-
-$MedTch1 = $_REQUEST['MedTch1'];
-$GradTch1 = $_REQUEST["GradTch1"];
-
-if ($_REQUEST["SubTch1"] != 'Select') {
-    $SubTch1 = $_REQUEST["SubTch1"];
-} else {
-    $SubTch1 = $_REQUEST["otherTch1"];
-}
-
-$MedTch2 = $_REQUEST["MedTch2"];
-$GradTch2 = $_REQUEST["GradTch2"];
-
-if ($_REQUEST["SubTch2"] != 'Select') {
-    $SubTch2 = $_REQUEST["SubTch2"];
-} else {
-    $SubTch2 = $_REQUEST["otherTch2"];
-}
-
-$MedTch3 = $_REQUEST["MedTch3"];
-$GradTch3 = $_REQUEST["GradTch3"];
-
-if ($_REQUEST["SubTch3"] != 'Select') {
-    $SubTch3 = $_REQUEST["SubTch3"];
-} else {
-    $SubTch3 = $_REQUEST["otherTch3"];
-}
-// var_dump($SubTch3);
-$id = $_REQUEST["id"];
-// echo "gg" . $MedTch1;
-$today = date("Y/m/d");
+$AppCat = $_REQUEST["AppCat"];
+$MedApp = $_REQUEST["MedApp"];
+$SubApp = $_REQUEST["SubApp"];
+$otherSub = $_REQUEST["otherSub"];
 
 $SQL1 = "SELECT TOP(1)
 *
@@ -151,51 +124,58 @@ WHERE StaffServiceHistory.NIC = '$nicNO' ORDER BY StaffServiceHistory.AppDate DE
 $stmt1 = $db->runMsSqlQuery($SQL1);
 while ($row1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
     $SchType = Trim($row1['SchoolType']);
+    // var_dump($SchType);
 }
-
-$sql = "INSERT INTO [dbo].[Temp_TeachingDetails]
+// var_dump($SchType);
+if ($SubApp != 'Select') {
+    $sql = "INSERT INTO [dbo].[Temp_AppoinmentDetails]
 ([NIC]
-,[TchSubject1]
-,[TchSubject2]
-,[TchSubject3]
-,[Medium1]
-,[Medium2]
-,[Medium3]
-,[GradeCode1]
-,[GradeCode2]
-,[GradeCode3]
+,[AppCategory]
+,[AppSubject]
+,[Medium]
 ,[SchoolType]
-,[RecStatus]
-,[RecordLog]
-,[LastUpdate])
-VALUES(
-    '$nicNO', 
-    '$SubTch1', 
-    '$SubTch2', 
-    '$SubTch3', 
-    '$MedTch1', 
-    '$MedTch2', 
-    '$MedTch3',
-    '$GradTch1',
-    '$GradTch2',
-    '$GradTch3',
-    '$SchType',
-    '0',
-    '$NICUser',
-    '$dateNow'
-)";
+,[OtherSub]
+,[RecordStatus]
+,[LastUpdate]
+,[RecordLog])
+VALUES
+('$nicNO', 
+'$AppCat', 
+'$SubApp', 
+'$MedApp', 
+'$SchType',
+NULL, 
+'0',
+'$dateNow',
+'$NICUser')";
+} else {
+    $sql = "INSERT INTO [dbo].[Temp_AppoinmentDetails]
+([NIC]
+,[AppCategory]
+,[AppSubject]
+,[Medium]
+,[SchoolType]
+,[OtherSub]
+,[RecordStatus]
+,[LastUpdate]
+,[RecordLog])
+VALUES
+('$nicNO', 
+'$AppCat', 
+NULL, 
+'$MedApp', 
+'$SchType',
+'$otherSub', 
+'0',
+'$dateNow',
+'$NICUser')";
+}
 
 $stmt = $db->runMsSqlQuery($sql);
 sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC);
-// var_dump($sql);
 
+// var_dump($sql);
 echo ("<script LANGUAGE='JavaScript'>
     window.alert('Succesfully Updated');
-    window.location.href='teaching_subj-12--$nicNO.html';
+    window.location.href='Appoint_subj-13--$nicNO.html';
     </script>");
-    // // } else {
-    // //     echo ("<script LANGUAGE='JavaScript'>
-    //     window.alert('ERROR OCCURED!');
-    //     window.location.href='Location: teaching_subj-12--NIC.html';
-    //     </script>");
-// }

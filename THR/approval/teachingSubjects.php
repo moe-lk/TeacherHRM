@@ -232,68 +232,48 @@ if ($id == '') {
         $NICSearch = $_REQUEST['NICSearch'];
     }
 
+    $countTotal = "SELECT TempTeachingDetailsTemp.ID
+    ,TempTeachingDetailsTemp.NIC
+    ,[SurnameWithInitials]
+    ,[FullName]
+    ,[TchSubject1]
+    ,[TchSubject2]
+    ,[TchSubject3]
+    ,[Medium1]
+    ,[Medium2]
+    ,[Medium3]
+    ,[GradeCode1]
+    ,[GradeCode2]
+    ,[GradeCode3]
+    ,[SchoolType]
+    ,TempTeachingDetailsTemp.RecStatus
+    ,TempTeachingDetailsTemp.RecordLog
+    ,TempTeachingDetailsTemp.LastUpdate
+FROM [MOENational].[dbo].[TempTeachingDetailsTemp] INNER JOIN [TeacherMast] ON TempTeachingDetailsTemp.NIC = TeacherMast.NIC";
 
-    //if ($accLevel == '14000' || $accLevel == '17000') {
-    if ($accLevel >= '14000' && $accLevel <= '17999') {
-        $approvSql = "WITH LIMIT AS(SELECT        TG_EmployeeUpdatePersInfo.ID, TG_EmployeeUpdatePersInfo.NIC, TG_EmployeeUpdatePersInfo.TeacherMastID, TG_EmployeeUpdatePersInfo.PermResiID, 
-							 TG_EmployeeUpdatePersInfo.CurrResID, CONVERT(varchar(20), TG_EmployeeUpdatePersInfo.dDateTime, 121) AS dDateTime, 
-							 TG_EmployeeUpdatePersInfo.IsApproved, UP_TeacherMast.SurnameWithInitials, CD_Title.TitleName, CD_Zone.InstitutionName, CD_Districts.DistName, ROW_NUMBER() OVER (ORDER BY TG_EmployeeUpdatePersInfo.ID ASC) AS 'RowNumber'
-	FROM            UP_TeacherMast INNER JOIN
-							 TG_EmployeeUpdatePersInfo ON UP_TeacherMast.ID = TG_EmployeeUpdatePersInfo.TeacherMastID INNER JOIN
-							 CD_Title ON UP_TeacherMast.Title = CD_Title.TitleCode INNER JOIN
-							 CD_Zone ON TG_EmployeeUpdatePersInfo.ZoneCode = CD_Zone.CenCode INNER JOIN
-							 CD_Districts ON CD_Zone.DistrictCode = CD_Districts.DistCode ON TeacherMast.NIC = UP_TeacherMast.NIC INNER JOIN
-                      CD_Service ON StaffServiceHistory.ServiceTypeCode = CD_Service.ServCode
-WHERE     (TG_EmployeeUpdatePersInfo.IsApproved = 'N') AND (CD_Service.ServiceName LIKE '%SLEAS%') AND (CD_Districts.ProCode = N'$ProCodeU')";
-    } else {
-        $approvSql = "WITH LIMIT AS(SELECT        TG_EmployeeUpdatePersInfo.ID, TG_EmployeeUpdatePersInfo.NIC, TG_EmployeeUpdatePersInfo.TeacherMastID, TG_EmployeeUpdatePersInfo.PermResiID, 
-							 TG_EmployeeUpdatePersInfo.CurrResID, CONVERT(varchar(20), TG_EmployeeUpdatePersInfo.dDateTime, 121) AS dDateTime, 
-							 TG_EmployeeUpdatePersInfo.IsApproved, UP_TeacherMast.SurnameWithInitials, CD_Title.TitleName, CD_Zone.InstitutionName, CD_Districts.DistName, ROW_NUMBER() OVER (ORDER BY TG_EmployeeUpdatePersInfo.ID ASC) AS 'RowNumber'
-	FROM            UP_TeacherMast INNER JOIN
-							 TG_EmployeeUpdatePersInfo ON UP_TeacherMast.ID = TG_EmployeeUpdatePersInfo.TeacherMastID INNER JOIN
-							 CD_Title ON UP_TeacherMast.Title = CD_Title.TitleCode INNER JOIN
-							 CD_Zone ON TG_EmployeeUpdatePersInfo.ZoneCode = CD_Zone.CenCode INNER JOIN
-							 CD_Districts ON CD_Zone.DistrictCode = CD_Districts.DistCode
-							 WHERE TG_EmployeeUpdatePersInfo.IsApproved='N'";
-    }
-    if ($NICSearch)
-        $approvSql .= " and (TG_EmployeeUpdatePersInfo.NIC like '%$NICSearch%')";
-    // if ($accLevel == '11050' || $accLevel == '11000' || $accLevel == '10000')
-    if ($AccessRoleType == "ZN")
-        $approvSql .= " and TG_EmployeeUpdatePersInfo.ZoneCode='$loggedSchool'";
 
-    $approvSql .= ")
-	select * from LIMIT WHERE RowNumber BETWEEN $Page_Start AND $Page_End";
 
-    $countTotal = "SELECT        TG_EmployeeUpdatePersInfo.ID
-	FROM            UP_TeacherMast INNER JOIN
-							 TG_EmployeeUpdatePersInfo ON UP_TeacherMast.ID = TG_EmployeeUpdatePersInfo.TeacherMastID INNER JOIN
-							 CD_Title ON UP_TeacherMast.Title = CD_Title.TitleCode INNER JOIN
-							 CD_Zone ON TG_EmployeeUpdatePersInfo.ZoneCode = CD_Zone.CenCode INNER JOIN
-							 CD_Districts ON CD_Zone.DistrictCode = CD_Districts.DistCode
-							 WHERE TG_EmployeeUpdatePersInfo.IsApproved='N'";
+    // Adding data to tables
+    $approvSql = "SELECT TempTeachingDetailsTemp.ID
+    ,TempTeachingDetailsTemp.NIC
+    ,[SurnameWithInitials]
+    ,[FullName]
+    ,[TchSubject1]
+    ,[TchSubject2]
+    ,[TchSubject3]
+    ,[Medium1]
+    ,[Medium2]
+    ,[Medium3]
+    ,[GradeCode1]
+    ,[GradeCode2]
+    ,[GradeCode3]
+    ,[SchoolType]
+    ,TempTeachingDetailsTemp.RecStatus
+    ,TempTeachingDetailsTemp.RecordLog
+    ,TempTeachingDetailsTemp.LastUpdate
+FROM [MOENational].[dbo].[TempTeachingDetailsTemp] INNER JOIN [TeacherMast] ON TempTeachingDetailsTemp.NIC = TeacherMast.NIC";
 
-    if ($NICSearch)
-        $countTotal .= " and (TG_EmployeeUpdatePersInfo.NIC like '%$NICSearch%')";
-    //if ($accLevel == '11050' || $accLevel == '11000' || $accLevel == '10000')
-    if ($AccessRoleType == "ZN")
-        $countTotal .= " and TG_EmployeeUpdatePersInfo.ZoneCode='$loggedSchool'";
-    //if($NICSearch){echo $countTotal;}
-    //if ($accLevel == '14000' || $accLevel == '17000') {
-    if ($accLevel >= '14000' && $accLevel <= '17999') {
-        $countTotal = "SELECT     TG_EmployeeUpdatePersInfo.ID
-FROM         TeacherMast INNER JOIN
-                      StaffServiceHistory ON TeacherMast.CurServiceRef = StaffServiceHistory.ID INNER JOIN
-                      UP_TeacherMast INNER JOIN
-                      TG_EmployeeUpdatePersInfo ON UP_TeacherMast.ID = TG_EmployeeUpdatePersInfo.TeacherMastID INNER JOIN
-                      CD_Title ON UP_TeacherMast.Title = CD_Title.TitleCode INNER JOIN
-                      CD_Zone ON TG_EmployeeUpdatePersInfo.ZoneCode = CD_Zone.CenCode INNER JOIN
-                      CD_Districts ON CD_Zone.DistrictCode = CD_Districts.DistCode ON TeacherMast.NIC = UP_TeacherMast.NIC INNER JOIN
-                      CD_Service ON StaffServiceHistory.ServiceTypeCode = CD_Service.ServCode
-WHERE     (TG_EmployeeUpdatePersInfo.IsApproved = 'N') AND (CD_Service.ServiceName LIKE '%SLEAS%') AND (CD_Districts.ProCode = N'$ProCodeU')";
-    }
-
-    $TotaRows = $db->rowCount($countTotal);
+    $TotaRows = $db->rowCount($approvSql);
     if (!$TotaRows)
         $TotaRows = 0;
 
@@ -354,9 +334,9 @@ WHERE     (TG_EmployeeUpdatePersInfo.IsApproved = 'N') AND (CD_Service.ServiceNa
                                     echo $_SESSION['success_update'];
                                     $_SESSION['success_update'] = "";
                                     ?><?php
-                    echo $_SESSION['fail_update'];
-                    $_SESSION['fail_update'] = "";
-                    ?></div>
+                                        echo $_SESSION['fail_update'];
+                                        $_SESSION['fail_update'] = "";
+                                        ?></div>
         </div>
     <?php } ?>
     <div style="width:738px; float:left;">
@@ -372,30 +352,42 @@ WHERE     (TG_EmployeeUpdatePersInfo.IsApproved = 'N') AND (CD_Service.ServiceNa
                         <table width="100%" cellspacing="1" cellpadding="1">
                             <tr>
                                 <td width="4%" height="25" align="center" bgcolor="#999999">#</td>
-                                <td width="37%" align="center" bgcolor="#999999">Employee Name</td>
-                                <td width="17%" align="center" bgcolor="#999999">NIC</td>
-                                <td width="13%" align="center" bgcolor="#999999">Request Date</td>
-                                <td width="23%" align="center" bgcolor="#999999">Zone</td>
-                                <td width="6%" align="center" bgcolor="#999999">Action</td>
+                                <td width="25%" align="center" bgcolor="#999999">Employee Name</td>
+                                <td width="8%" align="center" bgcolor="#999999">NIC</td>
+                                <td width="10%" align="center" bgcolor="#999999">Teaching subject for most hours</td>
+                                <td width="5%" align="center" bgcolor="#999999">Medium</td>
+                                <td width="5%" align="center" bgcolor="#999999">Gradespan</td>
+                                <td width="10%" align="center" bgcolor="#999999">Teaching subject for seecond most hours</td>
+                                <td width="5%" align="center" bgcolor="#999999">Medium</td>
+                                <td width="5%" align="center" bgcolor="#999999">Gradespan</td>
+                                <td width="10%" align="center" bgcolor="#999999">Capable subject</td>
+                                <td width="5%" align="center" bgcolor="#999999">Medium</td>
+                                <td width="5%" align="center" bgcolor="#999999">Gradespan</td>
+                                <td width="3%"></td>
+
+
                             </tr>
-                            <?php
-                            //$i=1; //echo $approvSql;
-                            $stmt = $db->runMsSqlQuery($approvSql);
-                            while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-                                $RequestID = $row['ID'];
-                                $InstitutionName = $row['InstitutionName'];
-                                $DistName = $row['DistName'];
-                                $RowNumber = $row['RowNumber'];
-                            ?>
-                                <tr>
-                                    <td height="20" bgcolor="#FFFFFF"><?php echo $RowNumber; ?></td>
-                                    <td bgcolor="#FFFFFF"><?php echo $row['SurnameWithInitials']; ?></td>
-                                    <td bgcolor="#FFFFFF"><?php echo $row['NIC']; ?></td>
-                                    <td bgcolor="#FFFFFF" align="center"><?php echo substr($row['dDateTime'], 0, 10); ?></td>
-                                    <td bgcolor="#FFFFFF" align="center"><?php echo "$InstitutionName ($DistName)"; ?></td>
+                            <tr>
+                                <?php
+                                //$i=1; //echo $approvSql;
+                                $stmt = $db->runMsSqlQuery($approvSql);
+                                while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                    echo "<td>" . $row["ID"] . "</td>";
+                                    echo "<td>" . $row["SurnameWithInitials"] . "</td>";
+                                    echo "<td>" . $row["TempTeachingDetailsTemp.NIC"] . "</td>";
+                                    echo "<td>" . $row["TchSubject1"] . "</td>";
+                                    echo "<td>" . $row["Medium1"] . "</td>";
+                                    echo "<td>" . $row["GradeCode1"] . "</td>";
+                                    echo "<td>" . $row["TchSubject2"] . "</td>";
+                                    echo "<td>" . $row["Medium2"] . "</td>";
+                                    echo "<td>" . $row["GradeCode2"] . "</td>";
+                                    echo "<td>" . $row["TchSubject3"] . "</td>";
+                                    echo "<td>" . $row["Medium3"] . "</td>";
+                                    echo "<td>" . $row["GradeCode3"] . "</td>";
+                                ?>
                                     <td bgcolor="#FFFFFF" align="center"><a href="updateRequestPersonalInfo-15--<?php echo $RequestID ?>.html"><img src="images/more_info.png" /></a></td>
-                                </tr>
-                            <?php } ?>
+                            </tr>
+                        <?php } ?>
                         </table>
                     </td>
                 </tr>
@@ -700,3 +692,6 @@ WHERE     (TG_EmployeeUpdatePersInfo.IsApproved = 'N') AND (CD_Service.ServiceNa
     </div>
 
 </form>
+<?php
+// } 
+?>
