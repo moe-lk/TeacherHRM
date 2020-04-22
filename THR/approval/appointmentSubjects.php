@@ -307,7 +307,7 @@ if ($id == '') {
 FROM [MOENational].[dbo].[TempAppoinmentDetails]
 INNER JOIN [TeacherMast] ON TempAppoinmentDetails.NIC = TeacherMast.NIC";
 
-    $TotaRows = $db->rowCount($countTotal);
+    $TotaRows = $db->rowCount($approvSql);
     if (!$TotaRows)
         $TotaRows = 0;
 

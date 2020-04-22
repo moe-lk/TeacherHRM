@@ -128,7 +128,7 @@ while ($row1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
 }
 // var_dump($SchType);
 if ($SubApp != 'Select') {
-    $sql = "INSERT INTO [dbo].[TempAppoinmentDetails]
+    $sql = "INSERT INTO [dbo].[Temp_AppoinmentDetails]
 ([NIC]
 ,[AppCategory]
 ,[AppSubject]
@@ -149,7 +149,7 @@ NULL,
 '$dateNow',
 '$NICUser')";
 } else {
-    $sql = "INSERT INTO [dbo].[TempAppoinmentDetails]
+    $sql = "INSERT INTO [dbo].[Temp_AppoinmentDetails]
 ([NIC]
 ,[AppCategory]
 ,[AppSubject]
@@ -174,6 +174,7 @@ NULL,
 $stmt = $db->runMsSqlQuery($sql);
 sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC);
 
+// var_dump($sql);
 echo ("<script LANGUAGE='JavaScript'>
     window.alert('Succesfully Updated');
     window.location.href='Appoint_subj-13--$nicNO.html';

@@ -42,23 +42,70 @@ CREATE TABLE [MOENational].[dbo].[CD_PV_TeachSubjects](
 	RecordLog varchar(MAX) NOT NULL
 	);
 
---------------------------AppoinmentDetails--------------------
-CREATE TABLE [MOENational].[dbo].[CD_AppoinmentDetails](
-	ID nchar(3) PRIMARY KEY,
+--------------------------Temp_AppoinmentDetails--------------------
+USE [MOENational]
+GO
+
+/****** Object:  Table [dbo].[Temp_AppoinmentDetails]    Script Date: 22/04/2020 13:05:03 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Temp_AppoinmentDetails](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
 	[NIC] [nchar](12) NOT NULL,
-	AppCategory nchar(3) NOT NULL,
-	AppSubject nvarchar(20) NOT NULL,
+	[AppCategory] [nchar](3) NOT NULL,
+	[AppSubject] [nvarchar](20) NOT NULL,
 	[Medium] [nvarchar](150) NULL,
 	[SchoolType] [nchar](2) NULL,
-	OtherSub nvarchar(20) NULL,
-	RecordLog varchar(MAX) NOT NULL
-	);
+	[OtherSub] [nvarchar](20) NULL,
+	[RecordLog] [varchar](max) NOT NULL,
+	[RecordStatus] [int] NULL,
+	[LastUpdate] [datetime] NULL,
+ CONSTRAINT [PK__Temp_App__3214EC27C3D0F59A] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+
 
 --------------------------TeachingDetails--------------------
-CREATE TABLE [dbo].[TempTeachingDetailsTemp](
-	[ID] [nchar](3) NOT NULL PRIMARY KEY,
+--CREATE TABLE [dbo].[Temp_TeachingDetails](
+--	[ID] [nchar](3) NOT NULL PRIMARY KEY,
+--	[NIC] [nchar](12) NOT NULL,
+--	[TchCategory] [nchar](3) NOT NULL,
+--	[TchSubject1] [nvarchar](50) NOT NULL,
+--	[TchSubject2] [nvarchar](50) NOT NULL,
+--	[TchSubject3] [nvarchar](50) NULL,
+--	[Medium1] [nvarchar](10) NULL,
+--	[Medium2] [nvarchar](10) NULL,
+--	[Medium3] [nvarchar](10) NULL,
+--	[GradeCode1] [nvarchar](10) NULL,
+--	[GradeCode2] [nvarchar](10) NULL,
+--	[GradeCode3] [nvarchar](10) NULL,
+--	[SchoolType] [nchar](2) NULL,
+--	[RecStatus] [int] NULL,
+--	[RecordLog] [varchar](max) NOT NULL,
+--	[LastUpdate] [datetime] NULL,
+
+--------------------------Temp_TeachingDetails--------------------
+USE [MOENational]
+GO
+
+/****** Object:  Table [dbo].[Temp_TeachingDetails]    Script Date: 22/04/2020 13:04:14 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Temp_TeachingDetails](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
 	[NIC] [nchar](12) NOT NULL,
-	[TchCategory] [nchar](3) NOT NULL,
 	[TchSubject1] [nvarchar](50) NOT NULL,
 	[TchSubject2] [nvarchar](50) NOT NULL,
 	[TchSubject3] [nvarchar](50) NULL,
@@ -72,25 +119,13 @@ CREATE TABLE [dbo].[TempTeachingDetailsTemp](
 	[RecStatus] [int] NULL,
 	[RecordLog] [varchar](max) NOT NULL,
 	[LastUpdate] [datetime] NULL,
+ CONSTRAINT [PK__Temp_Tea__3214EC27BBEFEFFB] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
 
---------------------------TempTeachingDetailsTemp--------------------
-CREATE TABLE [dbo].[TempTeachingDetailsTemp](
-	[ID] [nchar](3) NOT NULL PRIMARY KEY,
-	[NIC] [nchar](12) NOT NULL,
-	[TchCategory] [nchar](3) NOT NULL,
-	[TchSubject1] [nvarchar](50) NOT NULL,
-	[TchSubject2] [nvarchar](50) NOT NULL,
-	[TchSubject3] [nvarchar](50) NULL,
-	[Medium1] [nvarchar](10) NULL,
-	[Medium2] [nvarchar](10) NULL,
-	[Medium3] [nvarchar](10) NULL,
-	[GradeCode1] [nvarchar](10) NULL,
-	[GradeCode2] [nvarchar](10) NULL,
-	[GradeCode3] [nvarchar](10) NULL,
-	[SchoolType] [nchar](2) NULL,
-	[RecStatus] [int] NULL,
-	[RecordLog] [varchar](max) NOT NULL,
-	[LastUpdate] [datetime] NULL,)
 -----------------------------DynMenu---------------------------------
 USE [MOENational]
 GO
@@ -169,7 +204,7 @@ INSERT INTO [dbo].[TG_DynMenu]
            (NULL
            ,'Appointment Subjects'
            ,'24'
-           ,'appointmentSubjects-23.html'
+           ,'appointmentSubjects-24.html'
            ,27
            ,0
            ,'1'
@@ -237,6 +272,7 @@ ALTER TABLE CD_TeachingDetails
 ADD TchSubject2 nvarchar(20), OtherSub2 nvarchar(20),
            Medium2 nvarchar(150),
            GradeName2 nvarchar(150),
-		   TchSubject3 nvarchar(20), OtherSub3 nvarchar(20),
+		TchSubject3 nvarchar(20), 
+            OtherSub3 nvarchar(20),
            Medium3 nvarchar(150),
            GradeName3 nvarchar(150);

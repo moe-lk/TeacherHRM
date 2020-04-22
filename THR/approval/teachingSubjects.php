@@ -232,66 +232,28 @@ if ($id == '') {
         $NICSearch = $_REQUEST['NICSearch'];
     }
 
+    $countTotal = "SELECT TempTeachingDetailsTemp.ID
+    ,TempTeachingDetailsTemp.NIC
+    ,[SurnameWithInitials]
+    ,[FullName]
+    ,[TchSubject1]
+    ,[TchSubject2]
+    ,[TchSubject3]
+    ,[Medium1]
+    ,[Medium2]
+    ,[Medium3]
+    ,[GradeCode1]
+    ,[GradeCode2]
+    ,[GradeCode3]
+    ,[SchoolType]
+    ,TempTeachingDetailsTemp.RecStatus
+    ,TempTeachingDetailsTemp.RecordLog
+    ,TempTeachingDetailsTemp.LastUpdate
+FROM [MOENational].[dbo].[TempTeachingDetailsTemp] INNER JOIN [TeacherMast] ON TempTeachingDetailsTemp.NIC = TeacherMast.NIC";
 
-    //if ($accLevel == '14000' || $accLevel == '17000') {
-    //     if ($accLevel >= '14000' && $accLevel <= '17999') {
-    //         $approvSql = "WITH LIMIT AS(SELECT        TG_EmployeeUpdatePersInfo.ID, TG_EmployeeUpdatePersInfo.NIC, TG_EmployeeUpdatePersInfo.TeacherMastID, TG_EmployeeUpdatePersInfo.PermResiID, 
-    // 							 TG_EmployeeUpdatePersInfo.CurrResID, CONVERT(varchar(20), TG_EmployeeUpdatePersInfo.dDateTime, 121) AS dDateTime, 
-    // 							 TG_EmployeeUpdatePersInfo.IsApproved, UP_TeacherMast.SurnameWithInitials, CD_Title.TitleName, CD_Zone.InstitutionName, CD_Districts.DistName, ROW_NUMBER() OVER (ORDER BY TG_EmployeeUpdatePersInfo.ID ASC) AS 'RowNumber'
-    // 	FROM            UP_TeacherMast INNER JOIN
-    // 							 TG_EmployeeUpdatePersInfo ON UP_TeacherMast.ID = TG_EmployeeUpdatePersInfo.TeacherMastID INNER JOIN
-    // 							 CD_Title ON UP_TeacherMast.Title = CD_Title.TitleCode INNER JOIN
-    // 							 CD_Zone ON TG_EmployeeUpdatePersInfo.ZoneCode = CD_Zone.CenCode INNER JOIN
-    // 							 CD_Districts ON CD_Zone.DistrictCode = CD_Districts.DistCode ON TeacherMast.NIC = UP_TeacherMast.NIC INNER JOIN
-    //                       CD_Service ON StaffServiceHistory.ServiceTypeCode = CD_Service.ServCode
-    // WHERE     (TG_EmployeeUpdatePersInfo.IsApproved = 'N') AND (CD_Service.ServiceName LIKE '%SLEAS%') AND (CD_Districts.ProCode = N'$ProCodeU')";
-    //     } else {
-    //         $approvSql = "WITH LIMIT AS(SELECT        TG_EmployeeUpdatePersInfo.ID, TG_EmployeeUpdatePersInfo.NIC, TG_EmployeeUpdatePersInfo.TeacherMastID, TG_EmployeeUpdatePersInfo.PermResiID, 
-    // 							 TG_EmployeeUpdatePersInfo.CurrResID, CONVERT(varchar(20), TG_EmployeeUpdatePersInfo.dDateTime, 121) AS dDateTime, 
-    // 							 TG_EmployeeUpdatePersInfo.IsApproved, UP_TeacherMast.SurnameWithInitials, CD_Title.TitleName, CD_Zone.InstitutionName, CD_Districts.DistName, ROW_NUMBER() OVER (ORDER BY TG_EmployeeUpdatePersInfo.ID ASC) AS 'RowNumber'
-    // 	FROM            UP_TeacherMast INNER JOIN
-    // 							 TG_EmployeeUpdatePersInfo ON UP_TeacherMast.ID = TG_EmployeeUpdatePersInfo.TeacherMastID INNER JOIN
-    // 							 CD_Title ON UP_TeacherMast.Title = CD_Title.TitleCode INNER JOIN
-    // 							 CD_Zone ON TG_EmployeeUpdatePersInfo.ZoneCode = CD_Zone.CenCode INNER JOIN
-    // 							 CD_Districts ON CD_Zone.DistrictCode = CD_Districts.DistCode
-    // 							 WHERE TG_EmployeeUpdatePersInfo.IsApproved='N'";
-    //     }
-    //     if ($NICSearch)
-    //         $approvSql .= " and (TG_EmployeeUpdatePersInfo.NIC like '%$NICSearch%')";
-    //     // if ($accLevel == '11050' || $accLevel == '11000' || $accLevel == '10000')
-    //     if ($AccessRoleType == "ZN")
-    //         $approvSql .= " and TG_EmployeeUpdatePersInfo.ZoneCode='$loggedSchool'";
 
-    //     $approvSql .= ")
-    // 	select * from LIMIT WHERE RowNumber BETWEEN $Page_Start AND $Page_End";
 
-    //     $countTotal = "SELECT        TG_EmployeeUpdatePersInfo.ID
-    // 	FROM            UP_TeacherMast INNER JOIN
-    // 							 TG_EmployeeUpdatePersInfo ON UP_TeacherMast.ID = TG_EmployeeUpdatePersInfo.TeacherMastID INNER JOIN
-    // 							 CD_Title ON UP_TeacherMast.Title = CD_Title.TitleCode INNER JOIN
-    // 							 CD_Zone ON TG_EmployeeUpdatePersInfo.ZoneCode = CD_Zone.CenCode INNER JOIN
-    // 							 CD_Districts ON CD_Zone.DistrictCode = CD_Districts.DistCode
-    // 							 WHERE TG_EmployeeUpdatePersInfo.IsApproved='N'";
-
-    //     if ($NICSearch)
-    //         $countTotal .= " and (TG_EmployeeUpdatePersInfo.NIC like '%$NICSearch%')";
-    //     //if ($accLevel == '11050' || $accLevel == '11000' || $accLevel == '10000')
-    //     if ($AccessRoleType == "ZN")
-    //         $countTotal .= " and TG_EmployeeUpdatePersInfo.ZoneCode='$loggedSchool'";
-    //     //if($NICSearch){echo $countTotal;}
-    //     //if ($accLevel == '14000' || $accLevel == '17000') {
-    //     if ($accLevel >= '14000' && $accLevel <= '17999') {
-    //         $countTotal = "SELECT     TG_EmployeeUpdatePersInfo.ID
-    // FROM         TeacherMast INNER JOIN
-    //                       StaffServiceHistory ON TeacherMast.CurServiceRef = StaffServiceHistory.ID INNER JOIN
-    //                       UP_TeacherMast INNER JOIN
-    //                       TG_EmployeeUpdatePersInfo ON UP_TeacherMast.ID = TG_EmployeeUpdatePersInfo.TeacherMastID INNER JOIN
-    //                       CD_Title ON UP_TeacherMast.Title = CD_Title.TitleCode INNER JOIN
-    //                       CD_Zone ON TG_EmployeeUpdatePersInfo.ZoneCode = CD_Zone.CenCode INNER JOIN
-    //                       CD_Districts ON CD_Zone.DistrictCode = CD_Districts.DistCode ON TeacherMast.NIC = UP_TeacherMast.NIC INNER JOIN
-    //                       CD_Service ON StaffServiceHistory.ServiceTypeCode = CD_Service.ServCode
-    // WHERE     (TG_EmployeeUpdatePersInfo.IsApproved = 'N') AND (CD_Service.ServiceName LIKE '%SLEAS%') AND (CD_Districts.ProCode = N'$ProCodeU')";
-    //     }
+    // Adding data to tables
     $approvSql = "SELECT TempTeachingDetailsTemp.ID
     ,TempTeachingDetailsTemp.NIC
     ,[SurnameWithInitials]
@@ -311,7 +273,7 @@ if ($id == '') {
     ,TempTeachingDetailsTemp.LastUpdate
 FROM [MOENational].[dbo].[TempTeachingDetailsTemp] INNER JOIN [TeacherMast] ON TempTeachingDetailsTemp.NIC = TeacherMast.NIC";
 
-    $TotaRows = $db->rowCount($countTotal);
+    $TotaRows = $db->rowCount($approvSql);
     if (!$TotaRows)
         $TotaRows = 0;
 
@@ -730,3 +692,6 @@ FROM [MOENational].[dbo].[TempTeachingDetailsTemp] INNER JOIN [TeacherMast] ON T
     </div>
 
 </form>
+<?php
+// } 
+?>

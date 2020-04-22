@@ -153,7 +153,7 @@ while ($row1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
     $SchType = Trim($row1['SchoolType']);
 }
 
-$sql = " INSERT INTO [dbo].[TempTeachingDetailsTemp]
+$sql = "INSERT INTO [dbo].[Temp_TeachingDetails]
 ([NIC]
 ,[TchSubject1]
 ,[TchSubject2]
@@ -187,6 +187,7 @@ VALUES(
 
 $stmt = $db->runMsSqlQuery($sql);
 sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC);
+// var_dump($sql);
 
 echo ("<script LANGUAGE='JavaScript'>
     window.alert('Succesfully Updated');
