@@ -6,30 +6,30 @@
 <script type="text/javascript" language="javascript" charset="utf-8" src="verticalmenu/nav.js"></script>
 
 <style type="text/css">
-
     /* by duminda 2015-10-07 left menu */
-    .menuItemSelected{
-        float:left;
-        width:194px;
-        padding:2px;
-        font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
-        font-size:12px;
-        line-height:24px;
-        color:#FFF;
+    .menuItemSelected {
+        float: left;
+        width: 194px;
+        padding: 2px;
+        font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+        font-size: 12px;
+        line-height: 24px;
+        color: #FFF;
         border-radius: 2px;
-        background-color:#900;
+        background-color: #900;
 
     }
-    .menuItem{
-        float:left;
-        width:194px;
-        padding:2px;
-        font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
-        font-size:12px;
-        line-height:24px;
-        color:#FFF;
+
+    .menuItem {
+        float: left;
+        width: 194px;
+        padding: 2px;
+        font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+        font-size: 12px;
+        line-height: 24px;
+        color: #FFF;
         border-radius: 2px;
-        background-color:#A4B6FF;
+        background-color: #A4B6FF;
 
     }
 </style>
@@ -50,10 +50,10 @@ $AccessRoleType = $_SESSION['AccessRoleType'];
             <?php
             $arrPageID = array();
             $AccessRoleID = $_SESSION['AccessRoleID'];
+            // var_dump($AccessRoleID);
 
-
-// get all parent menu records for looged user
-// 2 = approval in TG_DynMenu
+            // get all parent menu records for looged user
+            // 2 = approval in TG_DynMenu
             $sqlDyn = "SELECT
 TG_DynMenu.ID,
 TG_DynMenu.Icon,
@@ -87,7 +87,7 @@ TG_Privilage.AccessRoleID = $AccessRoleID";
                 $parent_id = $row['ParentID'];
                 $is_parent = $row['IsParent'];
                 $show_menu = $row['ShowMenu'];
-
+                // var_dump($rowid);
 
 
                 // get pages for acctive class
@@ -124,7 +124,7 @@ TG_Privilage.AccessRoleID = $AccessRoleID";
                     $class_active = "open";
                 }
                 //**
-                ?>
+            ?>
 
                 <li>
                     <a class="<?php echo $class_active; ?>" href="#">
@@ -150,24 +150,24 @@ TG_DynMenu.ShowMenu = 1 AND
 TG_Privilage.AccessRoleID = $AccessRoleID";
 
                         $stmtCount = $db->runMsSqlQuery($sql_count);
-                        while($rowC = sqlsrv_fetch_array($stmtCount, SQLSRV_FETCH_ASSOC)){
+                        while ($rowC = sqlsrv_fetch_array($stmtCount, SQLSRV_FETCH_ASSOC)) {
                             $totCount += get_records_count($rowC['PageID'], $db, $loggedSchool, $nicNO, $accLevel);
                         }
 
-                        if($totCount>0){
+                        if ($totCount > 0) {
 
                         ?>
 
 
-                        <div style="width:32px; height:32px; float:right; margin-top:-5px;">
-                            <img src="../cms/images/new.png" />
-                        </div>
+                            <div style="width:32px; height:32px; float:right; margin-top:-5px;">
+                                <img src="../cms/images/new.png" />
+                            </div>
                         <?php
                         }
                         ?>
                     </a>
-    <?php
-    $sql_child = "SELECT
+                    <?php
+                    $sql_child = "SELECT
 TG_DynMenu.ID,
 TG_DynMenu.Icon,
 TG_DynMenu.Title,
@@ -184,40 +184,42 @@ TG_DynMenu.IsParent = 0 AND
 TG_DynMenu.ShowMenu = 1 AND
 TG_Privilage.AccessRoleID = $AccessRoleID";
 
-    $stmtChild = $db->runMsSqlQuery($sql_child);
+                    $stmtChild = $db->runMsSqlQuery($sql_child);
 
 
 
-    echo "<ul $block_ul>";
-    while ($rowCh = sqlsrv_fetch_array($stmtChild, SQLSRV_FETCH_ASSOC)) {
+                    echo "<ul $block_ul>";
+                    while ($rowCh = sqlsrv_fetch_array($stmtChild, SQLSRV_FETCH_ASSOC)) {
 
-        $record_count = get_records_count($rowCh['PageID'], $db, $loggedSchool, $nicNO, $accLevel);
+                        $record_count = get_records_count($rowCh['PageID'], $db, $loggedSchool, $nicNO, $accLevel);
 
-        $iconCh = $rowCh['Icon'];
-        $titleCh = $rowCh['Title'];
-        $urlCh = $rowCh['Url'];
-        $arrPageID[] = array($rowCh['PageID'], $rowCh['PHPPage']);
-        $class_activech = "";
-        if ($pageid == $rowCh['PageID']) {
-            $class_activech = "activeLink";
-        }
-        ?>
-                    <li class="<?php echo $class_activech; ?>">
-                        <a href="<?php echo $urlCh; ?>">
-                            <div style="width:20px; height:20px; float:left;"><img src="../cms/images/arrow.png" /></div><?php
-                echo $titleCh;
-                if($record_count>0){ echo " (".$record_count.")"; }
-                ?>
-                        </a>
-                    </li>
-                            <?php
+                        $iconCh = $rowCh['Icon'];
+                        $titleCh = $rowCh['Title'];
+                        $urlCh = $rowCh['Url'];
+                        $arrPageID[] = array($rowCh['PageID'], $rowCh['PHPPage']);
+                        $class_activech = "";
+                        if ($pageid == $rowCh['PageID']) {
+                            $class_activech = "activeLink";
                         }
-                        echo "</ul>";
-                        ?>
+                    ?>
+                <li class="<?php echo $class_activech; ?>">
+                    <a href="<?php echo $urlCh; ?>">
+                        <div style="width:20px; height:20px; float:left;"><img src="../cms/images/arrow.png" /></div><?php
+                                                                                                                        echo $titleCh;
+                                                                                                                        if ($record_count > 0) {
+                                                                                                                            echo " (" . $record_count . ")";
+                                                                                                                        }
+                                                                                                                        ?>
+                    </a>
                 </li>
-                <?php
-            }
+            <?php
+                    }
+                    echo "</ul>";
             ?>
+            </li>
+        <?php
+            }
+        ?>
 
         </ul>
     </nav>
@@ -225,20 +227,21 @@ TG_Privilage.AccessRoleID = $AccessRoleID";
 <!--end menu-->
 <div class="main_content_inner_block" style="width:736px; height:auto; float:left; margin-left:10px; border:thick; border-color:#666; border-width:1px; border-style:solid; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; padding-left:5px; padding-right:5px;">
 
-<?php
-// include related php pages
-for ($index = 0; $index < count($arrPageID); $index++) {
-    if ($pageid == $arrPageID[$index][0] ) {
-        include_once $arrPageID[$index][1];
+    <?php
+    // include related php pages
+    for ($index = 0; $index < count($arrPageID); $index++) {
+        if ($pageid == $arrPageID[$index][0]) {
+            include_once $arrPageID[$index][1];
+        }
     }
-}
-?>
+    ?>
 
 </div>
 
 <?php
 
-function get_records_count($pageId, $db, $loggedSchool, $nicNO, $accLevel) {
+function get_records_count($pageId, $db, $loggedSchool, $nicNO, $accLevel)
+{
 
     // new registration
     if ($pageId == '16') {
@@ -263,15 +266,15 @@ function get_records_count($pageId, $db, $loggedSchool, $nicNO, $accLevel) {
     // Personal Info
     if ($pageId == '15') {
 
-        $sql = "SELECT        TG_EmployeeUpdatePersInfo.ID, TG_EmployeeUpdatePersInfo.NIC, TG_EmployeeUpdatePersInfo.TeacherMastID, TG_EmployeeUpdatePersInfo.PermResiID,
-							 TG_EmployeeUpdatePersInfo.CurrResID, CONVERT(varchar(20), TG_EmployeeUpdatePersInfo.dDateTime, 121) AS dDateTime,
-							 TG_EmployeeUpdatePersInfo.IsApproved, UP_TeacherMast.SurnameWithInitials, CD_Title.TitleName, CD_Zone.InstitutionName, CD_Districts.DistName
-	FROM            UP_TeacherMast INNER JOIN
-							 TG_EmployeeUpdatePersInfo ON UP_TeacherMast.ID = TG_EmployeeUpdatePersInfo.TeacherMastID INNER JOIN
-							 CD_Title ON UP_TeacherMast.Title = CD_Title.TitleCode INNER JOIN
-							 CD_Zone ON TG_EmployeeUpdatePersInfo.ZoneCode = CD_Zone.CenCode INNER JOIN
-							 CD_Districts ON CD_Zone.DistrictCode = CD_Districts.DistCode
-							 WHERE TG_EmployeeUpdatePersInfo.IsApproved='N'";
+        $sql = "SELECT TG_EmployeeUpdatePersInfo.ID, TG_EmployeeUpdatePersInfo.NIC, TG_EmployeeUpdatePersInfo.TeacherMastID, TG_EmployeeUpdatePersInfo.PermResiID,
+				TG_EmployeeUpdatePersInfo.CurrResID, CONVERT(varchar(20), TG_EmployeeUpdatePersInfo.dDateTime, 121) AS dDateTime,
+				TG_EmployeeUpdatePersInfo.IsApproved, UP_TeacherMast.SurnameWithInitials, CD_Title.TitleName, CD_Zone.InstitutionName, CD_Districts.DistName
+	            FROM UP_TeacherMast INNER JOIN
+				TG_EmployeeUpdatePersInfo ON UP_TeacherMast.ID = TG_EmployeeUpdatePersInfo.TeacherMastID INNER JOIN
+				CD_Title ON UP_TeacherMast.Title = CD_Title.TitleCode INNER JOIN
+				CD_Zone ON TG_EmployeeUpdatePersInfo.ZoneCode = CD_Zone.CenCode INNER JOIN
+				CD_Districts ON CD_Zone.DistrictCode = CD_Districts.DistCode
+				WHERE TG_EmployeeUpdatePersInfo.IsApproved='N'";
 
         if ($_SESSION['AccessRoleType'] == 'ZN') {
             $sql .= " and TG_EmployeeUpdatePersInfo.ZoneCode='$loggedSchool'";
@@ -329,7 +332,7 @@ FROM            TG_EmployeeUpdateQualification INNER JOIN
         if ($_SESSION['AccessRoleType'] == 'ZN') {
             $sql .= " and TG_EmployeeUpdateQualification.ZoneCode='$loggedSchool'";
         }
-      //  echo $sql;
+        //  echo $sql;
         $rowCount = $db->rowCount($sql);
         if ($rowCount > 0) {
             return $rowCount;
@@ -421,6 +424,42 @@ WHERE        (TG_Approval_Leave.ApprovedStatus = 'P')";
             return $rowCount;
         }
         // Added by Dharshana -- End
+    }
+    if ($pageId  == '23') {
+            $sql = "SELECT *
+            FROM Temp_TeachingDetails
+            INNER JOIN [TeacherMast] ON Temp_TeachingDetails.NIC = TeacherMast.NIC 
+                    INNER JOIN StaffServiceHistory ON TeacherMast.CurServiceRef = StaffServiceHistory.ID 
+                    INNER JOIN CD_CensesNo ON StaffServiceHistory.InstCode = CD_CensesNo.CenCode
+                    INNER JOIN CD_Zone ON CD_CensesNo.ZoneCode = CD_Zone.CenCode
+                    INNER JOIN CD_Districts ON CD_Districts.DistCode = CD_Zone.DistrictCode
+                    WHERE Temp_TeachingDetails.RecStatus = '0'";
+
+            if ($_SESSION['AccessRoleType'] == 'ZN') {
+                "AND CD_Zone.CenCode = 'ZN2206'";
+            }
+            $rowCount = $db->rowCount($sql);
+            if ($rowCount > 0) {
+                return $rowCount;
+            }
+    }
+    if ($pageId  == '24') {
+        $sql = "SELECT *
+        FROM Temp_AppoinmentDetails
+        INNER JOIN [TeacherMast] ON Temp_AppoinmentDetails.NIC = TeacherMast.NIC 
+        INNER JOIN StaffServiceHistory ON TeacherMast.CurServiceRef = StaffServiceHistory.ID 
+        INNER JOIN CD_CensesNo ON StaffServiceHistory.InstCode = CD_CensesNo.CenCode
+        INNER JOIN CD_Zone ON CD_CensesNo.ZoneCode = CD_Zone.CenCode
+        INNER JOIN CD_Districts ON CD_Districts.DistCode = CD_Zone.DistrictCode
+        WHERE RecordStatus = '0'"; 
+
+        if ($_SESSION['AccessRoleType'] == 'ZN') {
+            $sql .= " AND ZoneCode = '$loggedSchool'";
+        }
+        $rowCount = $db->rowCount($sql);
+        if ($rowCount > 0) {
+            return $rowCount;
+        }
     }
     // National Principal
     if ($pageId == '7') {

@@ -1,4 +1,8 @@
 <link href="../cms/css/screen.css" rel="stylesheet" type="text/css" />
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <?php
 $msg = "";
 $nicUpdate = $_SESSION['NIC'];
@@ -36,130 +40,287 @@ WHERE        (TeacherMast.NIC = '$NICUser')";
         $msg .= "Please select medium.<br>";
     }
 
-    if ($msg == '') {
-        $familiChildStatus = "Add";
-        if ($TeachingIDA == '') {//$familiChildStatus=='Add'){
-            $queryMainSave = "INSERT INTO UP_TeacherSubject
-			   (NIC,SubjectType,SubjectCode,MediumCode,SecGradeCode,Grade,LastUpdate,UpdatedBy,RecordLog)
-		 VALUES
-			   ('$NICUser','$SubjectType','$SubjectCode','$MediumCode','$SecGradeCode','$Grade','$LastUpdate','$nicUpdate','First change')";
-            $db->runMsSqlQuery($queryMainSave);
+    // if ($msg == '') {
+    //     $familiChildStatus = "Add";
+    //     if ($TeachingIDA == '') { //$familiChildStatus=='Add'){
+    //         $queryMainSave = "INSERT INTO UP_TeacherSubject
+    // 		   (NIC,SubjectType,SubjectCode,MediumCode,SecGradeCode,Grade,LastUpdate,UpdatedBy,RecordLog)
+    // 	 VALUES
+    // 		   ('$NICUser','$SubjectType','$SubjectCode','$MediumCode','$SecGradeCode','$Grade','$LastUpdate','$nicUpdate','First change')";
+    //         $db->runMsSqlQuery($queryMainSave);
 
-            $reqTabMobAc = "SELECT ID FROM UP_TeacherSubject where NIC='$NICUser' and SubjectType='$SubjectType' and SubjectCode='$SubjectCode'  ORDER BY ID DESC";
-            $stmtMobAc = $db->runMsSqlQuery($reqTabMobAc);
-            $rowMobAc = sqlsrv_fetch_array($stmtMobAc, SQLSRV_FETCH_ASSOC);
-            $TeachingID = trim($rowMobAc['ID']);
-        }
-    }
+    //         $reqTabMobAc = "SELECT ID FROM UP_TeacherSubject where NIC='$NICUser' and SubjectType='$SubjectType' and SubjectCode='$SubjectCode'  ORDER BY ID DESC";
+    //         $stmtMobAc = $db->runMsSqlQuery($reqTabMobAc);
+    //         $rowMobAc = sqlsrv_fetch_array($stmtMobAc, SQLSRV_FETCH_ASSOC);
+    //         $TeachingID = trim($rowMobAc['ID']);
+    //     }
+    // }
 
     if ($msg == '') {
         $queryRegis = "INSERT INTO TG_EmployeeUpdateTeaching (NIC,TeachingID,dDateTime,ZoneCode,IsApproved,ApproveDate,ApprovedBy,UpdateBy)
 			 VALUES				   
 		('$NICUser','$TeachingID','$LastUpdate','$ZoneCode','N','','','$nicUpdate')";
         $db->runMsSqlQuery($queryRegis);
-        
+
         audit_trail($NICUser, $_SESSION["NIC"], 'teacherprofile\teaching.php', 'Insert', 'UP_TeacherSubject,TG_EmployeeUpdateTeaching', 'Insert user teaching info.');
 
         $success = "Your update request submitted successfully. Data will be displaying after the approvals.";
     }
 }
+$pageid = $_GET["pageid"];
+$menu = $_GET['menu'];
+$tpe = $_GET['tpe'];
+$id = $_GET['id'];
 
+$SQL1 = "SELECT TOP(1)
+*
+FROM
+TeacherMast
+join StaffServiceHistory on TeacherMast.CurServiceRef = StaffServiceHistory.ID
+join CD_CensesNo on StaffServiceHistory.InstCode = CD_CensesNo.CenCode 
+WHERE StaffServiceHistory.NIC = '$id' ORDER BY StaffServiceHistory.AppDate DESC";
+
+$stmt1 = $db->runMsSqlQuery($SQL1);
+while ($row1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
+    $SchType = Trim($row1['SchoolType']);
+}
+// $dateNow = date("Y/m/d");
+// echo $dateNow;
 ?>
+<style>
+    input[type=text],
+    select {
+        width: 100%;
+        padding: 6px 10px;
+        margin: 4px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    input[type=submit] {
+        width: 50%;
+        background-color: #92495C;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    /* #otherdiv{
+        display: none !important;
+    } */
+</style>
 <div class="main_content_inner_block">
     <div class="mcib_middle1">
-        <table>
-            <tr>
-                <td colspan="2" style="text-align: center; font-weight: bold;";>
-                    Appointment
-                </td>
-            </tr>
-            <tr>
-                <td>Appointment category: </td>
-                <td>
-                    <select id="AppCat">
-                    <option>Select</option>
-                    <?php // for apponment category combo box
-                    $sql = "SELECT ID, AppoinmentName FROM CD_AppSubCategory WHERE ID IS NOT NULL";
-                    $stmt = $db->runMsSqlQuery($sql);
-                    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
-                        $AppId = $row['ID'];
-                        $AppName = $row['AppoinmentName'];
-                        echo "<option value=".$AppName.">".$AppId."- ".$AppName."</option>";
-                    }
-                    ?>
-                         
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td>Appointed Medium: </td>
-                <td>
-                    <select id="MedApp">
-                    <option>Select</option>
-                    <?php // for meium combo box
-                    $sql = "SELECT Medium FROM CD_Medium WHERE Code != ''";
-                    $stmt = $db->runMsSqlQuery($sql);
-                    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
-                        $AppMeduim = $row['Medium'];
-                        echo "<option value=".$AppMeduim.">".$AppMeduim."</option>";
-                    }
-                    ?>
-                        
-                    </select>
-                </td>
-            </tr>
-            <?php //var_dump($AppId); ?>
-            <tr>
-                <td>Subject / Degree Appointed: </td>
-                <td>
-                <div id = "SubAppDiv">
-                    <select id="SubApp" onchange="show_otherdiv()">
-                        <option>Select</option>
-                        <?php
-                        if($AppId != '' ){
-                            $sql = "SELECT * FROM CD_AppSubjects";
+        <?php // var_dump($SchType); 
+        ?>
+        <form method="POST" name="AppFrmDetails" id="AppFrmDetails" action="AppSubmit.php">
+            <table>
+                <tr>
+                    <td colspan="2" style="text-align: center; font-weight: bold;" ;>
+                        Appointment
+                    </td>
+                </tr>
+                <tr>
+                    <td>Appointment category: </td>
+                    <td>
+                        <select id="AppCat" name="AppCat">
+                            <option value="">Select</option>
+                            <?php // for apponment category combo box
+                            // if ($SchType == '6') {
+                            //     $sql = "SELECT ID, AppointmentName FROM CD_PV_AppSubCategory WHERE ID IS NOT NULL";
+                            //     $stmt = $db->runMsSqlQuery($sql);
+                            //     while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                            //         $AppId = $row['ID'];
+                            //         $AppName = $row['AppointmentName'];
+                            //         echo "<option value=" . $AppId . ">" . $AppId . "- " . $AppName . "</option>";
+                            //     }
+                            // } else {
+                            //     $sql = "SELECT ID, AppointmentName FROM CD_AppSubCategory WHERE ID IS NOT NULL";
+                            //     $stmt = $db->runMsSqlQuery($sql);
+                            //     while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                            //         $AppId = $row['ID'];
+                            //         $AppName = $row['AppointmentName'];
+                            //         echo "<option value=" . $AppId . ">" . $AppId . "- " . $AppName . "</option>";
+                            //     }
+                            // }
+                            ?>
+
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Appointed Medium: </td>
+                    <td>
+                        <select id="MedApp" name="MedApp">
+                            <option>Select</option>
+                            <?php // for meium combo box
+                            $sql = "SELECT Medium FROM CD_Medium WHERE Code != ''";
                             $stmt = $db->runMsSqlQuery($sql);
-                            while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
-                                $AppSubject = $row['SubjectName'];
-                                echo "<option value=".$AppSubject.">".$AppSubject."</option>";
+                            while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                $AppMeduim = $row['Medium'];
+                                echo "<option value=" . $AppMeduim . ">" . $AppMeduim . "</option>";
                             }
-                        }
-                    ?>
-                    </select>
+                            ?>
+
+                        </select>
+                    </td>
+                </tr>
+                <?php //var_dump($AppId); 
+                ?>
+                <tr>
+                    <td>Subject / Degree Appointed: </td>
+                    <td>
+                        <div id="SubAppDiv">
+                            <select id="SubApp" name="SubApp">
+                                <option value="">Select</option>
+                                <?php
+                                // if ($SchType == '6') {
+                                //     if ($AppId != '') {
+                                //         $sql = "SELECT * FROM CD_PV_TeachSubjects";
+                                //         $stmt = $db->runMsSqlQuery($sql);
+                                //         while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                //             $AppSubjectID = $row['ID'];
+                                //             $AppSubject = $row['SubjectName'];
+                                //             echo "<option value=" . $AppSubjectID . ">" . $AppSubjectID . "-" . $AppSubject . "</option>";
+                                //         }
+                                //     }
+                                // } else {
+                                //     if ($AppId != '') {
+                                //         $sql = "SELECT * FROM CD_AppSubjects";
+                                //         $stmt = $db->runMsSqlQuery($sql);
+                                //         while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                //             $AppSubjectID = $row['ID'];
+                                //             $AppSubject = $row['SubjectName'];
+                                //             echo "<option value=" . $AppSubjectID . ">" . $AppSubjectID . "-" . $AppSubject . "</option>";
+                                //         }
+                                //     }
+                                // }
+                                ?>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <!-- <tr>
+                    <td><button type="button" onclick="show_otherdiv()">Other</button></td>
+                </tr> -->
+                <tr>
+                    <div>
+                        <td><div style="display :none" id="otherdiv">If Other Please Specify: </div></td>
+                        <td>
+                        <div style="display :none" id="inputdiv">
+                            <input type="text" name="otherSub" id="otherSub">
+                            </div>
+                        </td>
+                    </div>
+                </tr>
+                </tr>
+                <td colspan="2">
+                    <div>
+                        <input type="submit" name="AppFrmSubmit" id="AppFrmSubmit">
                     </div>
                 </td>
-            </tr>
-            
-            <tr>
-                <div id="otherdiv">
-                    <td>Please Specify: </td>
-                    <td>
-                    
-                        <input type="text" name="otherSub">
-                        
-                    </td>
-                </div>
-            </tr>
-            </tr>
-            <td colspan="2">
-            <div>
-                <input type = "submit"> 
-            </div>
-            </td>
-            </tr>
-        </table>
+                </tr>
+                <tr>
+                    <td class="box"><input type="hidden" name="id" id="id" value="<?php echo $id ?>"></td>
+                <tr>
+            </table>
+        </form>
     </div>
 </div>
 <script>
-    function show_otherdiv(){
-        var x = document.getElementById("otherdiv");
-        
-        if(x.style.display === "none"){
-            console.log(x);
-            x.style.display = "block";
-        }
-        else{
-            x.style.display = "none";
-        }
+    var schType = "<?php echo $SchType; ?>";
+    var i;
+    if(schType == 6){
+        i = '6';
+    }else{
+        i = '1';
     }
+    // console.log(i);
+    
+    var x = document.getElementById("otherdiv");
+    var y = document.getElementById("inputdiv");
+    // function show_otherdiv() {
+        // var x = document.getElementById("otherdiv");
+        // var y = document.getElementById("inputdiv");
+
+        // if (x.style.display === "none") {
+        //     // console.log(x);
+        //     x.style.display = "block";
+        // } else {
+        //     x.style.display = "none";
+        // }
+        // if (y.style.display === "none") {
+        //     // console.log(y);
+        //     y.style.display = "block";
+        // } else {
+        //     y.style.display = "none";
+        // }
+    // }
+
+    $(document).ready(function(){
+
+        load_json_data('AppCat');
+        // console.log('AppCat');
+
+
+        function load_json_data(id, category){
+            var html_code = '';
+            $.getJSON('AppSubject.json',function(data){
+                html_code += '<option value = "">'+id+'</option>';
+                $.each(data, function(key, value){
+                    if(id == 'AppCat'){
+                        if(value.category == '0'){
+                            html_code += '<option value="'+value.id+'">'+value.name+'</option>';
+                        }
+                    } 
+                    else{
+                        if(value.category == category){
+                            if(value.schtype == i){
+                                html_code += '<option value="'+value.id+'">'+value.name+'</option>';
+                            }                            
+                        }
+                    }
+                });
+             $('#'+id).html(html_code);
+            }); 
+        }
+        // console.log(html_code);
+        
+        $(document).on('change','#AppCat',function(){
+            var AppCat_id = $(this).val();
+            // alert(AppCat_id);
+
+            if(AppCat_id != ''){
+                // console.log(AppCat_id);
+                    load_json_data('SubApp',AppCat_id);
+            }
+            else{
+                
+                $('#AppSub').html('<option value="">Select</option>');
+
+            }
+        });
+        
+        $(document).on('change','#SubApp',function(){
+            var SubApp_id = $(this).val();
+
+            if(SubApp_id == '12' || SubApp_id =='11'){
+                x.style.display = "block";
+                y.style.display = "block";
+            }else{
+                x.style.display = "none";
+                y.style.display = "none"; 
+            }
+        });
+    });
 </script>
+<?php
+$AppCat = $_POST["AppCat"];
+$MedApp = $_POST["MedApp"];
+$SubApp = $_POST["SubApp"];
+$otherSub = $_POST["otherSub"];
+?>
