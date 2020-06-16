@@ -110,31 +110,40 @@ $dateNow = date("Y/m/d");
 $nicNO = $_REQUEST['id'];
 
 $MedTch1 = $_REQUEST['MedTch1'];
+$MedTch2 = $_REQUEST["MedTch2"];
+$MedTch3 = $_REQUEST["MedTch3"];
 $GradTch1 = $_REQUEST["GradTch1"];
+$GradTch2 = $_REQUEST["GradTch2"];
+$GradTch3 = $_REQUEST["GradTch3"];
 
 if ($_REQUEST["SubTch1"] != 'Select') {
     $SubTch1 = $_REQUEST["SubTch1"];
 } else {
-    $SubTch1 = $_REQUEST["otherTch1"];
+    $SubTch1 = "";
 }
-
-$MedTch2 = $_REQUEST["MedTch2"];
-$GradTch2 = $_REQUEST["GradTch2"];
 
 if ($_REQUEST["SubTch2"] != 'Select') {
     $SubTch2 = $_REQUEST["SubTch2"];
 } else {
-    $SubTch2 = $_REQUEST["otherTch2"];
+    $SubTch2 = "";
 }
-
-$MedTch3 = $_REQUEST["MedTch3"];
-$GradTch3 = $_REQUEST["GradTch3"];
 
 if ($_REQUEST["SubTch3"] != 'Select') {
     $SubTch3 = $_REQUEST["SubTch3"];
 } else {
-    $SubTch3 = $_REQUEST["otherTch3"];
+    $SubTch3 = "";
 }
+$otherTch1 = $_REQUEST["otherTch1"];
+$otherTch2 = $_REQUEST["otherTch2"];
+$otherTch3 = $_REQUEST["otherTch3"];
+
+if ($_REQUEST["otherspecial"] != 'Select') {
+    $otherspecial = $_REQUEST["otherspecial"];
+} else {
+    $otherspecial = "";
+}
+// $otherspecial = $_REQUEST["otherspecial"];
+
 // var_dump($SubTch3);
 $id = $_REQUEST["id"];
 // echo "gg" . $MedTch1;
@@ -158,27 +167,36 @@ $sql = "INSERT INTO [dbo].[Temp_TeachingDetails]
 ,[TchSubject1]
 ,[TchSubject2]
 ,[TchSubject3]
+,[Other1]
+,[Other2]
+,[Other3]
 ,[Medium1]
 ,[Medium2]
 ,[Medium3]
 ,[GradeCode1]
 ,[GradeCode2]
 ,[GradeCode3]
+,[OtherSpecial]
 ,[SchoolType]
 ,[RecStatus]
 ,[RecordLog]
 ,[LastUpdate])
-VALUES(
+VALUES
+(
     '$nicNO', 
     '$SubTch1', 
     '$SubTch2', 
-    '$SubTch3', 
+    '$SubTch3',
+    '$otherTch1',
+    '$otherTch2',
+    '$otherTch3', 
     '$MedTch1', 
     '$MedTch2', 
     '$MedTch3',
     '$GradTch1',
     '$GradTch2',
     '$GradTch3',
+    '$otherspecial',
     '$SchType',
     '0',
     '$NICUser',

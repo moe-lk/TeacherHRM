@@ -5,8 +5,6 @@ $success = "";
 include('../activityLog.php');
 // var_dump($_POST);
 if (isset($_POST["FrmSubmit"])) {
-    // echo "<script>alert('This is alert')</script>";
-
     $dateU = date('Y-m-d H:i:s');
     $dateUP = date('Y-m-d');
     $UpdateBy = "Add by $NICUser";
@@ -17,24 +15,26 @@ if (isset($_POST["FrmSubmit"])) {
     $msg = "";
 
     //get data from temp table - Start
-    $reqTab = "SELECT Temp_TeachingDetails.ID
-    ,Temp_TeachingDetails.NIC
-    ,[SurnameWithInitials]
-    ,[FullName]
-    ,[TchSubject1]
-    ,[TchSubject2]
-    ,[TchSubject3]
-    ,[Medium1]
-    ,[Medium2]
-    ,[Medium3]
-    ,[GradeCode1]
-    ,[GradeCode2]
-    ,[GradeCode3]
-    ,[SchoolType]
-    ,Temp_TeachingDetails.RecStatus
-    ,Temp_TeachingDetails.RecordLog
-    ,Temp_TeachingDetails.LastUpdate
-FROM [MOENational].[dbo].[Temp_TeachingDetails] 
+    $reqTab = "SELECT TOP (1000) [ID]
+      ,[NIC]
+      ,[TchSubject1]
+      ,[TchSubject2]
+      ,[TchSubject3]
+      ,[Other1]
+      ,[Other2]
+      ,[Other3]
+      ,[Medium1]
+      ,[Medium2]
+      ,[Medium3]
+      ,[GradeCode1]
+      ,[GradeCode2]
+      ,[GradeCode3]
+      ,[OtherSpecial]
+      ,[SchoolType]
+      ,[RecStatus]
+      ,[RecordLog]
+      ,[LastUpdate]
+  FROM [MOENational].[dbo].[Temp_TeachingDetails] 
 INNER JOIN [TeacherMast] ON Temp_TeachingDetails.NIC = TeacherMast.NIC
 WHERE Temp_TeachingDetails.ID = '$RegID'";
 
@@ -46,12 +46,16 @@ WHERE Temp_TeachingDetails.ID = '$RegID'";
     $TchSubject1 = $rowE['TchSubject1'];
     $TchSubject2 = $rowE['TchSubject2'];
     $TchSubject3 = $rowE['TchSubject3'];
+    $Other1 = $rowE['Other1'];
+    $Other2 = $rowE['Other2'];
+    $Other3 = $rowE['Other3'];
     $Medium1 = $rowE['Medium1'];
     $Medium2 = $rowE['Medium2'];
     $Medium3 = $rowE['Medium3'];
     $GradeCode1 = $rowE['GradeCode1'];
     $GradeCode2 = $rowE['GradeCode2'];
     $GradeCode3 = $rowE['GradeCode3'];
+    $OtherSpecial = $rowE['OtherSpecial'];
     $SchoolType = $rowE['SchoolType'];
 
     $TeacherMastID = trim($rowE['TeacherMastID']);
@@ -82,12 +86,16 @@ WHERE Temp_TeachingDetails.ID = '$RegID'";
         ,'$TchSubject1'
         ,'$TchSubject2'
         ,'$TchSubject3'
+        ,'$Other1'
+        ,'$Other2'
+        ,'$Other3'
         ,'$Medium1'
         ,'$Medium2'
         ,'$Medium3'
         ,'$GradeCode1'
         ,'$GradeCode2'
         ,'$GradeCode3'
+        ,'$OtherSpecial'
         ,'$SchoolType'
         ,'1'
         ,'$RecordLog'
@@ -123,24 +131,26 @@ WHERE Temp_TeachingDetails.ID = '$RegID'";
 $NICAPP = $_SESSION['NIC']; 
 
 if ($id != '') {
-    $reqTab = "SELECT Temp_TeachingDetails.ID
-    ,Temp_TeachingDetails.NIC
-    ,[SurnameWithInitials]
-    ,[FullName]
-    ,[TchSubject1]
-    ,[TchSubject2]
-    ,[TchSubject3]
-    ,[Medium1]
-    ,[Medium2]
-    ,[Medium3]
-    ,[GradeCode1]
-    ,[GradeCode2]
-    ,[GradeCode3]
-    ,[SchoolType]
-    ,Temp_TeachingDetails.RecStatus
-    ,Temp_TeachingDetails.RecordLog
-    ,Temp_TeachingDetails.LastUpdate
-FROM [MOENational].[dbo].[Temp_TeachingDetails] 
+    $reqTab = "SELECT TOP (1000) [ID]
+      ,[NIC]
+      ,[TchSubject1]
+      ,[TchSubject2]
+      ,[TchSubject3]
+      ,[Other1]
+      ,[Other2]
+      ,[Other3]
+      ,[Medium1]
+      ,[Medium2]
+      ,[Medium3]
+      ,[GradeCode1]
+      ,[GradeCode2]
+      ,[GradeCode3]
+      ,[OtherSpecial]
+      ,[SchoolType]
+      ,[RecStatus]
+      ,[RecordLog]
+      ,[LastUpdate]
+  FROM [MOENational].[dbo].[Temp_TeachingDetails] 
 INNER JOIN [TeacherMast] ON Temp_TeachingDetails.NIC = TeacherMast.NIC
 WHERE Temp_TeachingDetails.ID = '$id'";
 
@@ -156,33 +166,39 @@ WHERE Temp_TeachingDetails.ID = '$id'";
     $TchSubject1E = $rowE["TchSubject1"];
     $TchSubject2E = $rowE["TchSubject2"];
     $TchSubject3E = $rowE["TchSubject3"];
+    $Other1 = $rowE['Other1'];
+    $Other2 = $rowE['Other2'];
+    $Other3 = $rowE['Other3'];
     $Medium1E = $rowE['Medium1'];
     $Medium2E = $rowE['Medium2'];
     $Medium3E = $rowE['Medium3'];
     $GradeCode1E = $rowE["GradeCode1"];
     $GradeCode2E = $rowE["GradeCode2"];
     $GradeCode3E = $rowE["GradeCode3"];
+    $OtherSpecial = $rowE['OtherSpecial'];
 
 
     //Edit this as necessary----------------------------------------------------------------------------------------------------------------------------------------------------------
-    $sqlteachrMst = "SELECT Temp_TeachingDetails.ID
-    ,Temp_TeachingDetails.NIC
-    ,[SurnameWithInitials]
-    ,[FullName]
-    ,[TchSubject1]
-    ,[TchSubject2]
-    ,[TchSubject3]
-    ,[Medium1]
-    ,[Medium2]
-    ,[Medium3]
-    ,[GradeCode1]
-    ,[GradeCode2]
-    ,[GradeCode3]
-    ,[SchoolType]
-    ,Temp_TeachingDetails.RecStatus
-    ,Temp_TeachingDetails.RecordLog
-    ,Temp_TeachingDetails.LastUpdate
-FROM [MOENational].[dbo].[Temp_TeachingDetails] 
+    $sqlteachrMst = "SELECT TOP (1000) [ID]
+      ,[NIC]
+      ,[TchSubject1]
+      ,[TchSubject2]
+      ,[TchSubject3]
+      ,[Other1]
+      ,[Other2]
+      ,[Other3]
+      ,[Medium1]
+      ,[Medium2]
+      ,[Medium3]
+      ,[GradeCode1]
+      ,[GradeCode2]
+      ,[GradeCode3]
+      ,[OtherSpecial]
+      ,[SchoolType]
+      ,[RecStatus]
+      ,[RecordLog]
+      ,[LastUpdate]
+  FROM [MOENational].[dbo].[Temp_TeachingDetails] 
 INNER JOIN [TeacherMast] ON Temp_TeachingDetails.NIC = TeacherMast.NIC
 WHERE (Temp_TeachingDetails.ID = '$TeacherMastID')"; //(UP_TeacherMast.NIC = '850263230V')
 
@@ -234,12 +250,16 @@ if ($id == '') {
     ,[TchSubject1]
     ,[TchSubject2]
     ,[TchSubject3]
+    ,[Other1]
+    ,[Other2]
+    ,[Other3]
     ,[Medium1]
     ,[Medium2]
     ,[Medium3]
     ,[GradeCode1]
     ,[GradeCode2]
     ,[GradeCode3]
+    ,[OtherSpecial]
     ,Temp_TeachingDetails.SchoolType
     ,Temp_TeachingDetails.RecStatus
     ,Temp_TeachingDetails.RecordLog
@@ -261,12 +281,16 @@ if ($accLevel >= '14000' && $accLevel <= '17999') {
     ,[TchSubject1]
     ,[TchSubject2]
     ,[TchSubject3]
+    ,[Other1]
+    ,[Other2]
+    ,[Other3]
     ,[Medium1]
     ,[Medium2]
     ,[Medium3]
     ,[GradeCode1]
     ,[GradeCode2]
     ,[GradeCode3]
+    ,[OtherSpecial]
     ,Temp_TeachingDetails.SchoolType
     ,Temp_TeachingDetails.RecStatus
     ,Temp_TeachingDetails.RecordLog
@@ -288,12 +312,16 @@ else {
     ,[TchSubject1]
     ,[TchSubject2]
     ,[TchSubject3]
+    ,[Other1]
+    ,[Other2]
+    ,[Other3]
     ,[Medium1]
     ,[Medium2]
     ,[Medium3]
     ,[GradeCode1]
     ,[GradeCode2]
     ,[GradeCode3]
+    ,[OtherSpecial]
     ,Temp_TeachingDetails.SchoolType
     ,Temp_TeachingDetails.RecStatus
     ,Temp_TeachingDetails.RecordLog
@@ -320,12 +348,16 @@ if ($accLevel >= '14000' && $accLevel <= '17999') {
     ,[TchSubject1]
     ,[TchSubject2]
     ,[TchSubject3]
+    ,[Other1]
+    ,[Other2]
+    ,[Other3]
     ,[Medium1]
     ,[Medium2]
     ,[Medium3]
     ,[GradeCode1]
     ,[GradeCode2]
     ,[GradeCode3]
+    ,[OtherSpecial]
     ,Temp_TeachingDetails.SchoolType
     ,Temp_TeachingDetails.RecStatus
     ,Temp_TeachingDetails.RecordLog
@@ -444,6 +476,9 @@ WHERE Temp_TeachingDetails.RecStatus = '0'";
                                     $TchSubject1 = $row["TchSubject1"];
                                     $TchSubject2 = $row["TchSubject2"];
                                     $TchSubject3 = $row["TchSubject3"];
+                                    $Other1 = $row['Other1'];
+                                    $Other2 = $row['Other2'];
+                                    $Other3 = $row['Other3'];
                                     $Medium1 = $row['Medium1'];
                                     $Medium2 = $row['Medium2'];
                                     $Medium3 = $row['Medium3'];

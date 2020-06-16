@@ -5,7 +5,7 @@ $success = "";
 include('../activityLog.php');
 // var_dump($_POST);
 if (isset($_POST["FrmSubmit"])) {
-    if ($IsApproved == 'Y') {
+
         $dateU = date('Y-m-d H:i:s');
         $dateUP = date('Y-m-d');
         $UpdateBy = "Add by $NICUser";
@@ -33,7 +33,6 @@ if (isset($_POST["FrmSubmit"])) {
 
         $stmtE = $db->runMsSqlQuery($reqTab);
         $rowE = sqlsrv_fetch_array($stmtE, SQLSRV_FETCH_ASSOC);
-        
         $NIC = trim($rowE['NIC']);
         $TempID = $rowE['ID'];
         $SurnameWithInitials = $rowE['SurnameWithInitials'];
@@ -46,6 +45,8 @@ if (isset($_POST["FrmSubmit"])) {
         $RecordStatus = $rowE['RecordStatus'];
         // $LastUpdate = $rowE['LastUpdate'];
         // $RecordLog = $rowE['RecordLog'];
+        
+    if ($IsApproved == 'Y') {
         $RecordLog = "Approved by $NICUser";
         $ApprovedDate = date("Y-m-d H:i:s");
 
@@ -101,7 +102,7 @@ if ($id != '') {
     ,[SurnameWithInitials]
     ,[FullName]
     ,[AppCategory]
-	,[AppointmentName]
+	,CD_AppSubCategory.AppoinmentName
     ,[AppSubject]
 	,[SubjectName]
     ,[Medium]
@@ -114,7 +115,7 @@ FROM Temp_AppoinmentDetails
 INNER JOIN [TeacherMast] ON Temp_AppoinmentDetails.NIC = TeacherMast.NIC 
 INNER JOIN CD_AppSubCategory ON AppCategory = CD_AppSubCategory.ID
 INNER JOIN CD_AppSubjects ON AppSubject = CD_AppSubjects.ID
-WHERE Temp_AppoinmentDetails.ID='$id'";
+WHERE Temp_AppoinmentDetails.NIC='$id'";
 
     $stmtE = $db->runMsSqlQuery($reqTab);
     $rowE = sqlsrv_fetch_array($stmtE, SQLSRV_FETCH_ASSOC);
@@ -492,7 +493,10 @@ WHERE RecordStatus = '0'";
                         <table width="100%" cellspacing="2" cellpadding="2">
                             <tr>
                                 <td width="32%">&nbsp;</td>
-                                <td width="68%"><input type="hidden" name="RegID" value="<?php echo $id ?>" /><input name="FrmSubmit" type="submit" id="FrmSubmit" style="background-image: url(../cms/images/saveform.jpg); width:98px; height:26px; background-color:transparent; border:none;" value="" /></td>
+                                <td width="68%">
+                                    <input type="hidden" name="RegID" value="<?php echo $id ?>" />
+                                    <input name="FrmSubmit" type="submit" id="FrmSubmit" style="background-image: url(../cms/images/saveform.jpg); width:98px; height:26px; background-color:transparent; border:none;" value="" />
+                                </td>
                             </tr>
                         </table>
                     </td>

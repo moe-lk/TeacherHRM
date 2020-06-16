@@ -82,6 +82,11 @@ while ($row1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
     $SchType = Trim($row1['SchoolType']);
     // var_dump($SchType);
 }
+
+$TbLD=1;
+
+$SQLTBL = "SELECT * FROM TeachingDetails WHERE NIC = '$id' AND RecStatus = '1'";
+$stmtTBL = $db->runMsSqlQuery($SQLTBL);
 ?>
 
 <style>
@@ -106,10 +111,94 @@ while ($row1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
         border-radius: 4px;
         cursor: pointer;
     }
+    #Tblrecord {
+        border-collapse: collapse;       
+        border: 1px solid black;
+        /* padding: 5px; */
+    }
+
+    /* #Tblrecord, td, th {
+        border: 1px solid black;
+        padding: 5px;
+    } */
+    #headtbl{
+        background-color: #CCCCCC; 
+        /* color: white; */
+        font-weight: 700;
+        text-align: center;
+        padding-left: 10px;
+        padding-right: 10px;
+        width:100%;
+    }
 </style>
 <div class="main_content_inner_block">
     <div class="mcib_middle1">
-        <form method="POST" name="frmTchDetails" id="frmTchDetails" action="TchSubmit.php">
+    <table name="Tblrecord" id="Tblrecord" border = "1px" style="width:100%; display: block;">
+                <tr id="headtbl">
+                    <td colspan="3">
+                        Teaching subject for most hours
+                    </td>
+                    <td colspan="3">
+                        Teaching subject for second most hours
+                    </td>
+                    <td colspan="3">
+                        capable subject
+                    </td>
+                    <!-- <td>
+                        Effective date
+                    </td> -->
+                    <td>
+                        Action
+                    </td>
+                </tr>
+                <tr id="headtbl">
+                    <td>Subject</td>
+                    <td>Medium</td>
+                    <td>Grade Span</td>
+                    <td>Subject</td>
+                    <td>Medium</td>
+                    <td>Grade Span</td>
+                    <td>Subject</td>
+                    <td>Medium</td>
+                    <td>Grade Span</td>
+                    <!-- <td>&nbsp;</td> -->
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                <?php 
+                    $TotaRows = $db->rowCount($SQLTBL);
+                    // var_dump($TotaRows);
+                    if (!$TotaRows){
+                        // var_dump($TotaRows)
+                        $TbLD = 0;
+                    }
+                    // sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC);
+                    // var_dump($rowTBL);
+                    // if(is_null($rowTBL)){
+                    //     $TbLD = 0;
+                    // }
+                    while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){ 
+                        // else{
+                            echo "<td>".$rowTBL['TchSubject1']."</td>";
+                            echo "<td>".$rowTBL['Medium1']."</td>";
+                            echo "<td>".$rowTBL['GradeCode1']."</td>";
+                            echo "<td>".$rowTBL['TchSubject2']."</td>";
+                            echo "<td>".$rowTBL['Medium2']."</td>";
+                            echo "<td>".$rowTBL['GradeCode2']."</td>";
+                            echo "<td>".$rowTBL['TchSubject3']."</td>";
+                            echo "<td>".$rowTBL['Medium3']."</td>";
+                            echo "<td>".$rowTBL['GradeCode3']."</td>";
+                            echo "<td style='text-align:center'><input type='button' value='Edit' onclick='showForm()'></td>";
+                        // } 
+                    } 
+                    // var_dump($TbLD);    // echo "<td>&nbsp</td>";
+
+                        
+                ?>
+
+                </tr>
+            </table>
+        <form method="POST" name="frmTchDetails" id="frmTchDetails" action="TchSubmit.php" style="display:none; padding-top: 50px;">
             <table>
                 <tr>
                     <td colspan="2" style="text-align: center; font-weight: bold;" class="box">
@@ -363,6 +452,20 @@ while ($row1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
                         <input type="text" name="otherTch3" id="otherTch3" style="display :none">
                     </td>
                 </tr>
+                <tr>
+                    <td colspan="2">
+                        <hr>
+                    </td>
+                </tr>
+                <tr>
+                    <td  class="box" style="padding-right:100px">Other Special Services</td>
+                    <td class="box">
+                        <select id="otherspecial" name="otherspecial">
+                            <option>Select</option>
+
+                        </select>
+                    </td>
+                </tr>
                 <tr> 
                     <td colspan="2">
                         <div>
@@ -380,14 +483,17 @@ while ($row1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
             $MedTch1 = $_POST['MedTch1'];
             $GradTch1 = $_POST["GradTch1"];
             $SubTch1 = $_POST["SubTch1"];
-
+            $otherTch1 = $_POST["otherTch1"];
             $MedTch2 = $_POST["MedTch2"];
             $GradTch2 = $_POST["GradTch2"];
             $SubTch2 = $_POST["SubTch2"];
-
+            $otherTch2 = $_POST["otherTch2"];
             $MedTch3 = $_POST["MedTch3"];
             $GradTch3 = $_POST["GradTch3"];
             $SubTch3 = $_POST["SubTch3"];
+            $otherTch3 = $_POST["otherTch3"];
+            $otherspecial = $_POST["otherspecial"];
+
             // }
             // var_dump($_SESSION['id']);
 
@@ -396,6 +502,29 @@ while ($row1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
     </div>
 </div>
 <script>
+
+var Tbldata = <?php echo $TbLD; ?>;
+    // console.log(Tbldata);
+    var tbl = document.getElementById("frmTchDetails")
+    var itbl = document.getElementById("Tblrecord");
+    // console.log(itbl.style.display)
+                                if (itbl.style.display === "block" && Tbldata==0) {
+                                    itbl.style.display = "none";
+                                    tbl.style.display = "block";
+                                }
+    // var i = document.getElementById("Tblrecord")
+    // // console.log(Tbldata);
+    // if(Tbldata = 0){
+    //     i.style.display = "block";
+    // }
+
+    
+    function showForm(){
+        if (tbl.style.display === "none" ) {
+            // console.log(tbl);
+            tbl.style.display = "block";
+        }
+    }
     var schType = "<?php echo $SchType; ?>";
     var i;
     if(schType == 6){
@@ -415,9 +544,9 @@ while ($row1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
     $(document).ready(function(){
     // console.log(i);
     
-        load_json_data('SubTch1');
+        load_json_data1('SubTch1');
     
-        function load_json_data(id, category){
+        function load_json_data1(id, category){
             var html_code = '';
             
             $.getJSON('TchSubject.json',function(data){
@@ -451,9 +580,9 @@ while ($row1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
             }
         });
 
-        load_json_data('SubTch2');
+        load_json_data2('SubTch2');
 
-        function load_json_data(id, category){
+        function load_json_data2(id, category){
             var html_code = '';
             
             $.getJSON('TchSubject.json',function(data){

@@ -106,7 +106,7 @@ if ($pageid == 30) {
 }
 $dateNow = date("Y/m/d");
 
-var_dump($_REQUEST);
+// var_dump($_REQUEST);
 $nicNO = $_REQUEST['id'];
 $AppCat = $_REQUEST["AppCat"];
 $MedApp = $_REQUEST["MedApp"];

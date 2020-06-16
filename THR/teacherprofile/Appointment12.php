@@ -84,6 +84,12 @@ $stmt1 = $db->runMsSqlQuery($SQL1);
 while ($row1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
     $SchType = Trim($row1['SchoolType']);
 }
+
+$TbLD=1;
+
+$SQLTBL = "SELECT * FROM [MOENational].[dbo].[AppoinmentDetails] WHERE NIC = '$id' AND RecordStatus = '1'";
+$stmtTBL = $db->runMsSqlQuery($SQLTBL);
+
 // $dateNow = date("Y/m/d");
 // echo $dateNow;
 ?>
@@ -109,6 +115,25 @@ while ($row1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
         border-radius: 4px;
         cursor: pointer;
     }
+    #Tblrecord {
+        border-collapse: collapse;       
+        /* border: 1px solid black;
+        padding: 5px; */
+    }
+
+    /* #Tblrecord, td, th {
+        border: 1px solid black;
+        padding: 5px;
+    } */
+    #headtbl{
+        background-color: #CCCCCC; 
+        /* color: white; */
+        font-weight: 700;
+        text-align: center;
+        padding-left: 10px;
+        padding-right: 10px;
+        width:100%;
+    }
     /* #otherdiv{
         display: none !important;
     } */
@@ -117,7 +142,74 @@ while ($row1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
     <div class="mcib_middle1">
         <?php // var_dump($SchType); 
         ?>
-        <form method="POST" name="AppFrmDetails" id="AppFrmDetails" action="AppSubmit.php">
+        <!-- <div> -->
+            <table name="Tblrecord" id="Tblrecord" border = "1px" style="width:100%; display: block;">
+                <tr id="headtbl">
+                    <td colspan="3">
+                        Appointment Category
+                    </td>
+                    <td colspan="3">
+                        Appointment Medium
+                    </td>
+                    <td colspan="3">
+                        Appointment subject
+                    </td>
+                    <!-- <td>
+                        Effective date
+                    </td> -->
+                    <td>
+                        Action
+                    </td>
+                <!-- </tr>
+                <tr id="headtbl">
+                    <td>Subject</td>
+                    <td>Medium</td>
+                    <td>Grade Span</td>
+                    <td>Subject</td>
+                    <td>Medium</td>
+                    <td>Grade Span</td>
+                    <td>Subject</td>
+                    <td>Medium</td>
+                    <td>Grade Span</td> -->
+                    <!-- <td>&nbsp;</td> -->
+                    <!-- <td>&nbsp;</td>
+                </tr> -->
+                <tr>
+                <?php 
+                    $TotaRows = $db->rowCount($SQLTBL);
+                    // var_dump($TotaRows);
+                    if (!$TotaRows){
+                        // var_dump($TotaRows)
+                        $TbLD = 0;
+                    }
+                    // sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC);
+                    // var_dump($rowTBL);
+                    // if(is_null($rowTBL)){
+                    //     $TbLD = 0;
+                    // }
+                    while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){ 
+                        // else{
+                            echo "<td>".$rowTBL['TchSubject1']."</td>";
+                            echo "<td>".$rowTBL['Medium1']."</td>";
+                            echo "<td>".$rowTBL['GradeCode1']."</td>";
+                            echo "<td>".$rowTBL['TchSubject2']."</td>";
+                            echo "<td>".$rowTBL['Medium2']."</td>";
+                            echo "<td>".$rowTBL['GradeCode2']."</td>";
+                            echo "<td>".$rowTBL['TchSubject3']."</td>";
+                            echo "<td>".$rowTBL['Medium3']."</td>";
+                            echo "<td>".$rowTBL['GradeCode3']."</td>";
+                            echo "<td style='text-align:center'><input type='button' value='Edit' onclick='showForm()'></td>";
+                        // } 
+                    } 
+                    // var_dump($TbLD);    // echo "<td>&nbsp</td>";
+
+                        
+                ?>
+
+                </tr>
+            </table>
+        <!-- </div> -->
+        <form method="POST" name="AppFrmDetails" id="AppFrmDetails" action="AppSubmit.php" style="display:none; padding-top: 50px;">
             <table>
                 <tr>
                     <td colspan="2" style="text-align: center; font-weight: bold;" ;>
@@ -232,6 +324,29 @@ while ($row1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
     </div>
 </div>
 <script>
+
+    var Tbldata = <?php echo $TbLD; ?>;
+    // console.log(Tbldata);
+    var tbl = document.getElementById("AppFrmDetails")
+    var itbl = document.getElementById("Tblrecord");
+    // console.log(itbl.style.display)
+                                if (itbl.style.display === "block" && Tbldata==0) {
+                                    itbl.style.display = "none";
+                                    tbl.style.display = "block";
+                                }
+    // var i = document.getElementById("Tblrecord")
+    // // console.log(Tbldata);
+    // if(Tbldata = 0){
+    //     i.style.display = "block";
+    // }
+
+    
+    function showForm(){
+        if (tbl.style.display === "none" ) {
+            // console.log(tbl);
+            tbl.style.display = "block";
+        }
+    }
     var schType = "<?php echo $SchType; ?>";
     var i;
     if(schType == 6){
