@@ -148,13 +148,13 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
     <table name="Tblrecord" id="Tblrecord" border = "1px" style="width:100%; display: block;">
                 <tr id="headtbl">
                     <td colspan="3">
-                        Teaching subject for most hours
+                        Hightest number of teaching periods
                     </td>
                     <td colspan="3">
-                        Teaching subject for second most hours
+                        Second Highest number of teaching periods
                     </td>
                     <td colspan="3">
-                        capable subject
+                        Other capable subjects of teaching
                     </td>
                     <td>
                         Other Special Duties
@@ -214,7 +214,7 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
             <table>
                 <tr>
                     <td colspan="2" style="text-align: center; font-weight: bold;" class="box">
-                        <h3>Teaching Subject for most Hours</h3>
+                        <h3>Hightest number of teaching periods</h3>
                     </td>
                 </tr>
 
@@ -302,7 +302,7 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                     </td>
                 </tr>
                 <td colspan="2" style="text-align: center; font-weight: bold;" ;>
-                    <h3>Teaching Subject for Second most hours</h3>
+                    <h3>Second Highest number of teaching periods</h3>
                 </td>
                 <tr>
                     <td class="box">Medium</td>
@@ -386,7 +386,7 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                 </tr>
                 <tr>
                     <td colspan="2" style="text-align: center; font-weight: bold;" ;>
-                        <h3>Capable Teaching Subject</h3>
+                        <h3>Other capable subjects of teaching</h3>
                     </td>
                 </tr>
                 <tr>
@@ -515,7 +515,7 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
 </div>
 
 <script>
-var Tbldata = <?php echo $TbLD; ?>;
+    var Tbldata = <?php echo $TbLD; ?>;
     // console.log(Tbldata);
     var tbl = document.getElementById("frmTchDetails")
     var itbl = document.getElementById("Tblrecord");
@@ -583,7 +583,7 @@ var Tbldata = <?php echo $TbLD; ?>;
     $(document).ready(function(){
     // console.log(i);
     
-        load_json_data1('SubTch1');
+        load_json_data1('GradTch1');
     
         function load_json_data1(id, category){
             var html_code = '';
@@ -591,22 +591,34 @@ var Tbldata = <?php echo $TbLD; ?>;
             $.getJSON('TchSubject.json',function(data){
                 html_code += '<option value = "">'+id+'</option>';
                 $.each(data, function(key, value){
-                    if(id == 'SubTch1'){
-                        if(value.schtype == i){
-                            html_code += '<option value="'+value.id+'">'+value.name+'</option>';
+                    if(id == 'GradTch1'){
+                        if(value.category == '0'){
+                            // if(value.schtype == i){
+                                html_code += '<option value="'+value.id+'">'+value.name+'</option>';
+                            // }
                         }
                     } 
                     else{
                         if(value.category == category){
-                            if(value.schtype == i){
+                            // if(value.schtype == i){
                                 html_code += '<option value="'+value.id+'">'+value.name+'</option>';
-                            }                            
+                            // }                            
                         }
                     }
                 });
                 $('#'+id).html(html_code);
             }); 
         }
+        $(document).on('change','#GradTch1',function(){
+            var GradTch1_id = $(this).val();
+            if(GradTch1_id != ''){
+                // console.log(GradTch1_id);
+                load_json_data('SubTch1',GradTch1_id);
+            }
+            else{
+                $('#SubTch1').html('<option value="">Select</option>');
+            }
+        });
         $(document).on('change','#SubTch1',function(){
             var SubApp_id = $(this).val();
 
@@ -619,7 +631,7 @@ var Tbldata = <?php echo $TbLD; ?>;
             }
         });
 
-        load_json_data2('SubTch2');
+        load_json_data2('GradTch2');
 
         function load_json_data2(id, category){
             var html_code = '';
@@ -627,22 +639,34 @@ var Tbldata = <?php echo $TbLD; ?>;
             $.getJSON('TchSubject.json',function(data){
                 html_code += '<option value = "">'+id+'</option>';
                 $.each(data, function(key, value){
-                    if(id == 'SubTch2'){
-                        if(value.schtype == i){
+                    if(id == 'GradTch2'){
+                        if(value.category == '0'){
+                        // if(value.schtype == i){
                             html_code += '<option value="'+value.id+'">'+value.name+'</option>';
+                        // }
                         }
                     } 
                     else{
                         if(value.category == category){
-                            if(value.schtype == i){
+                            // if(value.schtype == i){
                                 html_code += '<option value="'+value.id+'">'+value.name+'</option>';
-                            }                            
+                            // }                            
                         }
                     }
                 });
                 $('#'+id).html(html_code);
             }); 
         }
+        $(document).on('change','#GradTch2',function(){
+            var GradTch2_id = $(this).val();
+            if(GradTch2_id != ''){
+                // console.log(GradTch2_id);
+                load_json_data('SubTch2',GradTch2_id);
+            }
+            else{
+                $('#SubTch2').html('<option value="">Select</option>');
+            }
+        });
         $(document).on('change','#SubTch2',function(){
             var SubApp_id = $(this).val();
 
@@ -655,7 +679,7 @@ var Tbldata = <?php echo $TbLD; ?>;
             }
         });
 
-        load_json_data('SubTch3');
+        load_json_data('GradTch3');
 
         function load_json_data(id, category){
             var html_code = '';
@@ -663,22 +687,34 @@ var Tbldata = <?php echo $TbLD; ?>;
             $.getJSON('TchSubject.json',function(data){
                 html_code += '<option value = "">'+id+'</option>';
                 $.each(data, function(key, value){
-                    if(id == 'SubTch3'){
-                        if(value.schtype == i){
-                            html_code += '<option value="'+value.id+'">'+value.name+'</option>';
+                    if(id == 'GradTch3'){
+                        if(value.category == '0'){
+                            // if(value.schtype == i){
+                                html_code += '<option value="'+value.id+'">'+value.name+'</option>';
+                            // }
                         }
                     } 
                     else{
                         if(value.category == category){
-                            if(value.schtype == i){
+                            // if(value.schtype == i){
                                 html_code += '<option value="'+value.id+'">'+value.name+'</option>';
-                            }                            
+                            // }                            
                         }
                     }
                 });
                 $('#'+id).html(html_code);
             }); 
         }
+        $(document).on('change','#GradTch3',function(){
+            var GradTch3_id = $(this).val();
+            if(GradTch3_id != ''){
+                // console.log(GradTch3_id);
+                load_json_data('SubTch3',GradTch3_id);
+            }
+            else{
+                $('#SubTch3').html('<option value="">Select</option>');
+            }
+        });
         $(document).on('change','#SubTch3',function(){
             var SubApp_id = $(this).val();
 

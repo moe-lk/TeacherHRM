@@ -217,6 +217,23 @@ $stmtTBL = $db->runMsSqlQuery($SQLTBL);
                     </td>
                 </tr>
                 <tr>
+                    <td>Appointed Medium: </td>
+                    <td>
+                        <select id="MedApp" name="MedApp">
+                            <option>Select</option>
+                            <?php // for meium combo box
+                            $sql = "SELECT Medium FROM CD_Medium WHERE Code != ''";
+                            $stmt = $db->runMsSqlQuery($sql);
+                            while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                $AppMeduim = $row['Medium'];
+                                echo "<option value=" . $AppMeduim . ">" . $AppMeduim . "</option>";
+                            }
+                            ?>
+
+                        </select>
+                    </td>
+                </tr>
+                <tr>
                     <td>Appointment category: </td>
                     <td>
                         <select id="AppCat" name="AppCat">
@@ -244,25 +261,6 @@ $stmtTBL = $db->runMsSqlQuery($SQLTBL);
                         </select>
                     </td>
                 </tr>
-                <tr>
-                    <td>Appointed Medium: </td>
-                    <td>
-                        <select id="MedApp" name="MedApp">
-                            <option>Select</option>
-                            <?php // for meium combo box
-                            $sql = "SELECT Medium FROM CD_Medium WHERE Code != ''";
-                            $stmt = $db->runMsSqlQuery($sql);
-                            while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-                                $AppMeduim = $row['Medium'];
-                                echo "<option value=" . $AppMeduim . ">" . $AppMeduim . "</option>";
-                            }
-                            ?>
-
-                        </select>
-                    </td>
-                </tr>
-                <?php //var_dump($AppId); 
-                ?>
                 <tr>
                     <td>Subject / Degree Appointed: </td>
                     <td>
@@ -326,24 +324,17 @@ $stmtTBL = $db->runMsSqlQuery($SQLTBL);
 <script>
 
     var Tbldata = <?php echo $TbLD; ?>;
-    // console.log(Tbldata);
     var tbl = document.getElementById("AppFrmDetails")
     var itbl = document.getElementById("Tblrecord");
-    // console.log(itbl.style.display)
-                                if (itbl.style.display === "block" && Tbldata==0) {
-                                    itbl.style.display = "none";
-                                    tbl.style.display = "block";
-                                }
-    // var i = document.getElementById("Tblrecord")
-    // // console.log(Tbldata);
-    // if(Tbldata = 0){
-    //     i.style.display = "block";
-    // }
+
+    if (itbl.style.display === "block" && Tbldata==0) {
+        itbl.style.display = "none";
+        tbl.style.display = "block";
+    }
 
     
     function showForm(){
         if (tbl.style.display === "none" ) {
-            // console.log(tbl);
             tbl.style.display = "block";
         }
     }
@@ -358,32 +349,14 @@ $stmtTBL = $db->runMsSqlQuery($SQLTBL);
     
     var x = document.getElementById("otherdiv");
     var y = document.getElementById("inputdiv");
-    // function show_otherdiv() {
-        // var x = document.getElementById("otherdiv");
-        // var y = document.getElementById("inputdiv");
-
-        // if (x.style.display === "none") {
-        //     // console.log(x);
-        //     x.style.display = "block";
-        // } else {
-        //     x.style.display = "none";
-        // }
-        // if (y.style.display === "none") {
-        //     // console.log(y);
-        //     y.style.display = "block";
-        // } else {
-        //     y.style.display = "none";
-        // }
-    // }
 
     $(document).ready(function(){
 
         load_json_data('AppCat');
         // console.log('AppCat');
-
-
         function load_json_data(id, category){
             var html_code = '';
+
             $.getJSON('AppSubject.json',function(data){
                 html_code += '<option value = "">'+id+'</option>';
                 $.each(data, function(key, value){
@@ -414,9 +387,7 @@ $stmtTBL = $db->runMsSqlQuery($SQLTBL);
                     load_json_data('SubApp',AppCat_id);
             }
             else{
-                
-                $('#AppSub').html('<option value="">Select</option>');
-
+                $('#SubApp').html('<option value="">Select</option>');
             }
         });
         
