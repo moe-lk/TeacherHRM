@@ -513,17 +513,17 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
         </form>
     </div>
 </div>
-<script>
 
+<script>
 var Tbldata = <?php echo $TbLD; ?>;
     // console.log(Tbldata);
     var tbl = document.getElementById("frmTchDetails")
     var itbl = document.getElementById("Tblrecord");
     // console.log(itbl.style.display)
-                                if (itbl.style.display === "block" && Tbldata==0) {
-                                    itbl.style.display = "none";
-                                    tbl.style.display = "block";
-                                }
+    if (itbl.style.display === "block" && Tbldata==0) {
+        itbl.style.display = "none";
+        tbl.style.display = "block";
+    }
     // var i = document.getElementById("Tblrecord")
     // // console.log(Tbldata);
     // if(Tbldata = 0){
@@ -532,23 +532,36 @@ var Tbldata = <?php echo $TbLD; ?>;
     
     // var thisone  = <?php // echo $rowTBL['Medium1'] ?>
     // console.log(thisone)
-    
+    var MedTch1 = document.getElementById("MedTch1");
+    var MedTch2 = document.getElementById("MedTch2");
+    var MedTch3 = document.getElementById("MedTch3");
+    var GradTch1 = document.getElementById("GradTch1");
+    var GradTch2 = document.getElementById("GradTch2");
+    var GradTch3 = document.getElementById("GradTch3");
+    var SubTch1 = document.getElementById("SubTch1");
+    var SubTch2 = document.getElementById("SubTch2");
+    var SubTch3 = document.getElementById("SubTch3");
+    var otherspecial = document.getElementById("otherspecial");
+
+    // var otherspecial = </script><?php // echo $OtherSpecial ?><script>    
+    // console.log(otherspecial);
+
     function showForm(){
         if (tbl.style.display === "none" ) {
-            // console.log(tbl);
             tbl.style.display = "block";
-
-
-            document.getElementById("MedTch1") = <?php  $Medium1; ?>;
-            document.getElementById("MedTch2") = <?php  $Medium2; ?>;
-            document.getElementById("MedTch3") = <?php  $Medium3; ?>;
-            document.getElementById("GradTch1") = <?php  $GradeCode1; ?>;
-            document.getElementById("GradTch2") = <?php  $GradeCode2; ?>;
-            document.getElementById("GradTch3") = <?php  $GradeCode3; ?>;
-            document.getElementById("SubTch1") = <?php  $TchSubject1; ?>;
-            document.getElementById("SubTch2") = <?php  $TchSubject2; ?>;
-            document.getElementById("SubTch3") = <?php  $TchSubject3; ?>;
-            document.getElementById("otherspecial") = <?php  $OtherSpecial; ?>;
+            
+            var MedTch1 = "<?php echo $Medium1; ?>";
+            var MedTch2 = "<?php echo $Medium2; ?>";
+            var MedTch3 = "<?php echo $Medium3; ?>";
+            var GradTch1 =  "<?php echo $GradeCode1; ?>";
+            var GradTch2 =  "<?php echo $GradeCode2; ?>";
+            var GradTch3 =  "<?php echo $GradeCode3; ?>";
+            var SubTch1 = "<?php echo $TchSubject1; ?>";
+            var SubTch2 = "<?php echo $TchSubject2; ?>";
+            var SubTch3 = "<?php echo $TchSubject3; ?>";
+            var otherspecial = "<?php echo $OtherSpecial; ?>";
+            
+            console.log(MedTch1);
         }
     }
     var schType = "<?php echo $SchType; ?>";

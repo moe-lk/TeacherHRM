@@ -22,8 +22,8 @@ class DBManager
     //private $server = "221.100.10.1"; // added by me
     //private $connectionInfo = array("UID" => "sa", "PWD" => "nEmIs@*123", "Database"=>"MOENational"); //added by me
     //800093325v
-    private $server = "TYRFING";
-    private $connectionInfo = array("UID" => "na", "PWD" => "na1234", "Database" => "MOENational");
+    private $server = "DESKTOP-OESJB7N\SQLEXPRESS"; 
+    private $connectionInfo = array("UID" => "sa", "PWD" => "na1234", "Database"=>"MOENational");
     private $conn = null;
 
 
