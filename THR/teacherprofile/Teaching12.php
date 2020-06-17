@@ -592,17 +592,21 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                 html_code += '<option value = "">'+id+'</option>';
                 $.each(data, function(key, value){
                     if(id == 'GradTch1'){
+                        
                         if(value.category == '0'){
-                            // if(value.schtype == i){
+                            if(value.schtype == i){
+                                
                                 html_code += '<option value="'+value.id+'">'+value.name+'</option>';
-                            // }
+                            }
                         }
                     } 
                     else{
                         if(value.category == category){
-                            // if(value.schtype == i){
-                                html_code += '<option value="'+value.id+'">'+value.name+'</option>';
-                            // }                            
+                            if(value.schtype == i){
+                                // console.log(value.schtype);
+                                // console.log(i);
+                                html_code += '<option value="'+value.id+'">'+value.name+'THIS2</option>';
+                            }                           
                         }
                     }
                 });
@@ -641,16 +645,16 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                 $.each(data, function(key, value){
                     if(id == 'GradTch2'){
                         if(value.category == '0'){
-                        // if(value.schtype == i){
-                            html_code += '<option value="'+value.id+'">'+value.name+'</option>';
-                        // }
+                            if(value.schtype == i){
+                                html_code += '<option value="'+value.id+'">'+value.name+'</option>';
+                            }
                         }
                     } 
                     else{
                         if(value.category == category){
-                            // if(value.schtype == i){
+                            if(value.schtype == i){
                                 html_code += '<option value="'+value.id+'">'+value.name+'</option>';
-                            // }                            
+                            }                            
                         }
                     }
                 });
@@ -689,16 +693,16 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                 $.each(data, function(key, value){
                     if(id == 'GradTch3'){
                         if(value.category == '0'){
-                            // if(value.schtype == i){
+                            if(value.schtype == i){
                                 html_code += '<option value="'+value.id+'">'+value.name+'</option>';
-                            // }
+                            }
                         }
                     } 
                     else{
                         if(value.category == category){
-                            // if(value.schtype == i){
+                            if(value.schtype == i){
                                 html_code += '<option value="'+value.id+'">'+value.name+'</option>';
-                            // }                            
+                            }                            
                         }
                     }
                 });
