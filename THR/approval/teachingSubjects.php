@@ -574,6 +574,11 @@ WHERE Temp_TeachingDetails.RecStatus = '0'";
                 </table> 
                 <?php 
                 } else { 
+                    // if($TchSubject1E != ''){
+                        $sql1 = "SELECT [SubjectName] FROM [MOENational].[dbo].[CD_TeachSubjects] WHERE ID = '$TchSubject1E'";
+                        $stmt1 = $db->runMsSqlQuery($sql1);
+                        $row1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC);
+                    // }
                     $sql1 = "SELECT [SubjectName] FROM [MOENational].[dbo].[CD_TeachSubjects] WHERE ID = '$TchSubject1E'";
                     $stmt1 = $db->runMsSqlQuery($sql1);
                     $row1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC);
@@ -656,7 +661,9 @@ WHERE Temp_TeachingDetails.RecStatus = '0'";
                             <tr>
                                 <td width="15%" align="left" valign="top"><strong>Subject</strong></td>
                                 <td width="1%" align="left" valign="top"><strong>:</strong></td>
-                                <td width="34%" align="left" valign="top"><?php echo $rowE['TchSubject1']." - ". $row1['SubjectName']; ?></td>
+                                <td width="34%" align="left" valign="top">
+                                    <?php echo $rowE['TchSubject1']." - ". $row1['SubjectName']; ?>
+                                </td>
                             </tr>
                             <tr>
                                 <td width="15%" align="left" valign="top"><strong>Medium</strong></td>

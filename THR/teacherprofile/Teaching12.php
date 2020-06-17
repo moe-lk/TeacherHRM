@@ -87,6 +87,18 @@ $TbLD=1;
 
 $SQLTBL = "SELECT * FROM TeachingDetails WHERE NIC = '$id' AND RecStatus = '1'";
 $stmtTBL = $db->runMsSqlQuery($SQLTBL);
+while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
+    $TchSubject1 = $rowTBL['TchSubject1'];
+    $Medium1 = $rowTBL['Medium1'];
+    $GradeCode1 = $rowTBL['GradeCode1'];
+    $TchSubject2 = $rowTBL['TchSubject2'];
+    $Medium2 = $rowTBL['Medium2'];
+    $GradeCode2 = $rowTBL['GradeCode2'];
+    $TchSubject3 = $rowTBL['TchSubject3'];
+    $Medium3 = $rowTBL['Medium3'];
+    $GradeCode3 = $rowTBL['GradeCode3'];
+    $OtherSpecial = $rowTBL['OtherSpecial'];
+}
 ?>
 
 <style>
@@ -144,9 +156,9 @@ $stmtTBL = $db->runMsSqlQuery($SQLTBL);
                     <td colspan="3">
                         capable subject
                     </td>
-                    <!-- <td>
-                        Effective date
-                    </td> -->
+                    <td>
+                        Other Special Duties
+                    </td>
                     <td>
                         Action
                     </td>
@@ -161,14 +173,14 @@ $stmtTBL = $db->runMsSqlQuery($SQLTBL);
                     <td>Subject</td>
                     <td>Medium</td>
                     <td>Grade Span</td>
-                    <!-- <td>&nbsp;</td> -->
+                    <td>&nbsp;</td>
                     <td>&nbsp;</td>
                 </tr>
                 <tr>
                 <?php 
-                    $TotaRows = $db->rowCount($SQLTBL);
+                    $TotalRows = $db->rowCount($SQLTBL);
                     // var_dump($TotaRows);
-                    if (!$TotaRows){
+                    if (!$TotalRows){
                         // var_dump($TotaRows)
                         $TbLD = 0;
                     }
@@ -177,20 +189,20 @@ $stmtTBL = $db->runMsSqlQuery($SQLTBL);
                     // if(is_null($rowTBL)){
                     //     $TbLD = 0;
                     // }
-                    while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){ 
+                    
                         // else{
-                            echo "<td>".$rowTBL['TchSubject1']."</td>";
-                            echo "<td>".$rowTBL['Medium1']."</td>";
-                            echo "<td>".$rowTBL['GradeCode1']."</td>";
-                            echo "<td>".$rowTBL['TchSubject2']."</td>";
-                            echo "<td>".$rowTBL['Medium2']."</td>";
-                            echo "<td>".$rowTBL['GradeCode2']."</td>";
-                            echo "<td>".$rowTBL['TchSubject3']."</td>";
-                            echo "<td>".$rowTBL['Medium3']."</td>";
-                            echo "<td>".$rowTBL['GradeCode3']."</td>";
+                            echo "<td>".$TchSubject1."</td>";
+                            echo "<td>".$Medium1."</td>";
+                            echo "<td>".$GradeCode1."</td>";
+                            echo "<td>".$TchSubject2."</td>";
+                            echo "<td>".$Medium2."</td>";
+                            echo "<td>".$GradeCode2."</td>";
+                            echo "<td>".$TchSubject3."</td>";
+                            echo "<td>".$Medium3."</td>";
+                            echo "<td>".$GradeCode3."</td>";
+                            echo "<td>".$OtherSpecial."</td>";
                             echo "<td style='text-align:center'><input type='button' value='Edit' onclick='showForm()'></td>";
                         // } 
-                    } 
                     // var_dump($TbLD);    // echo "<td>&nbsp</td>";
 
                         
@@ -458,7 +470,7 @@ $stmtTBL = $db->runMsSqlQuery($SQLTBL);
                     </td>
                 </tr>
                 <tr>
-                    <td  class="box" style="padding-right:100px">Other Special Services</td>
+                    <td  class="box" style="padding-right:100px">Other Special Duties</td>
                     <td class="box">
                         <select id="otherspecial" name="otherspecial">
                             <option>Select</option>
@@ -517,12 +529,26 @@ var Tbldata = <?php echo $TbLD; ?>;
     // if(Tbldata = 0){
     //     i.style.display = "block";
     // }
-
+    
+    // var thisone  = <?php // echo $rowTBL['Medium1'] ?>
+    // console.log(thisone)
     
     function showForm(){
         if (tbl.style.display === "none" ) {
             // console.log(tbl);
             tbl.style.display = "block";
+
+
+            document.getElementById("MedTch1") = <?php  $Medium1; ?>;
+            document.getElementById("MedTch2") = <?php  $Medium2; ?>;
+            document.getElementById("MedTch3") = <?php  $Medium3; ?>;
+            document.getElementById("GradTch1") = <?php  $GradeCode1; ?>;
+            document.getElementById("GradTch2") = <?php  $GradeCode2; ?>;
+            document.getElementById("GradTch3") = <?php  $GradeCode3; ?>;
+            document.getElementById("SubTch1") = <?php  $TchSubject1; ?>;
+            document.getElementById("SubTch2") = <?php  $TchSubject2; ?>;
+            document.getElementById("SubTch3") = <?php  $TchSubject3; ?>;
+            document.getElementById("otherspecial") = <?php  $OtherSpecial; ?>;
         }
     }
     var schType = "<?php echo $SchType; ?>";
@@ -653,54 +679,5 @@ var Tbldata = <?php echo $TbLD; ?>;
         });
     });
 
-// function show_otherdiv1(){
-//     var x = document.getElementById("otherdiv1");
-//     var y = document.getElementById("otherTch1");
-//     if (x.style.display === "none") {
-//             // console.log(x);
-//             x.style.display = "block";
-//         } else {
-//             x.style.display = "none";
-//         }
-//         if (y.style.display === "none") {
-//             // console.log(y);
-//             y.style.display = "block";
-//         } else {
-//             y.style.display = "none";
-//         }
-// }
-// function show_otherdiv2(){
-//     var x = document.getElementById("otherdiv2");
-//     var y = document.getElementById("otherTch2");
-//     if (x.style.display === "none") {
-//             // console.log(x);
-//             x.style.display = "block";
-//         } else {
-//             x.style.display = "none";
-//         }
-//         if (y.style.display === "none") {
-//             // console.log(y);
-//             y.style.display = "block";
-//         } else {
-//             y.style.display = "none";
-//         }
 
-// }
-// function show_otherdiv3 (){
-//     var x = document.getElementById("otherdiv3");
-//     var y = document.getElementById("otherTch3");
-//     if (x.style.display === "none") {
-//             // console.log(x);
-//             x.style.display = "block";
-//         } else {
-//             x.style.display = "none";
-//         }
-//         if (y.style.display === "none") {
-//             // console.log(y);
-//             y.style.display = "block";
-//         } else {
-//             y.style.display = "none";
-//         }
-
-// }
 </script>

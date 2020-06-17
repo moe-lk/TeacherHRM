@@ -144,73 +144,85 @@ if ($_REQUEST["otherspecial"] != 'Select') {
 }
 // $otherspecial = $_REQUEST["otherspecial"];
 
-// var_dump($SubTch3);
 $id = $_REQUEST["id"];
-// echo "gg" . $MedTch1;
-$today = date("Y/m/d");
+    // echo "gg" . $MedTch1;
+    $today = date("Y/m/d");
 
-$SQL1 = "SELECT TOP(1)
-*
-FROM
-TeacherMast
-join StaffServiceHistory on TeacherMast.CurServiceRef = StaffServiceHistory.ID
-join CD_CensesNo on StaffServiceHistory.InstCode = CD_CensesNo.CenCode 
-WHERE StaffServiceHistory.NIC = '$nicNO' ORDER BY StaffServiceHistory.AppDate DESC";
+    $SQL1 = "SELECT TOP(1) * FROM TeacherMast
+            join StaffServiceHistory on TeacherMast.CurServiceRef = StaffServiceHistory.ID
+            join CD_CensesNo on StaffServiceHistory.InstCode = CD_CensesNo.CenCode 
+            WHERE StaffServiceHistory.NIC = '$nicNO' 
+            ORDER BY StaffServiceHistory.AppDate DESC";
 
-$stmt1 = $db->runMsSqlQuery($SQL1);
-while ($row1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
-    $SchType = Trim($row1['SchoolType']);
-}
+    $stmt1 = $db->runMsSqlQuery($SQL1);
+    while ($row1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
+        $SchType = Trim($row1['SchoolType']);
+    }
 
-$sql = "INSERT INTO [dbo].[Temp_TeachingDetails]
-([NIC]
-,[TchSubject1]
-,[TchSubject2]
-,[TchSubject3]
-,[Other1]
-,[Other2]
-,[Other3]
-,[Medium1]
-,[Medium2]
-,[Medium3]
-,[GradeCode1]
-,[GradeCode2]
-,[GradeCode3]
-,[OtherSpecial]
-,[SchoolType]
-,[RecStatus]
-,[RecordLog]
-,[LastUpdate])
-VALUES
-(
-    '$nicNO', 
-    '$SubTch1', 
-    '$SubTch2', 
-    '$SubTch3',
-    '$otherTch1',
-    '$otherTch2',
-    '$otherTch3', 
-    '$MedTch1', 
-    '$MedTch2', 
-    '$MedTch3',
-    '$GradTch1',
-    '$GradTch2',
-    '$GradTch3',
-    '$otherspecial',
-    '$SchType',
-    '0',
-    '$NICUser',
-    '$dateNow'
-)";
+$sqlCheck = "SELECT * FROM TeachingDetails WHERE NIC = '$nicNO' AND RecStatus = '1'";
+$TotalRows = $db->rowCount($sqlCheck);
 
-$stmt = $db->runMsSqlQuery($sql);
-sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC);
-// var_dump($sql);
+// if(!$TotalRows){
+//     $SQLU = "UPDATE [dbo].[TeachingDetails]
+//             SET [RecStatus] = '2' WHERE NIC = '$nicNO'";
+// }
+// else{
+    // var_dump($SubTch3);
+    
 
-echo ("<script LANGUAGE='JavaScript'>
-    window.alert('Succesfully Updated');
-    window.location.href='teaching_subj-12--$nicNO.html';
-    </script>");
+    $sql = "INSERT INTO [dbo].[Temp_TeachingDetails]
+            ([NIC]
+            ,[TchSubject1]
+            ,[TchSubject2]
+            ,[TchSubject3]
+            ,[Other1]
+            ,[Other2]
+            ,[Other3]
+            ,[Medium1]
+            ,[Medium2]
+            ,[Medium3]
+            ,[GradeCode1]
+            ,[GradeCode2]
+            ,[GradeCode3]
+            ,[OtherSpecial]
+            ,[SchoolType]
+            ,[RecStatus]
+            ,[RecordLog]
+            ,[LastUpdate])
+            VALUES
+            (
+            '$nicNO', 
+            '$SubTch1', 
+            '$SubTch2', 
+            '$SubTch3',
+            '$otherTch1',
+            '$otherTch2',
+            '$otherTch3', 
+            '$MedTch1', 
+            '$MedTch2', 
+            '$MedTch3',
+            '$GradTch1',
+            '$GradTch2',
+            '$GradTch3',
+            '$otherspecial',
+            '$SchType',
+            '0',
+            '$NICUser',
+            '$dateNow'
+        )";
+
+    $stmt = $db->runMsSqlQuery($sql);
+    sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC);
+    // var_dump($sql);
+
+    echo ("<script LANGUAGE='JavaScript'>
+        window.alert('Succesfully Updated');
+        window.location.href='teaching_subj-12--$nicNO.html';
+        </script>");
+// }
+
+
+
     // // } else {
     // //     echo ("<script LANGUAGE='JavaScript'>
     //     window.alert('ERROR OCCURED!');
