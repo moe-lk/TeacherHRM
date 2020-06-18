@@ -15,26 +15,26 @@ if (isset($_POST["FrmSubmit"])) {
     $msg = "";
 
     //get data from temp table - Start
-    $reqTab = "SELECT TOP (1000) [ID]
-      ,[NIC]
-      ,[TchSubject1]
-      ,[TchSubject2]
-      ,[TchSubject3]
-      ,[Other1]
-      ,[Other2]
-      ,[Other3]
-      ,[Medium1]
-      ,[Medium2]
-      ,[Medium3]
-      ,[GradeCode1]
-      ,[GradeCode2]
-      ,[GradeCode3]
-      ,[OtherSpecial]
-      ,[SchoolType]
-      ,[RecStatus]
-      ,[RecordLog]
-      ,[LastUpdate]
-  FROM [MOENational].[dbo].[Temp_TeachingDetails] 
+    $reqTab = "SELECT Temp_TeachingDetails.ID
+    ,Temp_TeachingDetails.NIC
+    ,[TchSubject1]
+    ,[TchSubject2]
+    ,[TchSubject3]
+    ,[Other1]
+    ,[Other2]
+    ,[Other3]
+    ,[Medium1]
+    ,[Medium2]
+    ,[Medium3]
+    ,[GradeCode1]
+    ,[GradeCode2]
+    ,[GradeCode3]
+    ,[OtherSpecial]
+    ,[SchoolType]
+    ,Temp_TeachingDetails.RecStatus
+    ,Temp_TeachingDetails.RecordLog
+    ,Temp_TeachingDetails.LastUpdate
+FROM [MOENational].[dbo].[Temp_TeachingDetails] 
 INNER JOIN [TeacherMast] ON Temp_TeachingDetails.NIC = TeacherMast.NIC
 WHERE Temp_TeachingDetails.ID = '$RegID'";
 
