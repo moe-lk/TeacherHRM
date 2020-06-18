@@ -3,6 +3,7 @@
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="TchSubjects.js"></script>
 <?php
 $msg = "";
 $nicUpdate = $_SESSION['NIC'];
@@ -243,11 +244,11 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
 
                             <option>Select</option>
                             <?php // for meium combo box
-                            $sql = "SELECT * FROM CD_SecGrades WHERE GradeCode IS NOT NULL";
+                            $sql = "SELECT * FROM CD_TeachSubCategory WHERE ID IS NOT NULL";
                             $stmt = $db->runMsSqlQuery($sql);
                             while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-                                $TchGrade = $row['GradeName'];
-                                $TchGradeCode = $row['GradeCode'];
+                                $TchGrade = $row['CategoryName'];
+                                $TchGradeCode = $row['ID'];
                                 echo "<option value=" . $TchGradeCode . ">" . $TchGrade . "</option>";
                             }
                             ?>
@@ -329,11 +330,11 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
 
                             <option>Select</option>
                             <?php // for meium combo box
-                            $sql = "SELECT * FROM CD_SecGrades WHERE GradeCode IS NOT NULL";
+                            $sql = "SELECT * FROM CD_TeachSubCategory WHERE ID IS NOT NULL";
                             $stmt = $db->runMsSqlQuery($sql);
                             while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-                                $TchGrade = $row['GradeName'];
-                                $TchGradeCode = $row['GradeCode'];
+                                $TchGrade = $row['CategoryName'];
+                                $TchGradeCode = $row['ID'];
                                 echo "<option value=" . $TchGradeCode . ">" . $TchGrade . "</option>";
                             }
                             ?>
@@ -414,11 +415,11 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
 
                             <option>Select</option>
                             <?php // for meium combo box
-                            $sql = "SELECT * FROM CD_SecGrades WHERE GradeCode IS NOT NULL";
+                            $sql = "SELECT * FROM CD_TeachSubCategory WHERE ID IS NOT NULL";
                             $stmt = $db->runMsSqlQuery($sql);
                             while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-                                $TchGrade = $row['GradeName'];
-                                $TchGradeCode = $row['GradeCode'];
+                                $TchGrade = $row['CategoryName'];
+                                $TchGradeCode = $row['ID'];
                                 echo "<option value=" . $TchGradeCode . ">" . $TchGrade . "</option>";
                             }
                             ?>
@@ -474,7 +475,16 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                     <td class="box">
                         <select id="otherspecial" name="otherspecial">
                             <option>Select</option>
-
+                            
+                            <?php
+                            $sql = "SELECT * FROM CD_TeachSubjects WHERE Code = '9'";
+                            $stmt = $db->runMsSqlQuery($sql);
+                            while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                $TchGrade = $row['SubjectName'];
+                                $TchGradeCode = $row['ID'];
+                                echo "<option value=" . $TchGradeCode . ">" . $TchGrade . "</option>";
+                            }
+                            ?>
                         </select>
                     </td>
                 </tr>
@@ -580,157 +590,157 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
     var d = document.getElementById("otherTch3");
     
     
-    $(document).ready(function(){
-    // console.log(i);
+    // $(document).ready(function(){
+    // // console.log(i);
     
-        load_json_data1('GradTch1');
+    //     load_json_data1('GradTch1');
     
-        function load_json_data1(id, category){
-            var html_code = '';
+    //     function load_json_data1(id, category){
+    //         var html_code = '';
             
-            $.getJSON('TchSubject.json',function(data){
-                html_code += '<option value = "">'+id+'</option>';
-                $.each(data, function(key, value){
-                    if(id == 'GradTch1'){
+    //         $.getJSON('TchSubject.json',function(data){
+    //             html_code += '<option value = "">'+id+'</option>';
+    //             $.each(data, function(key, value){
+    //                 if(id == 'GradTch1'){
                         
-                        if(value.category == '0'){
-                            if(value.schtype == i){
+    //                     if(value.category == '0'){
+    //                         if(value.schtype == i){
                                 
-                                html_code += '<option value="'+value.id+'">'+value.name+'</option>';
-                            }
-                        }
-                    } 
-                    else{
-                        if(value.category == category){
-                            if(value.schtype == i){
-                                // console.log(value.schtype);
-                                // console.log(i);
-                                html_code += '<option value="'+value.id+'">'+value.name+'THIS2</option>';
-                            }                           
-                        }
-                    }
-                });
-                $('#'+id).html(html_code);
-            }); 
-        }
-        $(document).on('change','#GradTch1',function(){
-            var GradTch1_id = $(this).val();
-            if(GradTch1_id != ''){
-                // console.log(GradTch1_id);
-                load_json_data('SubTch1',GradTch1_id);
-            }
-            else{
-                $('#SubTch1').html('<option value="">Select</option>');
-            }
-        });
-        $(document).on('change','#SubTch1',function(){
-            var SubApp_id = $(this).val();
+    //                             html_code += '<option value="'+value.id+'">'+value.name+'</option>';
+    //                         }
+    //                     }
+    //                 } 
+    //                 else{
+    //                     if(value.category == category){
+    //                         if(value.schtype == i){
+    //                             // console.log(value.schtype);
+    //                             // console.log(i);
+    //                             html_code += '<option value="'+value.id+'">'+value.name+'THIS2</option>';
+    //                         }                           
+    //                     }
+    //                 }
+    //             });
+    //             $('#'+id).html(html_code);
+    //         }); 
+    //     }
+    //     $(document).on('change','#GradTch1',function(){
+    //         var GradTch1_id = $(this).val();
+    //         if(GradTch1_id != ''){
+    //             // console.log(GradTch1_id);
+    //             load_json_data('SubTch1',GradTch1_id);
+    //         }
+    //         else{
+    //             $('#SubTch1').html('<option value="">Select</option>');
+    //         }
+    //     });
+    //     $(document).on('change','#SubTch1',function(){
+    //         var SubApp_id = $(this).val();
 
-            if(SubApp_id == '12' || SubApp_id =='11'){
-                x.style.display = "block";
-                y.style.display = "block";
-            }else{
-                x.style.display = "none";
-                y.style.display = "none"; 
-            }
-        });
+    //         if(SubApp_id == '12' || SubApp_id =='11'){
+    //             x.style.display = "block";
+    //             y.style.display = "block";
+    //         }else{
+    //             x.style.display = "none";
+    //             y.style.display = "none"; 
+    //         }
+    //     });
 
-        load_json_data2('GradTch2');
+    //     load_json_data2('GradTch2');
 
-        function load_json_data2(id, category){
-            var html_code = '';
+    //     function load_json_data2(id, category){
+    //         var html_code = '';
             
-            $.getJSON('TchSubject.json',function(data){
-                html_code += '<option value = "">'+id+'</option>';
-                $.each(data, function(key, value){
-                    if(id == 'GradTch2'){
-                        if(value.category == '0'){
-                            if(value.schtype == i){
-                                html_code += '<option value="'+value.id+'">'+value.name+'</option>';
-                            }
-                        }
-                    } 
-                    else{
-                        if(value.category == category){
-                            if(value.schtype == i){
-                                html_code += '<option value="'+value.id+'">'+value.name+'</option>';
-                            }                            
-                        }
-                    }
-                });
-                $('#'+id).html(html_code);
-            }); 
-        }
-        $(document).on('change','#GradTch2',function(){
-            var GradTch2_id = $(this).val();
-            if(GradTch2_id != ''){
-                // console.log(GradTch2_id);
-                load_json_data('SubTch2',GradTch2_id);
-            }
-            else{
-                $('#SubTch2').html('<option value="">Select</option>');
-            }
-        });
-        $(document).on('change','#SubTch2',function(){
-            var SubApp_id = $(this).val();
+    //         $.getJSON('TchSubject.json',function(data){
+    //             html_code += '<option value = "">'+id+'</option>';
+    //             $.each(data, function(key, value){
+    //                 if(id == 'GradTch2'){
+    //                     if(value.category == '0'){
+    //                         if(value.schtype == i){
+    //                             html_code += '<option value="'+value.id+'">'+value.name+'</option>';
+    //                         }
+    //                     }
+    //                 } 
+    //                 else{
+    //                     if(value.category == category){
+    //                         if(value.schtype == i){
+    //                             html_code += '<option value="'+value.id+'">'+value.name+'</option>';
+    //                         }                            
+    //                     }
+    //                 }
+    //             });
+    //             $('#'+id).html(html_code);
+    //         }); 
+    //     }
+    //     $(document).on('change','#GradTch2',function(){
+    //         var GradTch2_id = $(this).val();
+    //         if(GradTch2_id != ''){
+    //             // console.log(GradTch2_id);
+    //             load_json_data('SubTch2',GradTch2_id);
+    //         }
+    //         else{
+    //             $('#SubTch2').html('<option value="">Select</option>');
+    //         }
+    //     });
+    //     $(document).on('change','#SubTch2',function(){
+    //         var SubApp_id = $(this).val();
 
-            if(SubApp_id == '12' || SubApp_id =='11'){
-                a.style.display = "block";
-                b.style.display = "block";
-            }else{
-                a.style.display = "none";
-                b.style.display = "none"; 
-            }
-        });
+    //         if(SubApp_id == '12' || SubApp_id =='11'){
+    //             a.style.display = "block";
+    //             b.style.display = "block";
+    //         }else{
+    //             a.style.display = "none";
+    //             b.style.display = "none"; 
+    //         }
+    //     });
 
-        load_json_data('GradTch3');
+    //     load_json_data('GradTch3');
 
-        function load_json_data(id, category){
-            var html_code = '';
+    //     function load_json_data(id, category){
+    //         var html_code = '';
             
-            $.getJSON('TchSubject.json',function(data){
-                html_code += '<option value = "">'+id+'</option>';
-                $.each(data, function(key, value){
-                    if(id == 'GradTch3'){
-                        if(value.category == '0'){
-                            if(value.schtype == i){
-                                html_code += '<option value="'+value.id+'">'+value.name+'</option>';
-                            }
-                        }
-                    } 
-                    else{
-                        if(value.category == category){
-                            if(value.schtype == i){
-                                html_code += '<option value="'+value.id+'">'+value.name+'</option>';
-                            }                            
-                        }
-                    }
-                });
-                $('#'+id).html(html_code);
-            }); 
-        }
-        $(document).on('change','#GradTch3',function(){
-            var GradTch3_id = $(this).val();
-            if(GradTch3_id != ''){
-                // console.log(GradTch3_id);
-                load_json_data('SubTch3',GradTch3_id);
-            }
-            else{
-                $('#SubTch3').html('<option value="">Select</option>');
-            }
-        });
-        $(document).on('change','#SubTch3',function(){
-            var SubApp_id = $(this).val();
+    //         $.getJSON('TchSubject.json',function(data){
+    //             html_code += '<option value = "">'+id+'</option>';
+    //             $.each(data, function(key, value){
+    //                 if(id == 'GradTch3'){
+    //                     if(value.category == '0'){
+    //                         if(value.schtype == i){
+    //                             html_code += '<option value="'+value.id+'">'+value.name+'</option>';
+    //                         }
+    //                     }
+    //                 } 
+    //                 else{
+    //                     if(value.category == category){
+    //                         if(value.schtype == i){
+    //                             html_code += '<option value="'+value.id+'">'+value.name+'</option>';
+    //                         }                            
+    //                     }
+    //                 }
+    //             });
+    //             $('#'+id).html(html_code);
+    //         }); 
+    //     }
+    //     $(document).on('change','#GradTch3',function(){
+    //         var GradTch3_id = $(this).val();
+    //         if(GradTch3_id != ''){
+    //             // console.log(GradTch3_id);
+    //             load_json_data('SubTch3',GradTch3_id);
+    //         }
+    //         else{
+    //             $('#SubTch3').html('<option value="">Select</option>');
+    //         }
+    //     });
+    //     $(document).on('change','#SubTch3',function(){
+    //         var SubApp_id = $(this).val();
 
-            if(SubApp_id == '12' || SubApp_id =='11'){
-                c.style.display = "block";
-                d.style.display = "block";
-            }else{
-                c.style.display = "none";
-                d.style.display = "none"; 
-            }
-        });
-    });
+    //         if(SubApp_id == '12' || SubApp_id =='11'){
+    //             c.style.display = "block";
+    //             d.style.display = "block";
+    //         }else{
+    //             c.style.display = "none";
+    //             d.style.display = "none"; 
+    //         }
+    //     });
+    // });
 
 
 </script>

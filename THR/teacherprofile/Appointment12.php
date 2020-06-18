@@ -3,6 +3,7 @@
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="AppSubjects.js" ></script>
 <?php
 $msg = "";
 $nicUpdate = $_SESSION['NIC'];
@@ -248,13 +249,13 @@ $stmtTBL = $db->runMsSqlQuery($SQLTBL);
                             //         echo "<option value=" . $AppId . ">" . $AppId . "- " . $AppName . "</option>";
                             //     }
                             // } else {
-                            //     $sql = "SELECT ID, AppointmentName FROM CD_AppSubCategory WHERE ID IS NOT NULL";
-                            //     $stmt = $db->runMsSqlQuery($sql);
-                            //     while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-                            //         $AppId = $row['ID'];
-                            //         $AppName = $row['AppointmentName'];
-                            //         echo "<option value=" . $AppId . ">" . $AppId . "- " . $AppName . "</option>";
-                            //     }
+                                $sql = "SELECT ID, AppointmentName FROM CD_AppSubCategory WHERE ID IS NOT NULL";
+                                $stmt = $db->runMsSqlQuery($sql);
+                                while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                    $AppId = $row['ID'];
+                                    $AppName = $row['AppointmentName'];
+                                    echo "<option value=" . $AppId . ">" . $AppId . "- " . $AppName . "</option>";
+                                }
                             // }
                             ?>
 
@@ -348,62 +349,62 @@ $stmtTBL = $db->runMsSqlQuery($SQLTBL);
     }
     // console.log(i);
     
-    var x = document.getElementById("otherdiv");
-    var y = document.getElementById("inputdiv");
+    // var x = document.getElementById("otherdiv");
+    // var y = document.getElementById("inputdiv");
 
-    $(document).ready(function(){
+    // $(document).ready(function(){
 
-        load_json_data('AppCat');
-        // console.log('AppCat');
-        function load_json_data(id, category){
-            var html_code = '';
+    //     load_json_data('AppCat');
+    //     // console.log('AppCat');
+    //     function load_json_data(id, category){
+    //         var html_code = '';
 
-            $.getJSON('AppSubject.json',function(data){
-                html_code += '<option value = "">'+id+'</option>';
-                $.each(data, function(key, value){
-                    if(id == 'AppCat'){
-                        if(value.category == '0'){
-                            html_code += '<option value="'+value.id+'">'+value.name+'</option>';
-                        }
-                    } 
-                    else{
-                        if(value.category == category){
-                            if(value.schtype == i){
-                                html_code += '<option value="'+value.id+'">'+value.name+'</option>';
-                            }                            
-                        }
-                    }
-                });
-             $('#'+id).html(html_code);
-            }); 
-        }
-        // console.log(html_code);
+    //         $.getJSON('AppSubject.json',function(data){
+    //             html_code += '<option value = "">'+id+'</option>';
+    //             $.each(data, function(key, value){
+    //                 if(id == 'AppCat'){
+    //                     if(value.category == '0'){
+    //                         html_code += '<option value="'+value.id+'">'+value.name+'</option>';
+    //                     }
+    //                 } 
+    //                 else{
+    //                     if(value.category == category){
+    //                         if(value.schtype == i){
+    //                             html_code += '<option value="'+value.id+'">'+value.name+'</option>';
+    //                         }                            
+    //                     }
+    //                 }
+    //             });
+    //          $('#'+id).html(html_code);
+    //         }); 
+    //     }
+    //     // console.log(html_code);
         
-        $(document).on('change','#AppCat',function(){
-            var AppCat_id = $(this).val();
-            // alert(AppCat_id);
+    //     $(document).on('change','#AppCat',function(){
+    //         var AppCat_id = $(this).val();
+    //         // alert(AppCat_id);
 
-            if(AppCat_id != ''){
-                // console.log(AppCat_id);
-                    load_json_data('SubApp',AppCat_id);
-            }
-            else{
-                $('#SubApp').html('<option value="">Select</option>');
-            }
-        });
+    //         if(AppCat_id != ''){
+    //             // console.log(AppCat_id);
+    //                 load_json_data('SubApp',AppCat_id);
+    //         }
+    //         else{
+    //             $('#SubApp').html('<option value="">Select</option>');
+    //         }
+    //     });
         
-        $(document).on('change','#SubApp',function(){
-            var SubApp_id = $(this).val();
+    //     $(document).on('change','#SubApp',function(){
+    //         var SubApp_id = $(this).val();
 
-            if(SubApp_id == '12' || SubApp_id =='11'){
-                x.style.display = "block";
-                y.style.display = "block";
-            }else{
-                x.style.display = "none";
-                y.style.display = "none"; 
-            }
-        });
-    });
+    //         if(SubApp_id == '12' || SubApp_id =='11'){
+    //             x.style.display = "block";
+    //             y.style.display = "block";
+    //         }else{
+    //             x.style.display = "none";
+    //             y.style.display = "none"; 
+    //         }
+    //     });
+    // });
 </script>
 <?php
 $AppCat = $_POST["AppCat"];
