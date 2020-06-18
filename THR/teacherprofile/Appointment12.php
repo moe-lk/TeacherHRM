@@ -262,6 +262,7 @@ $stmtTBL = $db->runMsSqlQuery($SQLTBL);
                     </td>
                 </tr>
                 <tr>
+                
                     <td style="padding-right: 50px">Subject / Degree Appointed: </td>
                     <td>
                         <div id="SubAppDiv">
