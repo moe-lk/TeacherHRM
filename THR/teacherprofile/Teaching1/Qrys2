@@ -1,0 +1,248 @@
+USE [MOENational]
+GO
+
+/****** Object:  Table [dbo].[CD_AppSubjects]    Script Date: 18-Jun-20 11:21:54 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[CD_AppSubjects](
+	[ID] [nchar](3) NOT NULL,
+	[Category] [nchar](3) NOT NULL,
+	[SubjectName] [nvarchar](20) NOT NULL,
+	[RecordLog] [varchar](max) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+
+USE [MOENational]
+GO
+
+/****** Object:  Table [dbo].[CD_AppSubCategory]    Script Date: 18-Jun-20 11:21:42 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[CD_AppSubCategory](
+	[ID] [nchar](3) NOT NULL,
+	[AppoinmentName] [nvarchar](20) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+USE [MOENational]
+GO
+
+/****** Object:  Table [dbo].[ApprovedCardre]    Script Date: 18-Jun-20 11:21:30 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[ApprovedCardre](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[CenCode] [nchar](12) NOT NULL,
+	[SubCode] [nchar](5) NOT NULL,
+	[SecCode] [nchar](5) NOT NULL,
+	[ApprCardre] [nvarchar](5) NULL,
+	[RecordLog] [varchar](max) NOT NULL,
+	[RecordStatus] [int] NULL,
+	[ApprovedDate] [datetime] NULL
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+
+USE [MOENational]
+GO
+
+/****** Object:  Table [dbo].[AppoinmentDetails]    Script Date: 18-Jun-20 11:21:17 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[AppoinmentDetails](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[NIC] [nchar](12) NOT NULL,
+	[AppCategory] [nchar](3) NOT NULL,
+	[AppSubject] [nvarchar](20) NOT NULL,
+	[Medium] [nvarchar](150) NULL,
+	[SchoolType] [nchar](2) NULL,
+	[OtherSub] [nvarchar](20) NULL,
+	[ApprovedBy] [varchar](max) NOT NULL,
+	[RecordStatus] [int] NULL,
+	[ApprovedDate] [datetime] NULL,
+	[ApproveComment] [text] NULL,
+ CONSTRAINT [PK_AppoinmentDetails] PRIMARY KEY CLUSTERED 
+(
+	[NIC] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+
+USE [MOENational]
+GO
+
+/****** Object:  Table [dbo].[CD_TeachSubjects]    Script Date: 18-Jun-20 11:23:38 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[CD_TeachSubjects](
+	[ID] [nchar](3) NOT NULL,
+	[Code] [int] NOT NULL,
+	[SubjectName] [nvarchar](100) NOT NULL,
+	[RecordLog] [varchar](max) NOT NULL,
+ CONSTRAINT [PK__CD_Teach__3214EC27592597C6] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+
+USE [MOENational]
+GO
+
+/****** Object:  Table [dbo].[CD_TeachSubCategory]    Script Date: 18-Jun-20 11:23:24 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[CD_TeachSubCategory](
+	[ID] [int] NOT NULL,
+	[CategoryName] [nvarchar](100) NOT NULL,
+	[RecordLog] [varchar](max) NOT NULL,
+ CONSTRAINT [PK__CD_Teach__3214EC271A14A427] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+
+USE [MOENational]
+GO
+
+/****** Object:  Table [dbo].[TeachingDetails]    Script Date: 18-Jun-20 11:24:12 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[TeachingDetails](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[NIC] [nchar](12) NOT NULL,
+	[TchSubject1] [nvarchar](50) NOT NULL,
+	[TchSubject2] [nvarchar](50) NOT NULL,
+	[TchSubject3] [nvarchar](50) NULL,
+	[Other1] [nvarchar](50) NULL,
+	[Other2] [nvarchar](50) NULL,
+	[Other3] [nvarchar](50) NULL,
+	[Medium1] [nvarchar](10) NULL,
+	[Medium2] [nvarchar](10) NULL,
+	[Medium3] [nvarchar](10) NULL,
+	[GradeCode1] [nvarchar](10) NULL,
+	[GradeCode2] [nvarchar](10) NULL,
+	[GradeCode3] [nvarchar](10) NULL,
+	[OtherSpecial] [nvarchar](50) NULL,
+	[SchoolType] [nchar](2) NULL,
+	[RecStatus] [int] NULL,
+	[ApprovedBy] [varchar](max) NOT NULL,
+	[ApprovedDate] [datetime] NULL,
+	[ApproveComment] [text] NULL,
+ CONSTRAINT [PK_TeachingDetails] PRIMARY KEY CLUSTERED 
+(
+	[NIC] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+
+USE [MOENational]
+GO
+
+/****** Object:  Table [dbo].[Temp_AppoinmentDetails]    Script Date: 18-Jun-20 11:24:28 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Temp_AppoinmentDetails](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[NIC] [nchar](12) NOT NULL,
+	[AppCategory] [nchar](3) NOT NULL,
+	[AppSubject] [nvarchar](20) NOT NULL,
+	[Medium] [nvarchar](150) NULL,
+	[SchoolType] [nchar](2) NULL,
+	[OtherSub] [nvarchar](20) NULL,
+	[RecordLog] [varchar](max) NOT NULL,
+	[RecordStatus] [int] NULL,
+	[LastUpdate] [datetime] NULL,
+ CONSTRAINT [PK__Temp_App__3214EC27C3D0F59A] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+
+USE [MOENational]
+GO
+
+/****** Object:  Table [dbo].[Temp_TeachingDetails]    Script Date: 18-Jun-20 11:24:43 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Temp_TeachingDetails](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[NIC] [nchar](12) NOT NULL,
+	[TchSubject1] [nvarchar](50) NOT NULL,
+	[TchSubject2] [nvarchar](50) NOT NULL,
+	[TchSubject3] [nvarchar](50) NULL,
+	[Other1] [nvarchar](50) NULL,
+	[Other2] [nvarchar](50) NULL,
+	[Other3] [nvarchar](50) NULL,
+	[Medium1] [nvarchar](10) NULL,
+	[Medium2] [nvarchar](10) NULL,
+	[Medium3] [nvarchar](10) NULL,
+	[GradeCode1] [nvarchar](10) NULL,
+	[GradeCode2] [nvarchar](10) NULL,
+	[GradeCode3] [nvarchar](10) NULL,
+	[OtherSpecial] [nvarchar](50) NULL,
+	[SchoolType] [nchar](2) NULL,
+	[RecStatus] [int] NULL,
+	[RecordLog] [varchar](max) NOT NULL,
+	[LastUpdate] [datetime] NULL,
+ CONSTRAINT [PK__Temp_Tea__3214EC27BBEFEFFB] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+
