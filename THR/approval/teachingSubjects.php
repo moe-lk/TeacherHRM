@@ -61,63 +61,103 @@ WHERE Temp_TeachingDetails.ID = '$RegID'";
     $TeacherMastID = trim($rowE['TeacherMastID']);
     $PermResiID = trim($rowE['PermResiID']);
     $CurrResID = trim($rowE['CurrResID']);
+
     if ($IsApproved == 'Y') {
 
         $RecordLog = "Approved by $NICUser";
         $ApprovedDate = date("Y-m-d H:i:s");
 
-        $queryMainInsert = "INSERT INTO [dbo].[TeachingDetails]
-        ([NIC]
-        ,[TchSubject1]
-        ,[TchSubject2]
-        ,[TchSubject3]
-        ,[Medium1]
-        ,[Medium2]
-        ,[Medium3]
-        ,[GradeCode1]
-        ,[GradeCode2]
-        ,[GradeCode3]
-        ,[SchoolType]
-        ,[RecStatus]
-        ,[ApprovedBy]
-        ,[ApprovedDate])
-  VALUES
-        ('$NIC'
-        ,'$TchSubject1'
-        ,'$TchSubject2'
-        ,'$TchSubject3'
-        ,'$Other1'
-        ,'$Other2'
-        ,'$Other3'
-        ,'$Medium1'
-        ,'$Medium2'
-        ,'$Medium3'
-        ,'$GradeCode1'
-        ,'$GradeCode2'
-        ,'$GradeCode3'
-        ,'$OtherSpecial'
-        ,'$SchoolType'
-        ,'1'
-        ,'$RecordLog'
-        ,'$ApprovedDate')";
-
-// var_dump($queryMainInsert);
-// printf($RegID);
-
-        $db->runMsSqlQueryInsert($queryMainInsert);
-
-        //update data into master table - End
-        //update data into master table - Start
-        $sqlTempUpdate = "UPDATE [dbo].[Temp_TeachingDetails]
-        SET [RecStatus] = 1
-        WHERE Temp_TeachingDetails.NIC = '$NIC'";
+        $SQLTBL = "SELECT * FROM [MOENational].[dbo].[TeachingDetails] WHERE NIC = '$NIC' AND RecStatus = '1'";
+        $TotalRows = $db->rowCount($SQLTBL);
         
-        $db->runMsSqlQueryInsert($sqlTempUpdate);
+        // var_dump($TotalRows);
+        // echo "YES";
+        if (!$TotalRows){
+            $queryMainInsert = "INSERT INTO [dbo].[TeachingDetails]
+            ([NIC]
+            ,[TchSubject1]
+            ,[TchSubject2]
+            ,[TchSubject3]
+            ,[Medium1]
+            ,[Medium2]
+            ,[Medium3]
+            ,[GradeCode1]
+            ,[GradeCode2]
+            ,[GradeCode3]
+            ,[SchoolType]
+            ,[RecStatus]
+            ,[ApprovedBy]
+            ,[ApprovedDate]
+            ,[ApproveComment])
+            VALUES
+            ('$NIC'
+            ,'$TchSubject1'
+            ,'$TchSubject2'
+            ,'$TchSubject3'
+            ,'$Other1'
+            ,'$Other2'
+            ,'$Other3'
+            ,'$Medium1'
+            ,'$Medium2'
+            ,'$Medium3'
+            ,'$GradeCode1'
+            ,'$GradeCode2'
+            ,'$GradeCode3'
+            ,'$OtherSpecial'
+            ,'$SchoolType'
+            ,'1'
+            ,'$RecordLog'
+            ,'$ApprovedDate'
+            ,'$ApproveComment')";
+
+            $db->runMsSqlQueryInsert($queryMainInsert);
+
+            //update data into master table - End
+            //update data into master table - Start
+            $sqlTempUpdate = "UPDATE [dbo].[Temp_TeachingDetails]
+                                SET [RecStatus] = '1'
+                                WHERE NIC = '$NIC'";
+            
+            $db->runMsSqlQueryInsert($sqlTempUpdate);
 
 
-        audit_trail($NIC, $_SESSION["NIC"], 'approval\teachingSubjects.php', 'Insert', 'TeachingDetails', 'Approve Teaching details.');
+            audit_trail($NIC, $_SESSION["NIC"], 'approval\teachingSubjects.php', 'Insert', 'TeachingDetails', 'Approve Teaching details.');
 
-        $msg .= "Your Approve was successffully submitted.<br>";
+            $msg .= "Your Approve was successfully submitted.<br>";
+        
+        }else{
+            $sqlupdate = "UPDATE [dbo].[TeachingDetails]
+            SET [TchSubject1] = '$TchSubject1'
+               ,[TchSubject2] = '$TchSubject2'
+               ,[TchSubject3] = '$TchSubject3'
+               ,[Other1] = '$Other1'
+               ,[Other2] = '$Other2'
+               ,[Other3] = '$Other3'
+               ,[Medium1] = '$Medium1'
+               ,[Medium2] = '$Medium2'
+               ,[Medium3] = '$Medium3'
+               ,[GradeCode1] = '$GradeCode1'
+               ,[GradeCode2] = '$GradeCode2'
+               ,[GradeCode3] = '$GradeCode3'
+               ,[OtherSpecial] = '$OtherSpecial'
+               ,[RecStatus] = '1'
+               ,[ApprovedBy] = '$RecordLog'
+               ,[ApprovedDate] = '$ApprovedDate'
+               ,[ApproveComment] = '$ApproveComment'
+          WHERE NIC = '$NIC'";
+          $db->runMsSqlQueryInsert($sqlupdate);
+
+          $sqlTempUpdate = "UPDATE [dbo].[Temp_TeachingDetails]
+            SET [RecStatus] = '1'
+            WHERE Temp_TeachingDetails.NIC = '$NIC'";
+            
+            $db->runMsSqlQueryInsert($sqlTempUpdate);
+
+
+            audit_trail($NIC, $_SESSION["NIC"], 'approval\teachingSubjects.php', 'Update', 'TeachingDetails', 'Approve Teaching details.');
+
+            $msg .= "Your Update was successfully submitted.<br>";
+        }
     } 
     else {
         $sqlreject = "DELETE FROM [dbo].[Temp_TeachingDetails] WHERE NIC = '$NIC'";

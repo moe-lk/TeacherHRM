@@ -1,9 +1,13 @@
 <link href="../cms/css/screen.css" rel="stylesheet" type="text/css" />
 <?php
+// $ApprovedDate = date("Y-m-d H:i:s");
+// var_dump($ApprovedDate);
+
 $msg = "";
 $success = "";
 include('../activityLog.php');
 // var_dump($_POST);
+
 if (isset($_POST["FrmSubmit"])) {
 
         $dateU = date('Y-m-d H:i:s');
@@ -45,47 +49,79 @@ if (isset($_POST["FrmSubmit"])) {
         $RecordStatus = $rowE['RecordStatus'];
         // $LastUpdate = $rowE['LastUpdate'];
         // $RecordLog = $rowE['RecordLog'];
+
         
     if ($IsApproved == 'Y') {
         $RecordLog = "Approved by $NICUser";
         $ApprovedDate = date("Y-m-d H:i:s");
 
-        $queryMainInsert = "INSERT INTO [dbo].[AppoinmentDetails]
-        ([NIC]
-        ,[AppCategory]
-        ,[AppSubject]
-        ,[Medium]
-        ,[SchoolType]
-        ,[OtherSub]
-        ,[ApprovedBy]
-        ,[RecordStatus]
-        ,[ApprovedDate])
-        VALUES
-        ('$NIC' 
-        , '$AppCategory'
-        , '$AppSubject' 
-        , '$Medium'
-        , '$SchoolType'
-        , '$OtherSub'
-        , '$RecordLog'
-        , '1'
-        , '$ApprovedDate')";
+        $SQLTBL = "SELECT * FROM [MOENational].[dbo].[AppoinmentDetails] WHERE NIC = '$NIC' AND RecordStatus = '1'";
+        $TotalRows = $db->rowCount($SQLTBL);
 
-        $db->runMsSqlQueryInsert($queryMainInsert);
+        // var_dump($TotalRows);
+        if (!$TotalRows){
+            $queryMainInsert = "INSERT INTO [dbo].[AppoinmentDetails]
+            ([NIC]
+            ,[AppCategory]
+            ,[AppSubject]
+            ,[Medium]
+            ,[SchoolType]
+            ,[OtherSub]
+            ,[ApprovedBy]
+            ,[RecordStatus]
+            ,[ApprovedDate]
+            ,[ApproveComment])
+            VALUES
+            ('$NIC' 
+            , '$AppCategory'
+            , '$AppSubject' 
+            , '$Medium'
+            , '$SchoolType'
+            , '$OtherSub'
+            , '$RecordLog'
+            , '1'
+            , '$ApprovedDate'
+            ,'$ApproveComment')";
 
+            $db->runMsSqlQueryInsert($queryMainInsert);
+
+
+                $sqlTempUpdate = "UPDATE [dbo].[Temp_AppoinmentDetails]
+                                SET [RecordStatus] = '1'
+                                WHERE NIC = '$NIC'";
+            
+                $db->runMsSqlQueryInsert($sqlTempUpdate);
+            
+                // $sqlcomment = "UPDATE [dbo].[AppoinmentDetails] SET ApproveComment = '$ApproveComment' WHERE NIC = '$NIC'";
+                // $db->runMsSqlQueryInsert($sqlcomment);
+
+                audit_trail($NIC, $_SESSION["NIC"], 'approval\appointmentSubjects.php', 'Insert', 'AppoinmentDetails', 'Approve appointment info.');
+
+                $msg .= "Your Approve was successfully submitted.<br>";
+        }else{
+            $qryupdate = "UPDATE [dbo].[AppoinmentDetails]
+                        SET 
+                        [AppCategory] = '$AppCategory'
+                        ,[AppSubject] = '$AppSubject'
+                        ,[Medium] = '$Medium'
+                        ,[OtherSub] = '$OtherSub'
+                        ,[ApprovedBy] = '$RecordLog'
+                        ,[RecordStatus] = '1'
+                        ,[ApprovedDate] = '$ApprovedDate'
+                        ,[ApproveComment] = '$ApproveComment'
+                        WHERE NIC = '$NIC'";
+            $db->runMsSqlQueryInsert($qryupdate);
 
             $sqlTempUpdate = "UPDATE [dbo].[Temp_AppoinmentDetails]
-                            SET [RecordStatus] = '1'
-                            WHERE NIC = '$NIC'";
-        
+                                SET [RecordStatus] = '1'
+                                WHERE NIC = '$NIC'";
             $db->runMsSqlQueryInsert($sqlTempUpdate);
-        
-            $sqlcomment = "UPDATE [dbo].[AppoinmentDetails] SET ApproveComment = '$ApproveComment' WHERE NIC = '$NIC'";
-            $db->runMsSqlQueryInsert($sqlcomment);
 
-            audit_trail($NIC, $_SESSION["NIC"], 'approval\appointmentSubjects.php', 'Insert', 'AppoinmentDetails', 'Approve appointment info.');
+            audit_trail($NIC, $_SESSION["NIC"], 'approval\appointmentSubjects.php', 'Update', 'AppoinmentDetails', 'Approve appointment info.');
 
-            $msg .= "Your Approve was successffully submitted.<br>";
+            $msg .= "Your Update was successfully submitted.<br>";
+
+        }
     } else {
 
         $sqlreject = "DELETE FROM [dbo].[Temp_AppoinmentDetails] WHERE NIC = '$NIC'";
