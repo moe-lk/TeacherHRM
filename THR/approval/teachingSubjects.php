@@ -169,28 +169,28 @@ WHERE Temp_TeachingDetails.ID = '$RegID'";
 
 // var_dump($_SESSION['NIC']);
 $NICAPP = $_SESSION['NIC']; 
-
+// var_dump($id);
 if ($id != '') {
-    $reqTab = "SELECT TOP (1000) [ID]
-      ,[NIC]
-      ,[TchSubject1]
-      ,[TchSubject2]
-      ,[TchSubject3]
-      ,[Other1]
-      ,[Other2]
-      ,[Other3]
-      ,[Medium1]
-      ,[Medium2]
-      ,[Medium3]
-      ,[GradeCode1]
-      ,[GradeCode2]
-      ,[GradeCode3]
-      ,[OtherSpecial]
-      ,[SchoolType]
-      ,[RecStatus]
-      ,[RecordLog]
-      ,[LastUpdate]
-  FROM [MOENational].[dbo].[Temp_TeachingDetails] 
+    $reqTab = "SELECT Temp_TeachingDetails.ID
+    ,Temp_TeachingDetails.NIC
+    ,[TchSubject1]
+    ,[TchSubject2]
+    ,[TchSubject3]
+    ,[Other1]
+    ,[Other2]
+    ,[Other3]
+    ,[Medium1]
+    ,[Medium2]
+    ,[Medium3]
+    ,[GradeCode1]
+    ,[GradeCode2]
+    ,[GradeCode3]
+    ,[OtherSpecial]
+    ,[SchoolType]
+    ,Temp_TeachingDetails.RecStatus
+    ,Temp_TeachingDetails.RecordLog
+    ,Temp_TeachingDetails.LastUpdate
+FROM [MOENational].[dbo].[Temp_TeachingDetails] 
 INNER JOIN [TeacherMast] ON Temp_TeachingDetails.NIC = TeacherMast.NIC
 WHERE Temp_TeachingDetails.ID = '$id'";
 
@@ -217,7 +217,7 @@ WHERE Temp_TeachingDetails.ID = '$id'";
     $GradeCode3E = $rowE["GradeCode3"];
     $OtherSpecial = $rowE['OtherSpecial'];
 
-
+    // var_dump($OtherSpecial);
     //Edit this as necessary----------------------------------------------------------------------------------------------------------------------------------------------------------
     $sqlteachrMst = "SELECT TOP (1000) [ID]
       ,[NIC]
@@ -538,7 +538,7 @@ WHERE Temp_TeachingDetails.RecStatus = '0'";
                                     <!-- <td bgcolor="#FFFFFF" align="center"> -->
                                         <!-- <input type="submit" name="tchApprove" id="tchApprove" value="Approve" > -->
                                         <td bgcolor="#FFFFFF" align="center" height="20" >
-                                            <a href="teachingSubjects-23--<?php echo $RequestID ?>.html"><img src="images/more_info.png"/></a>
+                                            <a href="teachingSubjects-33--<?php echo $RequestID ?>.html"><img src="images/more_info.png"/></a>
                                         </td>
                                         <!-- <button onclick="appFunction()">Approve</button> -->
                                         <!-- teachingSubjects-23.html -->
@@ -614,6 +614,7 @@ WHERE Temp_TeachingDetails.RecStatus = '0'";
                 </table> 
                 <?php 
                 } else { 
+                    
                     // if($TchSubject1E != ''){
                         $sql1 = "SELECT [SubjectName] FROM [MOENational].[dbo].[CD_TeachSubjects] WHERE ID = '$TchSubject1E'";
                         $stmt1 = $db->runMsSqlQuery($sql1);
@@ -631,29 +632,33 @@ WHERE Temp_TeachingDetails.RecStatus = '0'";
                     $stmt3 = $db->runMsSqlQuery($sql3);
                     $row3 = sqlsrv_fetch_array($stmt3, SQLSRV_FETCH_ASSOC);
 
-                    $sql4 = "SELECT [Medium] FROM [MOENational].[dbo].[CD_Medium] WHERE Code = '$Medium1E'";
+                    $sql4 = "SELECT [Medium] FROM [MOENational].[dbo].[CD_Medium] WHERE Code = '$Medium1E' AND Code != ''";
                     $stmt4 = $db->runMsSqlQuery($sql4);
                     $row4 = sqlsrv_fetch_array($stmt4, SQLSRV_FETCH_ASSOC);
                     
-                    $sql5 = "SELECT [Medium] FROM [MOENational].[dbo].[CD_Medium] WHERE Code = '$Medium2E'";
+                    $sql5 = "SELECT [Medium] FROM [MOENational].[dbo].[CD_Medium] WHERE Code = '$Medium2E' AND Code != ''";
                     $stmt5 = $db->runMsSqlQuery($sql5);
                     $row5 = sqlsrv_fetch_array($stmt5, SQLSRV_FETCH_ASSOC);
                     
-                    $sql6 = "SELECT [Medium] FROM [MOENational].[dbo].[CD_Medium] WHERE Code = '$Medium3E'";
+                    $sql6 = "SELECT [Medium] FROM [MOENational].[dbo].[CD_Medium] WHERE Code = '$Medium3E' AND Code != ''";
                     $stmt6 = $db->runMsSqlQuery($sql6);
                     $row6 = sqlsrv_fetch_array($stmt6, SQLSRV_FETCH_ASSOC);
                     
-                    $sql7 = "SELECT [GradeName] FROM [MOENational].[dbo].[CD_SecGrades] WHERE GradeCode = '$GradeCode1E'";
+                    $sql7 = "SELECT CategoryName FROM CD_TeachSubCategory WHERE ID = '$GradeCode1E'";
                     $stmt7 = $db->runMsSqlQuery($sql7);
                     $row7 = sqlsrv_fetch_array($stmt7, SQLSRV_FETCH_ASSOC);
                     
-                    $sql8 = "SELECT [GradeName] FROM [MOENational].[dbo].[CD_SecGrades] WHERE GradeCode = '$GradeCode2E'";
+                    $sql8 = "SELECT CategoryName FROM CD_TeachSubCategory WHERE ID = '$GradeCode2E'";
                     $stmt8 = $db->runMsSqlQuery($sql8);
                     $row8 = sqlsrv_fetch_array($stmt8, SQLSRV_FETCH_ASSOC);
                     
-                    $sql9 = "SELECT [GradeName] FROM [MOENational].[dbo].[CD_SecGrades] WHERE GradeCode = '$GradeCode3E'";
+                    $sql9 = "SELECT CategoryName FROM CD_TeachSubCategory WHERE ID = '$GradeCode3E'";
                     $stmt9 = $db->runMsSqlQuery($sql9);
                     $row9 = sqlsrv_fetch_array($stmt9, SQLSRV_FETCH_ASSOC);
+
+                    $sql10 = "SELECT SubjectName FROM CD_TeachSubjects WHERE ID = '$OtherSpecial'";
+                    $stmt10 = $db->runMsSqlQuery($sql10);
+                    $row10 = sqlsrv_fetch_array($stmt10, SQLSRV_FETCH_ASSOC);
                 ?>
             <table width="100%" cellpadding="0" cellspacing="0">
                 <tr>
@@ -713,7 +718,7 @@ WHERE Temp_TeachingDetails.RecStatus = '0'";
                             <tr>
                                 <td width="15%" align="left" valign="top"><strong>Grade Span</strong></td>
                                 <td width="1%" align="left" valign="top"><strong>:</strong></td>
-                                <td width="34%" align="left" valign="top"><?php echo $rowE['GradeCode1']." - ". $row7['GradeName']; ?></td>
+                                <td width="34%" align="left" valign="top"><?php echo $rowE['GradeCode1']." - ". $row7['CategoryName']; ?></td>
                             </tr>
                         </table>
                     </td>
@@ -745,7 +750,7 @@ WHERE Temp_TeachingDetails.RecStatus = '0'";
                             <tr>
                                 <td width="15%" align="left" valign="top"><strong>Grade Span</strong></td>
                                 <td width="1%" align="left" valign="top"><strong>:</strong></td>
-                                <td width="34%" align="left" valign="top"><?php echo $rowE['GradeCode2']." - ". $row8['GradeName']; ?></td>
+                                <td width="34%" align="left" valign="top"><?php echo $rowE['GradeCode2']." - ". $row8['CategoryName']; ?></td>
                             </tr>
                         </table>
                     </td>
@@ -777,12 +782,22 @@ WHERE Temp_TeachingDetails.RecStatus = '0'";
                             <tr>
                                 <td width="15%" align="left" valign="top"><strong>Grade Span</strong></td>
                                 <td width="1%" align="left" valign="top"><strong>:</strong></td>
-                                <td width="34%" align="left" valign="top"><?php echo $rowE['GradeCode3']." - ". $row9['GradeName']; ?></td>
+                                <td width="34%" align="left" valign="top"><?php echo $rowE['GradeCode3']." - ". $row9['CategoryName']; ?></td>
                             </tr>
                         </table>
                     </td>
                 </tr>
-
+                <tr>
+                    <td colspan="2" valign="top">
+                        <table width="100%" cellspacing="2" cellpadding="2">
+                            <tr>
+                                <td width="15%" align="left" valign="top"><strong>Other Special Duties</strong></td>
+                                <td width="1%" align="left" valign="top"><strong>:</strong></td>
+                                <td width="34%" align="left" valign="top"><?php echo $rowE['OtherSpecial']." - ". $row10['SubjectName']; ?></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
                 <tr>
                     <td valign="top">&nbsp;</td>
                     <td valign="top">&nbsp;</td>

@@ -109,12 +109,48 @@ $dateNow = date("Y/m/d");
 // var_dump($_REQUEST);
 $nicNO = $_REQUEST['id'];
 
-$MedTch1 = $_REQUEST['MedTch1'];
-$MedTch2 = $_REQUEST["MedTch2"];
-$MedTch3 = $_REQUEST["MedTch3"];
-$GradTch1 = $_REQUEST["GradTch1"];
-$GradTch2 = $_REQUEST["GradTch2"];
-$GradTch3 = $_REQUEST["GradTch3"];
+
+// $MedTch2 = $_REQUEST["MedTch2"];
+// $MedTch3 = $_REQUEST["MedTch3"];
+// $GradTch1 = $_REQUEST["GradTch1"];
+// $GradTch2 = $_REQUEST["GradTch2"];
+// $GradTch3 = $_REQUEST["GradTch3"];
+
+if ($_REQUEST["MedTch1"] != 'Select') {
+    $MedTch1 = $_REQUEST["MedTch1"];
+} else {
+    $MedTch1 = "";
+}
+
+if ($_REQUEST["MedTch2"] != 'Select') {
+    $MedTch2 = $_REQUEST["MedTch2"];
+} else {
+    $MedTch2 = "";
+}
+
+if ($_REQUEST["MedTch3"] != 'Select') {
+    $MedTch3 = $_REQUEST["MedTch3"];
+} else {
+    $MedTch3 = "";
+}
+
+if ($_REQUEST["GradTch1"] != 'Select') {
+    $GradTch1 = $_REQUEST["GradTch1"];
+} else {
+    $GradTch1 = "";
+}
+
+if ($_REQUEST["GradTch2"] != 'Select') {
+    $GradTch2 = $_REQUEST["GradTch2"];
+} else {
+    $GradTch2 = "";
+}
+
+if ($_REQUEST["GradTch3"] != 'Select') {
+    $GradTch3 = $_REQUEST["GradTch3"];
+} else {
+    $GradTch3 = "";
+}
 
 if ($_REQUEST["SubTch1"] != 'Select') {
     $SubTch1 = $_REQUEST["SubTch1"];
