@@ -542,20 +542,26 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
     
     // var thisone  = <?php // echo $rowTBL['Medium1'] ?>
     // console.log(thisone)
-    var MedTch1 = document.getElementById("MedTch1");
-    var MedTch2 = document.getElementById("MedTch2");
-    var MedTch3 = document.getElementById("MedTch3");
-    var GradTch1 = document.getElementById("GradTch1");
-    var GradTch2 = document.getElementById("GradTch2");
-    var GradTch3 = document.getElementById("GradTch3");
-    var SubTch1 = document.getElementById("SubTch1");
-    var SubTch2 = document.getElementById("SubTch2");
-    var SubTch3 = document.getElementById("SubTch3");
-    var otherspecial = document.getElementById("otherspecial");
+    var MedTch1 = document.getElementById("MedTch1").value;
+    var MedTch2 = document.getElementById("MedTch2").value;
+    var MedTch3 = document.getElementById("MedTch3").value;
+    var GradTch1 = document.getElementById("GradTch1").value;
+    var GradTch2 = document.getElementById("GradTch2").value;
+    var GradTch3 = document.getElementById("GradTch3").value;
+    var SubTch1 = document.getElementById("SubTch1").value;
+    var SubTch2 = document.getElementById("SubTch2").value;
+    var SubTch3 = document.getElementById("SubTch3").value;
+    var otherspecial = document.getElementById("otherspecial").value;
 
-    // var otherspecial = </script><?php // echo $OtherSpecial ?><script>    
-    // console.log(otherspecial);
+    // var otherspecial = <?php  //echo $OtherSpecial; ?>   
+    console.log(otherspecial);
 
+    selectElement('leaveCode', '11')
+
+function selectElement(id, valueToSelect) {    
+    let element = document.getElementById(id);
+    element.value = valueToSelect;
+}
     function showForm(){
         if (tbl.style.display === "none" ) {
             tbl.style.display = "block";
@@ -571,7 +577,7 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
             var SubTch3 = "<?php echo $TchSubject3; ?>";
             var otherspecial = "<?php echo $OtherSpecial; ?>";
             
-            console.log(MedTch1);
+            console.log(otherspecial);
         }
     }
     var schType = "<?php echo $SchType; ?>";

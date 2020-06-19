@@ -87,7 +87,7 @@ while ($row1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
 }
 
 $TbLD=1;
-
+// var_dump($id);
 $SQLTBL = "SELECT * FROM [MOENational].[dbo].[AppoinmentDetails] WHERE NIC = '$id' AND RecordStatus = '1'";
 $stmtTBL = $db->runMsSqlQuery($SQLTBL);
 
@@ -146,13 +146,13 @@ $stmtTBL = $db->runMsSqlQuery($SQLTBL);
         <!-- <div> -->
             <table name="Tblrecord" id="Tblrecord" border = "1px" style="width:100%; display: block;">
                 <tr id="headtbl">
-                    <td colspan="3">
+                    <td>
                         Appointment Category
                     </td>
-                    <td colspan="3">
+                    <td>
                         Appointment Medium
                     </td>
-                    <td colspan="3">
+                    <td>
                         Appointment subject
                     </td>
                     <!-- <td>
@@ -161,20 +161,6 @@ $stmtTBL = $db->runMsSqlQuery($SQLTBL);
                     <td>
                         Action
                     </td>
-                <!-- </tr>
-                <tr id="headtbl">
-                    <td>Subject</td>
-                    <td>Medium</td>
-                    <td>Grade Span</td>
-                    <td>Subject</td>
-                    <td>Medium</td>
-                    <td>Grade Span</td>
-                    <td>Subject</td>
-                    <td>Medium</td>
-                    <td>Grade Span</td> -->
-                    <!-- <td>&nbsp;</td> -->
-                    <!-- <td>&nbsp;</td>
-                </tr> -->
                 <tr>
                 <?php 
                     $TotaRows = $db->rowCount($SQLTBL);
@@ -183,28 +169,12 @@ $stmtTBL = $db->runMsSqlQuery($SQLTBL);
                         // var_dump($TotaRows)
                         $TbLD = 0;
                     }
-                    // sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC);
-                    // var_dump($rowTBL);
-                    // if(is_null($rowTBL)){
-                    //     $TbLD = 0;
-                    // }
-                    while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){ 
-                        // else{
-                            echo "<td>".$rowTBL['TchSubject1']."</td>";
-                            echo "<td>".$rowTBL['Medium1']."</td>";
-                            echo "<td>".$rowTBL['GradeCode1']."</td>";
-                            echo "<td>".$rowTBL['TchSubject2']."</td>";
-                            echo "<td>".$rowTBL['Medium2']."</td>";
-                            echo "<td>".$rowTBL['GradeCode2']."</td>";
-                            echo "<td>".$rowTBL['TchSubject3']."</td>";
-                            echo "<td>".$rowTBL['Medium3']."</td>";
-                            echo "<td>".$rowTBL['GradeCode3']."</td>";
-                            echo "<td style='text-align:center'><input type='button' value='Edit' onclick='showForm()'></td>";
-                        // } 
-                    } 
-                    // var_dump($TbLD);    // echo "<td>&nbsp</td>";
 
-                        
+                    $rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC);
+                        echo "<td>".$rowTBL['AppCategory']."</td>";
+                        echo "<td>".$rowTBL['Medium']."</td>";
+                        echo "<td>".$rowTBL['AppSubject']."</td>";
+                        echo "<td style='text-align:center'><input type='button' value='Edit' onclick='showForm()'></td>";
                 ?>
 
                 </tr>
