@@ -140,7 +140,7 @@ if ($id != '') {
     ,[SurnameWithInitials]
     ,[FullName]
     ,[AppCategory]
-	,CD_AppSubCategory.AppoinmentName
+	,CD_AppSubCategory.AppointmentName
     ,[AppSubject]
 	,[SubjectName]
     ,[Medium]
@@ -153,7 +153,7 @@ FROM Temp_AppoinmentDetails
 INNER JOIN [TeacherMast] ON Temp_AppoinmentDetails.NIC = TeacherMast.NIC 
 INNER JOIN CD_AppSubCategory ON AppCategory = CD_AppSubCategory.ID
 INNER JOIN CD_AppSubjects ON AppSubject = CD_AppSubjects.ID
-WHERE Temp_AppoinmentDetails.NIC='$id'";
+WHERE Temp_AppoinmentDetails.ID='$id'";
 
     $stmtE = $db->runMsSqlQuery($reqTab);
     $rowE = sqlsrv_fetch_array($stmtE, SQLSRV_FETCH_ASSOC);
