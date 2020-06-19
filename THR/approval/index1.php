@@ -425,7 +425,7 @@ WHERE        (TG_Approval_Leave.ApprovedStatus = 'P')";
         }
         // Added by Dharshana -- End
     }
-    if ($pageId  == '23') {
+    if ($pageId  == '33') {
             $sql = "SELECT *
             FROM Temp_TeachingDetails
             INNER JOIN [TeacherMast] ON Temp_TeachingDetails.NIC = TeacherMast.NIC 
@@ -443,7 +443,7 @@ WHERE        (TG_Approval_Leave.ApprovedStatus = 'P')";
                 return $rowCount;
             }
     }
-    if ($pageId  == '24') {
+    if ($pageId  == '34') {
         $sql = "SELECT *
         FROM Temp_AppoinmentDetails
         INNER JOIN [TeacherMast] ON Temp_AppoinmentDetails.NIC = TeacherMast.NIC 

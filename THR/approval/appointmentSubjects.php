@@ -54,6 +54,8 @@ if (isset($_POST["FrmSubmit"])) {
     if ($IsApproved == 'Y') {
         $RecordLog = "Approved by $NICUser";
         $ApprovedDate = date("Y-m-d H:i:s");
+        // var_dump($ApprovedDate);
+        // var_dump($RecordLog);
 
         $SQLTBL = "SELECT * FROM [MOENational].[dbo].[AppoinmentDetails] WHERE NIC = '$NIC' AND RecordStatus = '1'";
         $TotalRows = $db->rowCount($SQLTBL);
@@ -116,7 +118,7 @@ if (isset($_POST["FrmSubmit"])) {
                                 SET [RecordStatus] = '1'
                                 WHERE NIC = '$NIC'";
             $db->runMsSqlQueryInsert($sqlTempUpdate);
-
+            // var_dump($sqlTempUpdate);
             audit_trail($NIC, $_SESSION["NIC"], 'approval\appointmentSubjects.php', 'Update', 'AppoinmentDetails', 'Approve appointment info.');
 
             $msg .= "Your Update was successfully submitted.<br>";
@@ -312,7 +314,7 @@ WHERE RecordStatus = '0'";
         </form>
     </div>
 <?php } ?>
-<form method="post" action="appointmentSubjects-24.html" name="frmSave" id="frmSave" enctype="multipart/form-data" onSubmit="return check_form(frmSave);">
+<form method="post" action="appointmentSubjects-34.html" name="frmSave" id="frmSave" enctype="multipart/form-data" onSubmit="return check_form(frmSave);">
     <?php if ($msg != '' || $success != '') { //if($_SESSION['success_update']!='' || $_SESSION['success_update']!=''){    
     ?>
 
@@ -371,7 +373,7 @@ WHERE RecordStatus = '0'";
                                     $num++; 
                                 ?>
                                     <td bgcolor="#FFFFFF" align="center" height="20" >
-                                        <a href="appointmentSubjects-24--<?php echo $RequestID ?>.html"><img src="images/more_info.png"/></a>
+                                        <a href="appointmentSubjects-34--<?php echo $RequestID ?>.html"><img src="images/more_info.png"/></a>
                                     </td> 
                             </tr>
                         <?php } ?>

@@ -17,6 +17,7 @@ if (isset($_POST["FrmSubmit"])) {
     //get data from temp table - Start
     $reqTab = "SELECT Temp_TeachingDetails.ID
     ,Temp_TeachingDetails.NIC
+    ,SurnameWithInitials
     ,[TchSubject1]
     ,[TchSubject2]
     ,[TchSubject3]
@@ -34,11 +35,11 @@ if (isset($_POST["FrmSubmit"])) {
     ,Temp_TeachingDetails.RecStatus
     ,Temp_TeachingDetails.RecordLog
     ,Temp_TeachingDetails.LastUpdate
-FROM [MOENational].[dbo].[Temp_TeachingDetails] 
-INNER JOIN [TeacherMast] ON Temp_TeachingDetails.NIC = TeacherMast.NIC
-WHERE Temp_TeachingDetails.ID = '$RegID'";
+    FROM [MOENational].[dbo].[Temp_TeachingDetails] 
+    INNER JOIN [TeacherMast] ON Temp_TeachingDetails.NIC = TeacherMast.NIC
+    WHERE Temp_TeachingDetails.ID = '$RegID'";
 
-// printf($reqTab);
+    // printf($reqTab);
     $stmtE = $db->runMsSqlQuery($reqTab);
     $rowE = sqlsrv_fetch_array($stmtE, SQLSRV_FETCH_ASSOC);
     $NIC = trim($rowE['NIC']);
@@ -66,11 +67,13 @@ WHERE Temp_TeachingDetails.ID = '$RegID'";
 
         $RecordLog = "Approved by $NICUser";
         $ApprovedDate = date("Y-m-d H:i:s");
+        // var_dump($ApprovedDate);
+        // var_dump($RecordLog);
 
         $SQLTBL = "SELECT * FROM [MOENational].[dbo].[TeachingDetails] WHERE NIC = '$NIC' AND RecStatus = '1'";
         $TotalRows = $db->rowCount($SQLTBL);
         
-        // var_dump($TotalRows);
+        // var_dump($NIC);
         // echo "YES";
         if (!$TotalRows){
             $queryMainInsert = "INSERT INTO [dbo].[TeachingDetails]
@@ -78,48 +81,51 @@ WHERE Temp_TeachingDetails.ID = '$RegID'";
             ,[TchSubject1]
             ,[TchSubject2]
             ,[TchSubject3]
+            ,[Other1]
+            ,[Other2]
+            ,[Other3]
             ,[Medium1]
             ,[Medium2]
             ,[Medium3]
             ,[GradeCode1]
             ,[GradeCode2]
             ,[GradeCode3]
+            ,[OtherSpecial]
             ,[SchoolType]
             ,[RecStatus]
             ,[ApprovedBy]
             ,[ApprovedDate]
             ,[ApproveComment])
-            VALUES
-            ('$NIC'
-            ,'$TchSubject1'
-            ,'$TchSubject2'
-            ,'$TchSubject3'
-            ,'$Other1'
-            ,'$Other2'
-            ,'$Other3'
-            ,'$Medium1'
-            ,'$Medium2'
-            ,'$Medium3'
-            ,'$GradeCode1'
-            ,'$GradeCode2'
-            ,'$GradeCode3'
-            ,'$OtherSpecial'
-            ,'$SchoolType'
-            ,'1'
-            ,'$RecordLog'
-            ,'$ApprovedDate'
-            ,'$ApproveComment')";
+             VALUES
+             ('$NIC'
+             ,'$TchSubject1'
+             ,'$TchSubject2'
+             ,'$TchSubject3'
+             ,'$Other1'
+             ,'$Other2'
+             ,'$Other3'
+             ,'$Medium1'
+             ,'$Medium2'
+             ,'$Medium3'
+             ,'$GradeCode1'
+             ,'$GradeCode2'
+             ,'$GradeCode3'
+             ,'$OtherSpecial'
+             ,'$SchoolType'
+             ,'1'
+             ,'$RecordLog'
+             ,'$ApprovedDate'
+             ,'$ApproveComment')";
 
             $db->runMsSqlQueryInsert($queryMainInsert);
 
-            //update data into master table - End
-            //update data into master table - Start
             $sqlTempUpdate = "UPDATE [dbo].[Temp_TeachingDetails]
                                 SET [RecStatus] = '1'
                                 WHERE NIC = '$NIC'";
             
             $db->runMsSqlQueryInsert($sqlTempUpdate);
 
+            
 
             audit_trail($NIC, $_SESSION["NIC"], 'approval\teachingSubjects.php', 'Insert', 'TeachingDetails', 'Approve Teaching details.');
 
@@ -147,10 +153,11 @@ WHERE Temp_TeachingDetails.ID = '$RegID'";
           WHERE NIC = '$NIC'";
           $db->runMsSqlQueryInsert($sqlupdate);
 
+          
           $sqlTempUpdate = "UPDATE [dbo].[Temp_TeachingDetails]
             SET [RecStatus] = '1'
             WHERE Temp_TeachingDetails.NIC = '$NIC'";
-            
+            // var_dump($sqlTempUpdate);
             $db->runMsSqlQueryInsert($sqlTempUpdate);
 
 
@@ -173,6 +180,7 @@ $NICAPP = $_SESSION['NIC'];
 if ($id != '') {
     $reqTab = "SELECT Temp_TeachingDetails.ID
     ,Temp_TeachingDetails.NIC
+    ,SurnameWithInitials
     ,[TchSubject1]
     ,[TchSubject2]
     ,[TchSubject3]
@@ -199,6 +207,7 @@ WHERE Temp_TeachingDetails.ID = '$id'";
     // var_dump($rowE['NIC']); 
     $NIC = trim($rowE['NIC']);
     $TeacherMastID = trim($rowE['ID']);
+    $SurnameWithInitials = $rowE['SurnameWithInitials'];
     // $PermResiID = trim($rowE['PermResiID']);
     // $CurrResID = trim($rowE['CurrResID']);
     $UpdateBy = trim($rowE['RecordLog']);
@@ -219,26 +228,26 @@ WHERE Temp_TeachingDetails.ID = '$id'";
 
     // var_dump($OtherSpecial);
     //Edit this as necessary----------------------------------------------------------------------------------------------------------------------------------------------------------
-    $sqlteachrMst = "SELECT TOP (1000) [ID]
-      ,[NIC]
-      ,[TchSubject1]
-      ,[TchSubject2]
-      ,[TchSubject3]
-      ,[Other1]
-      ,[Other2]
-      ,[Other3]
-      ,[Medium1]
-      ,[Medium2]
-      ,[Medium3]
-      ,[GradeCode1]
-      ,[GradeCode2]
-      ,[GradeCode3]
-      ,[OtherSpecial]
-      ,[SchoolType]
-      ,[RecStatus]
-      ,[RecordLog]
-      ,[LastUpdate]
-  FROM [MOENational].[dbo].[Temp_TeachingDetails] 
+    $sqlteachrMst = "SELECT Temp_TeachingDetails.ID
+    ,Temp_TeachingDetails.NIC
+    ,[TchSubject1]
+    ,[TchSubject2]
+    ,[TchSubject3]
+    ,[Other1]
+    ,[Other2]
+    ,[Other3]
+    ,[Medium1]
+    ,[Medium2]
+    ,[Medium3]
+    ,[GradeCode1]
+    ,[GradeCode2]
+    ,[GradeCode3]
+    ,[OtherSpecial]
+    ,[SchoolType]
+    ,Temp_TeachingDetails.RecStatus
+    ,Temp_TeachingDetails.RecordLog
+    ,Temp_TeachingDetails.LastUpdate
+FROM [MOENational].[dbo].[Temp_TeachingDetails] 
 INNER JOIN [TeacherMast] ON Temp_TeachingDetails.NIC = TeacherMast.NIC
 WHERE (Temp_TeachingDetails.ID = '$TeacherMastID')"; //(UP_TeacherMast.NIC = '850263230V')
 
@@ -459,7 +468,7 @@ WHERE Temp_TeachingDetails.RecStatus = '0'";
         </form>
     </div>
 <?php } ?>
-<form method="post" action="teachingSubjects-23.html" name="frmSave" id="frmSave" enctype="multipart/form-data" onSubmit="return check_form(frmSave);">
+<form method="post" action="teachingSubjects-33.html" name="frmSave" id="frmSave" enctype="multipart/form-data" onSubmit="return check_form(frmSave);">
     <?php if ($msg != '' || $success != '') { //if($_SESSION['success_update']!='' || $_SESSION['success_update']!=''){    
     ?>
 
@@ -678,7 +687,7 @@ WHERE Temp_TeachingDetails.RecStatus = '0'";
                             <tr>
                                 <td width="30%" align="left" valign="top"><strong>NIC</strong></td>
                                 <td width="3%" align="left" valign="top"><strong>:</strong></td>
-                                <td width="67%" align="left" valign="top"><?php echo $NIC ?></td>
+                                <td width="67%" align="left" valign="top"><?php echo $rowE['NIC'] ?></td>
                             </tr>
                             <tr>
                                 <td align="left" valign="top"><strong>Surname with Initials</strong></td>
@@ -695,7 +704,7 @@ WHERE Temp_TeachingDetails.RecStatus = '0'";
                     <td valign="top">&nbsp;</td>
                 </tr>
                 <tr>
-                    <td colspan="2" valign="top" style="border-bottom:1px; border-bottom-style:solid; font-size:14px;"><strong>Teaching Subject for most Hours</strong></td>
+                    <td colspan="2" valign="top" style="border-bottom:1px; border-bottom-style:solid; font-size:14px;"><strong>Highest Number of Teaching Periods</strong></td>
                 </tr>
                 <tr>
                     <td colspan="2" valign="top">&nbsp;</td>
@@ -729,7 +738,7 @@ WHERE Temp_TeachingDetails.RecStatus = '0'";
                     <td valign="top">&nbsp;</td>
                 </tr>
                 <tr>
-                    <td colspan="2" valign="top" style="border-bottom:1px; border-bottom-style:solid; font-size:14px;"><strong>Teaching Subject for Second most Hours</strong></td>
+                    <td colspan="2" valign="top" style="border-bottom:1px; border-bottom-style:solid; font-size:14px;"><strong>Second Highest Number of Teaching Periods</strong></td>
                 </tr>
                 <tr>
                     <td colspan="2" valign="top">&nbsp;</td>
@@ -761,7 +770,7 @@ WHERE Temp_TeachingDetails.RecStatus = '0'";
                     <td valign="top">&nbsp;</td>
                 </tr>
                 <tr>
-                    <td colspan="2" valign="top" style="border-bottom:1px; border-bottom-style:solid; font-size:14px;"><strong>Teaching Subject for most Hours</strong></td>
+                    <td colspan="2" valign="top" style="border-bottom:1px; border-bottom-style:solid; font-size:14px;"><strong>Other capable Subject subjects of teaching</strong></td>
                 </tr>
                 <tr>
                     <td colspan="2" valign="top">&nbsp;</td>
@@ -786,6 +795,9 @@ WHERE Temp_TeachingDetails.RecStatus = '0'";
                             </tr>
                         </table>
                     </td>
+                </tr>
+                <tr>
+                    <td colspan="2" valign="top">&nbsp;</td>
                 </tr>
                 <tr>
                     <td colspan="2" valign="top">
