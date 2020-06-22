@@ -88,7 +88,24 @@ while ($row1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
 
 $TbLD=1;
 // var_dump($id);
-$SQLTBL = "SELECT * FROM [MOENational].[dbo].[AppoinmentDetails] WHERE NIC = '$id' AND RecordStatus = '1'";
+$SQLTBL = "SELECT AppoinmentDetails.ID 
+,[NIC]
+,[AppCategory]
+,[AppSubject]
+,AppoinmentDetails.Medium AS MEDCode
+,[SchoolType]
+,[OtherSub]
+,[ApprovedBy]
+,[RecordStatus]
+,[ApprovedDate]
+,[ApproveComment] 
+,[AppointmentName]
+,CD_Medium.Medium 
+,[SubjectName] FROM [MOENational].[dbo].[AppoinmentDetails]  
+INNER JOIN CD_AppSubCategory ON AppCategory = CD_AppSubCategory.ID
+INNER JOIN CD_AppSubjects ON AppSubject = CD_AppSubjects.ID
+INNER JOIN CD_Medium ON AppoinmentDetails.Medium = CD_Medium.Code 
+WHERE NIC = '$id' AND RecordStatus = '1'";
 $stmtTBL = $db->runMsSqlQuery($SQLTBL);
 
 // $dateNow = date("Y/m/d");
@@ -146,19 +163,19 @@ $stmtTBL = $db->runMsSqlQuery($SQLTBL);
         <!-- <div> -->
             <table name="Tblrecord" id="Tblrecord" border = "1px" style="width:100%; display: block;">
                 <tr id="headtbl">
-                    <td>
+                    <td style="padding: 5px; padding-left: 10px; padding-right: 150px;">
                         Appointment Category
                     </td>
-                    <td>
-                        Appointment Medium
-                    </td>
-                    <td>
+                    <td style="padding: 5px; padding-left: 10px; padding-right: 150px;">
                         Appointment subject
+                    </td>
+                    <td style="padding: 5px; padding-left: 10px; padding-right: 50px;">
+                        Appointment Medium
                     </td>
                     <!-- <td>
                         Effective date
                     </td> -->
-                    <td>
+                    <td style="padding: 5px; padding-left: 10px; padding-right: 10px;">
                         Action
                     </td>
                 <tr>
@@ -171,9 +188,9 @@ $stmtTBL = $db->runMsSqlQuery($SQLTBL);
                     }
 
                     $rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC);
-                        echo "<td>".$rowTBL['AppCategory']."</td>";
-                        echo "<td>".$rowTBL['Medium']."</td>";
-                        echo "<td>".$rowTBL['AppSubject']."</td>";
+                        echo "<td style='padding: 5px;'>".$rowTBL['AppCategory']." - ".$rowTBL['AppointmentName']."</td>";
+                        echo "<td style='padding: 5px;'>".$rowTBL['AppSubject']." - ".$rowTBL['SubjectName']."</td>";
+                        echo "<td style='padding: 5px;'>".$rowTBL['MEDCode']." - ".$rowTBL['Medium']."</td>";
                         echo "<td style='text-align:center'><input type='button' value='Edit' onclick='showForm()'></td>";
                 ?>
 
@@ -187,23 +204,7 @@ $stmtTBL = $db->runMsSqlQuery($SQLTBL);
                         Appointment
                     </td>
                 </tr>
-                <tr>
-                    <td>Appointed Medium: </td>
-                    <td>
-                        <select id="MedApp" name="MedApp">
-                            <option>Select</option>
-                            <?php // for meium combo box
-                            $sql = "SELECT Medium FROM CD_Medium WHERE Code != ''";
-                            $stmt = $db->runMsSqlQuery($sql);
-                            while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-                                $AppMeduim = $row['Medium'];
-                                echo "<option value=" . $AppMeduim . ">" . $AppMeduim . "</option>";
-                            }
-                            ?>
-
-                        </select>
-                    </td>
-                </tr>
+                
                 <tr>
                     <td>Appointment category: </td>
                     <td>
@@ -264,6 +265,24 @@ $stmtTBL = $db->runMsSqlQuery($SQLTBL);
                                 ?>
                             </select>
                         </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Appointed Medium: </td>
+                    <td>
+                        <select id="MedApp" name="MedApp">
+                            <option>Select</option>
+                            <?php // for meium combo box
+                            $sql = "SELECT Medium FROM CD_Medium WHERE Code != ''";
+                            $stmt = $db->runMsSqlQuery($sql);
+                            while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                $MedID = $row['MEDCode'];
+                                $AppMeduim = $row['Medium'];
+                                echo "<option value=" . $MedID . ">" . $AppMeduim . "</option>";
+                            }
+                            ?>
+
+                        </select>
                     </td>
                 </tr>
                 <!-- <tr>

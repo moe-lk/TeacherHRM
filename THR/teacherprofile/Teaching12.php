@@ -86,9 +86,59 @@ while ($row1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
 
 $TbLD=1;
 
-$SQLTBL = "SELECT * FROM TeachingDetails WHERE NIC = '$id' AND RecStatus = '1'";
+$SQLTBL = "SELECT TeachingDetails.ID
+,[NIC]
+,[TchSubject1]
+,[TchSubject2]
+,[TchSubject3]
+,[Other1]
+,[Other2]
+,[Other3]
+,[Medium1]
+,[Medium2]
+,[Medium3]
+,[GradeCode1]
+,[GradeCode2]
+,[GradeCode3]
+,[OtherSpecial]
+,[SchoolType]
+,[RecStatus]
+,[ApprovedBy]
+,[ApprovedDate]
+,[ApproveComment]
+,TC1.SubjectName AS Subj1
+,TC2.SubjectName AS Subj2
+,TC3.SubjectName AS Subj3
+,TM1.Medium AS Med1
+,TM2.Medium AS Med2
+,TM3.Medium AS Med3
+,TSC1.CategoryName AS Tcat1
+,TSC2.CategoryName AS Tcat2
+,TSC3.CategoryName AS Tcat3
+,TC4.SubjectName AS Other
+FROM TeachingDetails 
+LEFT JOIN CD_TeachSubjects AS TC1 ON TeachingDetails.TchSubject1 = TC1.ID
+LEFT JOIN CD_TeachSubjects AS TC2 ON TeachingDetails.TchSubject2 = TC2.ID
+LEFT JOIN CD_TeachSubjects AS TC3 ON TeachingDetails.TchSubject3 = TC3.ID
+LEFT JOIN CD_Medium AS TM1 ON TeachingDetails.Medium1 = TM1.Code
+LEFT JOIN CD_Medium AS TM2 ON TeachingDetails.Medium2 = TM2.Code
+LEFT JOIN CD_Medium AS TM3 ON TeachingDetails.Medium3 = TM3.Code
+LEFT JOIN CD_TeachSubCategory AS TSC1 ON TeachingDetails.GradeCode1 = TSC1.ID
+LEFT JOIN CD_TeachSubCategory AS TSC2 ON TeachingDetails.GradeCode2 = TSC2.ID
+LEFT JOIN CD_TeachSubCategory AS TSC3 ON TeachingDetails.GradeCode3 = TSC3.ID
+LEFT JOIN CD_TeachSubjects AS TC4 ON TeachingDetails.OtherSpecial = TC4.ID
+WHERE NIC = '$id' AND RecStatus = '1'";
 $stmtTBL = $db->runMsSqlQuery($SQLTBL);
 while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
+    $Subj1 = $rowTBL['Subj1'];
+    $Subj2 = $rowTBL['Subj2'];
+    $Subj3 = $rowTBL['Subj3'];
+    $Med1 = $rowTBL['Med1'];
+    $Med2 = $rowTBL['Med2'];
+    $Med3 = $rowTBL['Med3'];
+    $Tcat1 = $rowTBL['Tcat1'];
+    $Tcat2 = $rowTBL['Tcat2'];
+    $Tcat3 = $rowTBL['Tcat3'];
     $TchSubject1 = $rowTBL['TchSubject1'];
     $Medium1 = $rowTBL['Medium1'];
     $GradeCode1 = $rowTBL['GradeCode1'];
@@ -99,6 +149,7 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
     $Medium3 = $rowTBL['Medium3'];
     $GradeCode3 = $rowTBL['GradeCode3'];
     $OtherSpecial = $rowTBL['OtherSpecial'];
+    $Other = $rowTBL['Other'];
 }
 ?>
 
@@ -127,7 +178,7 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
     #Tblrecord {
         border-collapse: collapse;       
         border: 1px solid black;
-        /* padding: 5px; */
+        padding: 5px;
     }
 
     /* #Tblrecord, td, th {
@@ -139,8 +190,9 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
         /* color: white; */
         font-weight: 700;
         text-align: center;
-        padding-left: 10px;
-        padding-right: 10px;
+        padding-left: 15px;
+        padding-right: 15px;
+        padding: 10px;
         width:100%;
     }
 </style>
@@ -148,34 +200,35 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
     <div class="mcib_middle1">
     <table name="Tblrecord" id="Tblrecord" border = "1px" style="width:100%; display: block;">
                 <tr id="headtbl">
-                    <td colspan="3">
+                    <td colspan="3" style="padding: 5px; padding-left: 10px; padding-right: 10px;">
                         Hightest number of teaching periods
                     </td>
-                    <td colspan="3">
+                    <td colspan="3" style="padding: 5px; padding-left: 10px; padding-right: 10px;">
                         Second Highest number of teaching periods
                     </td>
-                    <td colspan="3">
+                    <td colspan="3" style="padding: 5px; padding-left: 10px; padding-right: 10px;">
                         Other capable subjects of teaching
                     </td>
-                    <td>
+                    <td style="padding: 5px; padding-left: 10px; padding-right: 10px;">
                         Other Special Duties
                     </td>
-                    <td>
+                    <td style="padding: 5px; padding-left: 10px; padding-right: 10px;">
                         Action
                     </td>
                 </tr>
                 <tr id="headtbl">
-                    <td>Subject</td>
-                    <td>Medium</td>
-                    <td>Grade Span</td>
-                    <td>Subject</td>
-                    <td>Medium</td>
-                    <td>Grade Span</td>
-                    <td>Subject</td>
-                    <td>Medium</td>
-                    <td>Grade Span</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
+                    <td style="padding: 5px;">Grade Span</td>
+                    <td style="padding: 5px;">Subject</td>
+                    <td style="padding: 5px;">Medium</td>
+                    <td style="padding: 5px;">Grade Span</td>
+                    <td style="padding: 5px;">Subject</td>
+                    <td style="padding: 5px;">Medium</td>
+                    <td style="padding: 5px;">Grade Span</td>
+                    <td style="padding: 5px;">Subject</td>
+                    <td style="padding: 5px;">Medium</td>
+                    
+                    <td style="padding: 5px;">&nbsp;</td>
+                    <td style="padding: 5px;">&nbsp;</td>
                 </tr>
                 <tr>
                 <?php 
@@ -192,17 +245,17 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                     // }
                     
                         // else{
-                            echo "<td>".$TchSubject1."</td>";
-                            echo "<td>".$Medium1."</td>";
-                            echo "<td>".$GradeCode1."</td>";
-                            echo "<td>".$TchSubject2."</td>";
-                            echo "<td>".$Medium2."</td>";
-                            echo "<td>".$GradeCode2."</td>";
-                            echo "<td>".$TchSubject3."</td>";
-                            echo "<td>".$Medium3."</td>";
-                            echo "<td>".$GradeCode3."</td>";
-                            echo "<td>".$OtherSpecial."</td>";
-                            echo "<td style='text-align:center'><input type='button' value='Edit' onclick='showForm()'></td>";
+                            echo "<td style='padding: 5px;'>".$GradeCode1." - ".$Tcat1."</td>";
+                            echo "<td style='padding: 5px;'>".$TchSubject1." - ".$Subj1."</td>";
+                            echo "<td style='padding: 5px;'>".$Medium1." - ".$Med1."</td>";
+                            echo "<td style='padding: 5px;'>".$GradeCode2." - ".$Tcat2."</td>";
+                            echo "<td style='padding: 5px;'>".$TchSubject2." - ".$Subj2."</td>";
+                            echo "<td style='padding: 5px;'>".$Medium2." - ".$Med2."</td>";
+                            echo "<td style='padding: 5px;'>".$GradeCode3." - ".$Tcat3."</td>";
+                            echo "<td style='padding: 5px;'>".$TchSubject3." - ".$Subj3."</td>";
+                            echo "<td style='padding: 5px;'>".$Medium3." - ".$Med3."</td>";
+                            echo "<td style='padding: 5px;'>".$OtherSpecial." - ".$Other."</td>";
+                            echo "<td style='padding: 5px;' style='text-align:center'><input type='button' value='Edit' onclick='showForm()'></td>";
                         // } 
                     // var_dump($TbLD);    // echo "<td>&nbsp</td>";
 
@@ -219,24 +272,7 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                     </td>
                 </tr>
 
-                <tr>
-                    <td class="box">Medium</td>
-                    <td class="box">
-                        <select id="MedTch1" name="MedTch1">
-                            <option>Select</option>
-                            <?php // for meium combo box
-                            $sql = "SELECT * FROM CD_Medium WHERE Code != ''";
-                            $stmt = $db->runMsSqlQuery($sql);
-                            while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-                                $TchMedium = $row['Medium'];
-                                $TchMediumCode = $row['Code'];
-                                echo "<option value=" . $TchMediumCode . ">" . $TchMedium . "</option>";
-                            }
-                            ?>
-
-                        </select>
-                    </td>
-                </tr>
+                
                 <tr>
                     <td class="box">Grade Span</td>
                     <td class="box">
@@ -244,7 +280,7 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
 
                             <option>Select</option>
                             <?php // for meium combo box
-                            $sql = "SELECT * FROM CD_TeachSubCategory WHERE ID IS NOT NULL";
+                            $sql = "SELECT * FROM CD_TeachSubCategory WHERE ID IS NOT NULL AND ID != '9'";
                             $stmt = $db->runMsSqlQuery($sql);
                             while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
                                 $TchGrade = $row['CategoryName'];
@@ -298,17 +334,9 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2">
-                        <hr>
-                    </td>
-                </tr>
-                <td colspan="2" style="text-align: center; font-weight: bold;" ;>
-                    <h3>Second Highest number of teaching periods</h3>
-                </td>
-                <tr>
                     <td class="box">Medium</td>
                     <td class="box">
-                        <select id="MedTch2" name="MedTch2">
+                        <select id="MedTch1" name="MedTch1">
                             <option>Select</option>
                             <?php // for meium combo box
                             $sql = "SELECT * FROM CD_Medium WHERE Code != ''";
@@ -319,9 +347,20 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                                 echo "<option value=" . $TchMediumCode . ">" . $TchMedium . "</option>";
                             }
                             ?>
+
                         </select>
                     </td>
                 </tr>
+                <tr>
+                    <td colspan="2">
+                        <hr>
+                    </td>
+                </tr>
+                
+                <td colspan="2" style="text-align: center; font-weight: bold;" ;>
+                    <h3>Second Highest number of teaching periods</h3>
+                </td>
+                
                 <tr>
 
                     <td class="box">Grade Span</td>
@@ -330,7 +369,7 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
 
                             <option>Select</option>
                             <?php // for meium combo box
-                            $sql = "SELECT * FROM CD_TeachSubCategory WHERE ID IS NOT NULL";
+                            $sql = "SELECT * FROM CD_TeachSubCategory WHERE ID IS NOT NULL AND ID != '9'";
                             $stmt = $db->runMsSqlQuery($sql);
                             while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
                                 $TchGrade = $row['CategoryName'];
@@ -381,19 +420,9 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2">
-                        <hr>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2" style="text-align: center; font-weight: bold;" ;>
-                        <h3>Other capable subjects of teaching</h3>
-                    </td>
-                </tr>
-                <tr>
                     <td class="box">Medium</td>
                     <td class="box">
-                        <select id="MedTch3" name="MedTch3">
+                        <select id="MedTch2" name="MedTch2">
                             <option>Select</option>
                             <?php // for meium combo box
                             $sql = "SELECT * FROM CD_Medium WHERE Code != ''";
@@ -404,10 +433,20 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                                 echo "<option value=" . $TchMediumCode . ">" . $TchMedium . "</option>";
                             }
                             ?>
-
                         </select>
                     </td>
                 </tr>
+                <tr>
+                    <td colspan="2">
+                        <hr>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: center; font-weight: bold;" ;>
+                        <h3>Other capable subjects of teaching</h3>
+                    </td>
+                </tr>
+                
                 <tr>
                     <td class="box">Grade Span</td>
                     <td class="box">
@@ -415,7 +454,7 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
 
                             <option>Select</option>
                             <?php // for meium combo box
-                            $sql = "SELECT * FROM CD_TeachSubCategory WHERE ID IS NOT NULL";
+                            $sql = "SELECT * FROM CD_TeachSubCategory WHERE ID IS NOT NULL AND ID != '9'";
                             $stmt = $db->runMsSqlQuery($sql);
                             while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
                                 $TchGrade = $row['CategoryName'];
@@ -463,6 +502,24 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                     </td>
                     <td class="box">
                         <input type="text" name="otherTch3" id="otherTch3" style="display :none">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="box">Medium</td>
+                    <td class="box">
+                        <select id="MedTch3" name="MedTch3">
+                            <option>Select</option>
+                            <?php // for meium combo box
+                            $sql = "SELECT * FROM CD_Medium WHERE Code != ''";
+                            $stmt = $db->runMsSqlQuery($sql);
+                            while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                $TchMedium = $row['Medium'];
+                                $TchMediumCode = $row['Code'];
+                                echo "<option value=" . $TchMediumCode . ">" . $TchMedium . "</option>";
+                            }
+                            ?>
+
+                        </select>
                     </td>
                 </tr>
                 <tr>

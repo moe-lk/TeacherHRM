@@ -21,17 +21,4 @@ $(document).ready(function () {
       },
     });
   });
-
-  $(document).on("change", "#SubApp", function () {
-    var SubApp_id = $(this).val();
-
-    alert(SubApp_id);
-    if (SubApp_id == "4") {
-      x.style.display = "block";
-      y.style.display = "block";
-    } else {
-      x.style.display = "none";
-      y.style.display = "none";
-    }
-  });
 });
