@@ -269,14 +269,14 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                             echo "<td style='padding: 5px;'>".$OtherSpecial."-".$Other."</td>";
                             echo "<td style='padding: 5px;' style='text-align:center'><input type='button' value='Edit' onclick='showForm()'></td>";
                         // } 
-                    // var_dump($TbLD);    // echo "<td>&nbsp</td>";
+                    // var_dump($GradeCode3);    // echo "<td>&nbsp</td>";
 
                         
                 ?>
 
                 </tr>
             </table>
-        <form method="POST" name="frmTchDetails" id="frmTchDetails" action="TchSubmit.php" style="display:none; padding-top: 50px;">
+            <form method="POST" name="frmTchDetails" id="frmTchDetails" action="TchSubmit.php" style="display:none; padding-top: 50px;">
             <table>
                 <tr>
                     <td colspan="2" style="text-align: center; font-weight: bold;" class="box">
@@ -290,18 +290,20 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                     <td class="box">
                         <select id="GradTch1" name="GradTch1">
                             <?php 
-                            if($TbLD == 0){
+                            if($TbLD == 0 || $GradeCode1 == ''){
                                 echo "<option>Select</option>";
-                            }else{
-                                echo "<option value=" . $TchSubject1 . ">" . $Tcat1 . "</option>";
-                            } 
-                            // for meium combo box
+                            }
+                            
                             $sql = "SELECT * FROM CD_TeachSubCategory WHERE ID IS NOT NULL AND ID != '9'";
                             $stmt = $db->runMsSqlQuery($sql);
                             while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
                                 $TchGrade = $row['CategoryName'];
                                 $TchGradeCode = $row['ID'];
-                                echo "<option value=" . $TchGradeCode . ">" . $TchGrade . "</option>";
+                                $seltebr = "";
+                                if($TchGradeCode == $GradeCode1){
+                                    $seltebr = "selected";
+                                }
+                                echo "<option value=" . $TchGradeCode . " $seltebr>" . $TchGrade . "</option>";
                             }
                             ?>
                         </select>
@@ -314,29 +316,21 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                     <td class="box">Subject</td>
                     <td class="box">
                         <select id="SubTch1" name="SubTch1">
-                            <!-- <option>Select</option> -->
                             <?php
-                            if($TbLD == 0){
+                            if($TbLD == 0 || $TchSubject1 == ''){
                                 echo "<option>Select</option>";
+                            } 
+                            $sql = "SELECT * FROM CD_TeachSubjects WHERE ID IS NOT NULL AND Code != '9'";
+                            $stmt = $db->runMsSqlQuery($sql);
+                            while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                $TchSub = $row['SubjectName'];
+                                $TchSubCode = $row['ID'];
+                                $seltebr = "";
+                                if($TchSubCode == $TchSubject1){
+                                    $seltebr = "selected";
+                                }
+                                echo "<option value=" . $TchSubCode . " $seltebr>" . $TchSub . "</option>";
                             }
-                            // if ($SchType == '6') {
-
-                            //     $sql = "SELECT * FROM CD_PV_TeachSubjects";
-                            //     $stmt = $db->runMsSqlQuery($sql);
-                            //     while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-                            //         $TchSubject = $row['SubjectName'];
-                            //         $TchSubCode = $row['ID'];
-                            //         echo "<option value=" . $TchSubCode  . ">" . $TchSubCode . " - " . $TchSubject . "</option>";
-                            //     }
-                            // } else {
-                            //     $sql = "SELECT * FROM CD_TeachSubjects";
-                            //     $stmt = $db->runMsSqlQuery($sql);
-                            //     while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-                            //         $TchSubject = $row['SubjectName'];
-                            //         $TchSubCode = $row['ID'];
-                            //         echo "<option value=" . $TchSubCode  . ">" . $TchSubCode . " - " . $TchSubject . "</option>";
-                            //     }
-                            // }
                             ?>
                         </select>
                     </td>
@@ -358,7 +352,7 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                         <select id="MedTch1" name="MedTch1">
                             <!-- <option>Select</option> -->
                             <?php // for meium combo box
-                            if($TbLD == 0){
+                            if($TbLD == 0 || $Medium1 == ''){
                                 echo "<option>Select</option>";
                             }
                             $sql = "SELECT * FROM CD_Medium WHERE Code != ''";
@@ -366,7 +360,11 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                             while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
                                 $TchMedium = $row['Medium'];
                                 $TchMediumCode = $row['Code'];
-                                echo "<option value=" . $TchMediumCode . ">" . $TchMedium . "</option>";
+                                $seltebr = "";
+                                if($TchMediumCode == $Medium1){
+                                    $seltebr = "selected";
+                                }
+                                echo "<option value=" . $TchMediumCode . " $seltebr>" . $TchMedium . "</option>";
                             }
                             ?>
 
@@ -389,7 +387,7 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                     <td class="box">
                         <select id="GradTch2" name="GradTch2">
                             <?php
-                            if($TbLD == 0){
+                            if($TbLD == 0 || $GradeCode2 == ''){
                                 echo "<option>Select</option>";
                             } // for meium combo box
                             $sql = "SELECT * FROM CD_TeachSubCategory WHERE ID IS NOT NULL AND ID != '9'";
@@ -397,7 +395,11 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                             while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
                                 $TchGrade = $row['CategoryName'];
                                 $TchGradeCode = $row['ID'];
-                                echo "<option value=" . $TchGradeCode . ">" . $TchGrade . "</option>";
+                                $seltebr = "";
+                                if($TchGradeCode == $GradeCode2){
+                                    $seltebr = "selected";
+                                }
+                                echo "<option value=" . $TchGradeCode . "$seltebr>" . $TchGrade . "</option>";
                             }
                             ?>
                         </select>
@@ -409,27 +411,20 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                         <select id="SubTch2" name="SubTch2">
                             <!-- <option>Select</option> -->
                             <?php
-                            if($TbLD == 0){
+                            if($TbLD == 0 || $TchSubject2 == ''){
                                 echo "<option>Select</option>";
                             }
-                            // if ($SchType == '6') {
-
-                            //     $sql = "SELECT * FROM CD_PV_TeachSubjects";
-                            //     $stmt = $db->runMsSqlQuery($sql);
-                            //     while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-                            //         $TchSubject = $row['SubjectName'];
-                            //         $TchSubCode = $row['ID'];
-                            //         echo "<option value=" . $TchSubCode  . ">" . $TchSubCode . " - " . $TchSubject . "</option>";
-                            //     }
-                            // } else {
-                            //     $sql = "SELECT * FROM CD_TeachSubjects";
-                            //     $stmt = $db->runMsSqlQuery($sql);
-                            //     while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-                            //         $TchSubject = $row['SubjectName'];
-                            //         $TchSubCode = $row['ID'];
-                            //         echo "<option value=" . $TchSubCode  . ">" . $TchSubCode . " - " . $TchSubject . "</option>";
-                            //     }
-                            // }
+                            $sql = "SELECT * FROM CD_TeachSubjects WHERE ID IS NOT NULL AND Code != '9'";
+                            $stmt = $db->runMsSqlQuery($sql);
+                            while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                $TchSub = $row['SubjectName'];
+                                $TchSubCode = $row['ID'];
+                                $seltebr = "";
+                                if($TchSubCode == $TchSubject2){
+                                    $seltebr = "selected";
+                                }
+                                echo "<option value=" . $TchSubCode . " $seltebr>" . $TchSub . "</option>";
+                            }
                             ?>
                         </select>
                     </td>
@@ -451,7 +446,7 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                         <select id="MedTch2" name="MedTch2">
                             <!-- <option>Select</option> -->
                             <?php // for meium combo box
-                            if($TbLD == 0){
+                            if($TbLD == 0 || $Medium2 == ''){
                                 echo "<option>Select</option>";
                             }
                             $sql = "SELECT * FROM CD_Medium WHERE Code != ''";
@@ -459,7 +454,11 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                             while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
                                 $TchMedium = $row['Medium'];
                                 $TchMediumCode = $row['Code'];
-                                echo "<option value=" . $TchMediumCode . ">" . $TchMedium . "</option>";
+                                $seltebr = "";
+                                if($TchMediumCode == $Medium2){
+                                    $seltebr = "selected";
+                                }
+                                echo "<option value=" . $TchMediumCode . "$seltebr>" . $TchMedium . "</option>";
                             }
                             ?>
                         </select>
@@ -483,7 +482,7 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
 
                             <!-- <option>Select</option> -->
                             <?php // for meium combo box
-                            if($TbLD == 0){
+                            if($TbLD == 0 || $GradeCode3 == ''){
                                 echo "<option>Select</option>";
                             } 
                             $sql = "SELECT * FROM CD_TeachSubCategory WHERE ID IS NOT NULL AND ID != '9'";
@@ -491,7 +490,11 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                             while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
                                 $TchGrade = $row['CategoryName'];
                                 $TchGradeCode = $row['ID'];
-                                echo "<option value=" . $TchGradeCode . ">" . $TchGrade . "</option>";
+                                $seltebr = "";
+                                if($TchGradeCode == $GradeCode3){
+                                    $seltebr = "selected";
+                                }
+                                echo "<option value=" . $TchGradeCode . "$seltebr>" . $TchGrade . "</option>";
                             }
                             ?>
                         </select>
@@ -503,27 +506,20 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                         <select id="SubTch3" name="SubTch3">
                             <!-- <option>Select</option> -->
                             <?php
-                            if($TbLD == 0){
+                            if($TbLD == 0 || $TchSubject3 == ''){
                                 echo "<option>Select</option>";
                             }
-                            // if ($SchType == '6') {
-
-                            //     $sql = "SELECT * FROM CD_PV_TeachSubjects";
-                            //     $stmt = $db->runMsSqlQuery($sql);
-                            //     while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-                            //         $TchSubject = $row['SubjectName'];
-                            //         $TchSubCode = $row['ID'];
-                            //         echo "<option value=" . $TchSubCode  . ">" . $TchSubCode . " - " . $TchSubject . "</option>";
-                            //     }
-                            // } else {
-                            //     $sql = "SELECT * FROM CD_TeachSubjects";
-                            //     $stmt = $db->runMsSqlQuery($sql);
-                            //     while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-                            //         $TchSubject = $row['SubjectName'];
-                            //         $TchSubCode = $row['ID'];
-                            //         echo "<option value=" . $TchSubCode  . ">" . $TchSubCode . " - " . $TchSubject . "</option>";
-                            //     }
-                            // }
+                            $sql = "SELECT * FROM CD_TeachSubjects WHERE ID IS NOT NULL AND Code != '9'";
+                            $stmt = $db->runMsSqlQuery($sql);
+                            while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                $TchSub = $row['SubjectName'];
+                                $TchSubCode = $row['ID'];
+                                $seltebr = "";
+                                if($TchSubCode == $TchSubject3){
+                                    $seltebr = "selected";
+                                }
+                                echo "<option value=" . $TchSubCode . " $seltebr>" . $TchSub . "</option>";
+                            }
                             ?>
                         </select>
                     </td>
@@ -545,7 +541,7 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                         <select id="MedTch3" name="MedTch3">
                             <!-- <option>Select</option> -->
                             <?php // for meium combo box
-                            if($TbLD == 0){
+                            if($TbLD == 0 || $Medium3 == ''){
                                 echo "<option>Select</option>";
                             }
                             $sql = "SELECT * FROM CD_Medium WHERE Code != ''";
@@ -553,7 +549,11 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                             while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
                                 $TchMedium = $row['Medium'];
                                 $TchMediumCode = $row['Code'];
-                                echo "<option value=" . $TchMediumCode . ">" . $TchMedium . "</option>";
+                                $seltebr = "";
+                                if($TchMediumCode == $Medium3){
+                                    $seltebr = "selected";
+                                }
+                                echo "<option value=" . $TchMediumCode . " $seltebr>" . $TchMedium . "</option>";
                             }
                             ?>
 
@@ -572,7 +572,7 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                             <!-- <option>Select</option> -->
                             
                             <?php
-                            if($TbLD == 0){
+                            if($TbLD == 0 || $OtherSpecial == ''){
                                 echo "<option>Select</option>";
                             }
                             $sql = "SELECT * FROM CD_TeachSubjects WHERE Code = '9'";
@@ -580,7 +580,11 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                             while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
                                 $TchGrade = $row['SubjectName'];
                                 $TchGradeCode = $row['ID'];
-                                echo "<option value=" . $TchGradeCode . ">" . $TchGrade . "</option>";
+                                $seltebr = "";
+                                if($TchGradeCode  == $OtherSpecial){
+                                    $seltebr = "selected";
+                                }
+                                echo "<option value=" . $TchGradeCode . " $seltebr>" . $TchGrade . "</option>";
                             }
                             ?>
                         </select>
@@ -640,19 +644,19 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
     
     // var thisone  = <?php // echo $rowTBL['Medium1'] ?>
     // console.log(thisone)
-    var MedTch1 = document.getElementById("MedTch1");
-    var MedTch2 = document.getElementById("MedTch2");
-    var MedTch3 = document.getElementById("MedTch3");
-    var GradTch1 = document.getElementById("GradTch1");
-    var GradTch2 = document.getElementById("GradTch2");
-    var GradTch3 = document.getElementById("GradTch3");
-    var SubTch1 = document.getElementById("SubTch1");
-    var SubTch2 = document.getElementById("SubTch2");
-    var SubTch3 = document.getElementById("SubTch3");
-    var otherspecial = document.getElementById("otherspecial");
+    // var MedTch1 = document.getElementById("MedTch1");
+    // var MedTch2 = document.getElementById("MedTch2");
+    // var MedTch3 = document.getElementById("MedTch3");
+    // var GradTch1 = document.getElementById("GradTch1");
+    // var GradTch2 = document.getElementById("GradTch2");
+    // var GradTch3 = document.getElementById("GradTch3");
+    // var SubTch1 = document.getElementById("SubTch1");
+    // var SubTch2 = document.getElementById("SubTch2");
+    // var SubTch3 = document.getElementById("SubTch3");
+    // var otherspecial = document.getElementById("otherspecial");
 
     // var otherspecial = <?php  //echo $OtherSpecial; ?>   
-    console.log(otherspecial);
+    // console.log(otherspecial);
 
     // selectElement('leaveCode', '11')
 
@@ -663,29 +667,15 @@ function selectElement(id, valueToSelect) {
     function showForm(){
         if (tbl.style.display === "none" ) {
             tbl.style.display = "block";
-            // $("#SubTch1").val("<?php // echo $TchSubject1; ?>");
-            
-            // var MedTch1 = "<select value ='<?php // echo $Medium1; ?>'></select>";
-            // var MedTch2 = "<select value ='<?php // echo $Medium2; ?>'></select>";
-            // var MedTch3 = "<select value ='<?php // echo $Medium3; ?>'></select>";
-            // var GradTch1 =  "<select value ='<?php // echo $GradeCode1; ?>'></select>";
-            // var GradTch2 =  "<select value ='<?php // echo $GradeCode2; ?>'></select>";
-            // var GradTch3 =  "<select value ='<?php // echo $GradeCode3; ?>'></select>";
-            // var SubTch1 = "<select value ='<?php // echo $TchSubject1; ?>'></select>";
-            // var SubTch2 = "<select value ='<?php // echo $TchSubject2; ?>'></select>";
-            // var SubTch3 = "<select value ='<?php // echo $TchSubject3; ?>'></select>";
-            // var otherspecial = "<select value ='<?php // echo $OtherSpecial; ?>'></select>";
-            
-            // console.log(SubTch1);
         }
     }
-    var schType = "<?php echo $SchType; ?>";
-    var i;
-    if(schType == 6){
-        i = '6';
-    }else{
-        i = '1';
-    }
+    // var schType = "<?php echo $SchType; ?>";
+    // var i;
+    // if(schType == 6){
+    //     i = '6';
+    // }else{
+    //     i = '1';
+    // }
     
     var x = document.getElementById("otherdiv1");
     var y = document.getElementById("otherTch1");
@@ -693,159 +683,43 @@ function selectElement(id, valueToSelect) {
     var b = document.getElementById("otherTch2");
     var c = document.getElementById("otherdiv3");
     var d = document.getElementById("otherTch3");
+
     
+    $(document).on("change", "#SubTch1", function () {
+        var SubApp_id = $(this).val()
+        // console.log(SubApp_id)
+        if (SubApp_id == "248" || SubApp_id == "456") {
+        x.style.display = "block";
+        y.style.display = "block";
+        } else {
+        x.style.display = "none";
+        y.style.display = "none";
+        }
+    });
+
+    $(document).on("change", "#SubTch2", function () {
+        var SubApp_id = $(this).val()
+        // console.log(SubApp_id)
+        if (SubApp_id == "248" || SubApp_id == "456") {
+        a.style.display = "block";
+        b.style.display = "block";
+        } else {
+        a.style.display = "none";
+        b.style.display = "none";
+        }
+    });
     
-    // $(document).ready(function(){
-    // // console.log(i);
-    
-    //     load_json_data1('GradTch1');
-    
-    //     function load_json_data1(id, category){
-    //         var html_code = '';
-            
-    //         $.getJSON('TchSubject.json',function(data){
-    //             html_code += '<option value = "">'+id+'</option>';
-    //             $.each(data, function(key, value){
-    //                 if(id == 'GradTch1'){
-                        
-    //                     if(value.category == '0'){
-    //                         if(value.schtype == i){
-                                
-    //                             html_code += '<option value="'+value.id+'">'+value.name+'</option>';
-    //                         }
-    //                     }
-    //                 } 
-    //                 else{
-    //                     if(value.category == category){
-    //                         if(value.schtype == i){
-    //                             // console.log(value.schtype);
-    //                             // console.log(i);
-    //                             html_code += '<option value="'+value.id+'">'+value.name+'THIS2</option>';
-    //                         }                           
-    //                     }
-    //                 }
-    //             });
-    //             $('#'+id).html(html_code);
-    //         }); 
-    //     }
-    //     $(document).on('change','#GradTch1',function(){
-    //         var GradTch1_id = $(this).val();
-    //         if(GradTch1_id != ''){
-    //             // console.log(GradTch1_id);
-    //             load_json_data('SubTch1',GradTch1_id);
-    //         }
-    //         else{
-    //             $('#SubTch1').html('<option value="">Select</option>');
-    //         }
-    //     });
-    //     $(document).on('change','#SubTch1',function(){
-    //         var SubApp_id = $(this).val();
-
-    //         if(SubApp_id == '12' || SubApp_id =='11'){
-    //             x.style.display = "block";
-    //             y.style.display = "block";
-    //         }else{
-    //             x.style.display = "none";
-    //             y.style.display = "none"; 
-    //         }
-    //     });
-
-    //     load_json_data2('GradTch2');
-
-    //     function load_json_data2(id, category){
-    //         var html_code = '';
-            
-    //         $.getJSON('TchSubject.json',function(data){
-    //             html_code += '<option value = "">'+id+'</option>';
-    //             $.each(data, function(key, value){
-    //                 if(id == 'GradTch2'){
-    //                     if(value.category == '0'){
-    //                         if(value.schtype == i){
-    //                             html_code += '<option value="'+value.id+'">'+value.name+'</option>';
-    //                         }
-    //                     }
-    //                 } 
-    //                 else{
-    //                     if(value.category == category){
-    //                         if(value.schtype == i){
-    //                             html_code += '<option value="'+value.id+'">'+value.name+'</option>';
-    //                         }                            
-    //                     }
-    //                 }
-    //             });
-    //             $('#'+id).html(html_code);
-    //         }); 
-    //     }
-    //     $(document).on('change','#GradTch2',function(){
-    //         var GradTch2_id = $(this).val();
-    //         if(GradTch2_id != ''){
-    //             // console.log(GradTch2_id);
-    //             load_json_data('SubTch2',GradTch2_id);
-    //         }
-    //         else{
-    //             $('#SubTch2').html('<option value="">Select</option>');
-    //         }
-    //     });
-    //     $(document).on('change','#SubTch2',function(){
-    //         var SubApp_id = $(this).val();
-
-    //         if(SubApp_id == '12' || SubApp_id =='11'){
-    //             a.style.display = "block";
-    //             b.style.display = "block";
-    //         }else{
-    //             a.style.display = "none";
-    //             b.style.display = "none"; 
-    //         }
-    //     });
-
-    //     load_json_data('GradTch3');
-
-    //     function load_json_data(id, category){
-    //         var html_code = '';
-            
-    //         $.getJSON('TchSubject.json',function(data){
-    //             html_code += '<option value = "">'+id+'</option>';
-    //             $.each(data, function(key, value){
-    //                 if(id == 'GradTch3'){
-    //                     if(value.category == '0'){
-    //                         if(value.schtype == i){
-    //                             html_code += '<option value="'+value.id+'">'+value.name+'</option>';
-    //                         }
-    //                     }
-    //                 } 
-    //                 else{
-    //                     if(value.category == category){
-    //                         if(value.schtype == i){
-    //                             html_code += '<option value="'+value.id+'">'+value.name+'</option>';
-    //                         }                            
-    //                     }
-    //                 }
-    //             });
-    //             $('#'+id).html(html_code);
-    //         }); 
-    //     }
-    //     $(document).on('change','#GradTch3',function(){
-    //         var GradTch3_id = $(this).val();
-    //         if(GradTch3_id != ''){
-    //             // console.log(GradTch3_id);
-    //             load_json_data('SubTch3',GradTch3_id);
-    //         }
-    //         else{
-    //             $('#SubTch3').html('<option value="">Select</option>');
-    //         }
-    //     });
-    //     $(document).on('change','#SubTch3',function(){
-    //         var SubApp_id = $(this).val();
-
-    //         if(SubApp_id == '12' || SubApp_id =='11'){
-    //             c.style.display = "block";
-    //             d.style.display = "block";
-    //         }else{
-    //             c.style.display = "none";
-    //             d.style.display = "none"; 
-    //         }
-    //     });
-    // });
+    $(document).on("change", "#SubTch3", function () {
+        var SubApp_id = $(this).val()
+        // console.log(SubApp_id)
+        if (SubApp_id == "248" || SubApp_id == "456") {
+        c.style.display = "block";
+        d.style.display = "block";
+        } else {
+        c.style.display = "none";
+        d.style.display = "none";
+        }
+    });
 
 
 </script>

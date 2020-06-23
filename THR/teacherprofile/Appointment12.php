@@ -107,7 +107,15 @@ INNER JOIN CD_AppSubjects ON AppSubject = CD_AppSubjects.ID
 INNER JOIN CD_Medium ON AppoinmentDetails.Medium = CD_Medium.Code 
 WHERE NIC = '$id' AND RecordStatus = '1'";
 $stmtTBL = $db->runMsSqlQuery($SQLTBL);
-
+while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
+    // echo "Yes";
+    $AppCategory = $rowTBL['AppCategory'];
+    $AppSubject = $rowTBL['AppSubject'];
+    $MEDCode = $rowTBL['MEDCode'];
+    $AppointmentName = $rowTBL['AppointmentName'];
+    $SubjectName = $rowTBL['SubjectName'];
+    $Medium = $rowTBL['Medium'];
+}
 // $dateNow = date("Y/m/d");
 // echo $dateNow;
 ?>
@@ -180,6 +188,7 @@ $stmtTBL = $db->runMsSqlQuery($SQLTBL);
                     </td>
                 <tr>
                 <?php 
+                    // var_dump($AppointmentName);
                     $TotaRows = $db->rowCount($SQLTBL);
                     // var_dump($TotaRows);
                     if (!$TotaRows){
@@ -187,10 +196,10 @@ $stmtTBL = $db->runMsSqlQuery($SQLTBL);
                         $TbLD = 0;
                     }
 
-                    $rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC);
-                        echo "<td style='padding: 5px;'>".$rowTBL['AppCategory']." - ".$rowTBL['AppointmentName']."</td>";
-                        echo "<td style='padding: 5px;'>".$rowTBL['AppSubject']." - ".$rowTBL['SubjectName']."</td>";
-                        echo "<td style='padding: 5px;'>".$rowTBL['MEDCode']." - ".$rowTBL['Medium']."</td>";
+                    // $rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC);
+                        echo "<td style='padding: 5px;'>".$AppCategory." - ".$AppointmentName."</td>";
+                        echo "<td style='padding: 5px;'>".$AppSubject." - ".$SubjectName."</td>";
+                        echo "<td style='padding: 5px;'>".$MEDCode." - ".$Medium."</td>";
                         echo "<td style='text-align:center'><input type='button' value='Edit' onclick='showForm()'></td>";
                 ?>
 
@@ -209,85 +218,53 @@ $stmtTBL = $db->runMsSqlQuery($SQLTBL);
                     <td>Appointment category: </td>
                     <td>
                         <select id="AppCat" name="AppCat">
-                            <option value="">Select</option>
-                            <?php // for apponment category combo box
-                            // if ($SchType == '6') {
-                            //     $sql = "SELECT ID, AppointmentName FROM CD_PV_AppSubCategory WHERE ID IS NOT NULL";
-                            //     $stmt = $db->runMsSqlQuery($sql);
-                            //     while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-                            //         $AppId = $row['ID'];
-                            //         $AppName = $row['AppointmentName'];
-                            //         echo "<option value=" . $AppId . ">" . $AppId . "- " . $AppName . "</option>";
-                            //     }
-                            // } else {
-                                $sql = "SELECT ID, AppointmentName FROM CD_AppSubCategory WHERE ID IS NOT NULL";
-                                $stmt = $db->runMsSqlQuery($sql);
-                                while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-                                    $AppId = $row['ID'];
-                                    $AppName = $row['AppointmentName'];
-                                    echo "<option value=" . $AppId . ">" . $AppId . "- " . $AppName . "</option>";
+                        <?php
+                            if($TbLD == 0 || $AppCategory == ''){
+                                echo "<option>Select</option>";
+                            }
+                             
+                            $sql = "SELECT ID, AppointmentName FROM CD_AppSubCategory WHERE ID IS NOT NULL";
+                            $stmt = $db->runMsSqlQuery($sql);
+                            while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                $AppId = $row['ID'];
+                                $AppName = $row['AppointmentName'];
+                                $seltebr = "";
+                                if($TchGradeCode == $AppCategory){
+                                    $seltebr = "selected";
                                 }
-                            // }
-                            ?>
+                                echo "<option value=" . $AppId . " $seltebr>". $AppName ."</option>";
+                            }
+                        ?>
 
                         </select>
                     </td>
                 </tr>
                 <tr>
-                
                     <td style="padding-right: 50px">Subject / Degree Appointed: </td>
                     <td>
                         <div id="SubAppDiv">
                             <select id="SubApp" name="SubApp">
-                                <option value="">Select</option>
-                                <?php
-                                // if ($SchType == '6') {
-                                //     if ($AppId != '') {
-                                //         $sql = "SELECT * FROM CD_PV_TeachSubjects";
-                                //         $stmt = $db->runMsSqlQuery($sql);
-                                //         while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-                                //             $AppSubjectID = $row['ID'];
-                                //             $AppSubject = $row['SubjectName'];
-                                //             echo "<option value=" . $AppSubjectID . ">" . $AppSubjectID . "-" . $AppSubject . "</option>";
-                                //         }
-                                //     }
-                                // } else {
-                                //     if ($AppId != '') {
-                                //         $sql = "SELECT * FROM CD_AppSubjects";
-                                //         $stmt = $db->runMsSqlQuery($sql);
-                                //         while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-                                //             $AppSubjectID = $row['ID'];
-                                //             $AppSubject = $row['SubjectName'];
-                                //             echo "<option value=" . $AppSubjectID . ">" . $AppSubjectID . "-" . $AppSubject . "</option>";
-                                //         }
-                                //     }
-                                // }
-                                ?>
+                            <?php
+                                if($TbLD == 0 || $AppSubject == ''){
+                                    echo "<option>Select</option>";
+                                }
+                                $sql = "SELECT * FROM CD_AppSubjects WHERE ID IS NOT NULL";
+                                $stmt = $db->runMsSqlQuery($sql);
+                                while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                    $AppSubId = trim($row['ID']);
+                                    $AppSubName = $row['SubjectName'];
+                                    $seltebr = "";
+                                    var_dump($AppSubId);
+                                    if($AppSubId == $AppSubject){
+                                        $seltebr = "selected";
+                                    }
+                                    echo "<option value=" . $AppSubId . " $seltebr>". $AppSubName ."</option>";
+                                }
+                            ?>
                             </select>
                         </div>
                     </td>
                 </tr>
-                <tr>
-                    <td>Appointed Medium: </td>
-                    <td>
-                        <select id="MedApp" name="MedApp">
-                            <option>Select</option>
-                            <?php // for meium combo box
-                            $sql = "SELECT Medium FROM CD_Medium WHERE Code != ''";
-                            $stmt = $db->runMsSqlQuery($sql);
-                            while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-                                $MedID = $row['MEDCode'];
-                                $AppMeduim = $row['Medium'];
-                                echo "<option value=" . $MedID . ">" . $AppMeduim . "</option>";
-                            }
-                            ?>
-
-                        </select>
-                    </td>
-                </tr>
-                <!-- <tr>
-                    <td><button type="button" onclick="show_otherdiv()">Other</button></td>
-                </tr> -->
                 <tr>
                     <div>
                         <td><div style="display :none" id="otherdiv">If Other Please Specify: </div></td>
@@ -298,6 +275,35 @@ $stmtTBL = $db->runMsSqlQuery($SQLTBL);
                         </td>
                     </div>
                 </tr>
+                <tr>
+                    <td>Appointed Medium: </td>
+                    <td>
+                        <select id="MedApp" name="MedApp">
+                            
+                            <?php // for meium combo box
+                            if($TbLD == 0 || $MEDCode == ''){
+                                echo "<option>Select</option>";
+                            }
+                            $sql = "SELECT Medium FROM CD_Medium WHERE Code != ''";
+                            $stmt = $db->runMsSqlQuery($sql);
+                            while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                $MedID = $row['MEDCode'];
+                                $AppMeduim = $row['Medium'];
+                                $seltebr = "";
+                                if($MedID == $MEDCode){
+                                    $seltebr = "selected";
+                                }
+                                echo "<option value=" . $MedID . " $seltebr>" . $AppMeduim . "</option>";
+                            }
+                            ?>
+
+                        </select>
+                    </td>
+                </tr>
+                <!-- <tr>
+                    <td><button type="button" onclick="show_otherdiv()">Other</button></td>
+                </tr> -->
+                
                 </tr>
                 <td colspan="2">
                     <div>
