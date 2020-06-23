@@ -1,5 +1,6 @@
 <?php
 require_once '../error_handle.php';
+include "../db_config/DBManager1.php";
 set_error_handler("errorHandler");
 register_shutdown_function("shutdownHandler");
 session_start();
@@ -205,6 +206,10 @@ $TotalRows = $db->rowCount($sqlCheck);
 // else{
     // var_dump($SubTch3);
     
+function insertsub(){
+    if(sqlsrv_begin_transaction($conn) === false){
+        die(print_r(sqlsrv_errors(),true));
+    }
 
     $sql = "INSERT INTO [dbo].[Temp_TeachingDetails]
             ([NIC]
@@ -247,8 +252,19 @@ $TotalRows = $db->rowCount($sqlCheck);
             '$dateNow'
         )";
 
-    $stmt = $db->runMsSqlQuery($sql);
-    sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC);
+    // $stmt = $db->runMsSqlQuery($sql);
+    $params = array($nicNO, $SubTch1, $SubTch2, $SubTch3, $otherTch1, $otherTch2, $otherTch3, $MedTch1, $MedTch2, $MedTch3, $GradTch1, $GradTch2, $GradTch3, $otherspecial, $SchType,$NICUser,$dateNow);
+    $stmt = sqlsrv_query( $conn, $sql, $params );
+    if($stmt){
+        sqlsrv_commit($conn);
+        echo "Successfully Added";
+        echo "<script>alert('Successfully Added')</script>";
+    } else {
+        sqlsrv_rollback( $conn );
+        echo "Updates rolled back.<br />";
+    }
+}
+    // sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC);
     // var_dump($sql);
 
     echo ("<script LANGUAGE='JavaScript'>

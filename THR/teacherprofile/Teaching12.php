@@ -58,10 +58,10 @@ WHERE        (TeacherMast.NIC = '$NICUser')";
     // }
 
     if ($msg == '') {
-        $queryRegis = "INSERT INTO TG_EmployeeUpdateTeaching (NIC,TeachingID,dDateTime,ZoneCode,IsApproved,ApproveDate,ApprovedBy,UpdateBy)
-			 VALUES				   
-		('$NICUser','$TeachingID','$LastUpdate','$ZoneCode','N','','','$nicUpdate')";
-        $db->runMsSqlQuery($queryRegis);
+        // $queryRegis = "INSERT INTO TG_EmployeeUpdateTeaching (NIC,TeachingID,dDateTime,ZoneCode,IsApproved,ApproveDate,ApprovedBy,UpdateBy)
+		// 	 VALUES				   
+		// ('$NICUser','$TeachingID','$LastUpdate','$ZoneCode','N','','','$nicUpdate')";
+        // $db->runMsSqlQuery($queryRegis);
 
         audit_trail($NICUser, $_SESSION["NIC"], 'teacherprofile\teaching.php', 'Insert', 'UP_TeacherSubject,TG_EmployeeUpdateTeaching', 'Insert user teaching info.');
 
@@ -97,8 +97,8 @@ $SQLTBL = "SELECT TeachingDetails.ID
 ,[Medium1]
 ,[Medium2]
 ,[Medium3]
-,[GradeCode1]
-,[GradeCode2]
+,trim([GradeCode1]) AS GradeCode1
+,trim([GradeCode2]) AS GradeCode2
 ,[GradeCode3]
 ,[OtherSpecial]
 ,[SchoolType]
@@ -112,8 +112,8 @@ $SQLTBL = "SELECT TeachingDetails.ID
 ,TM1.Medium AS Med1
 ,TM2.Medium AS Med2
 ,TM3.Medium AS Med3
-,TSC1.CategoryName AS Tcat1
-,TSC2.CategoryName AS Tcat2
+,trim(TSC1.CategoryName) AS Tcat1
+,trim(TSC2.CategoryName) AS Tcat2
 ,TSC3.CategoryName AS Tcat3
 ,TC4.SubjectName AS Other
 FROM TeachingDetails 
@@ -133,15 +133,27 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
     $Subj1 = $rowTBL['Subj1'];
     $Subj2 = $rowTBL['Subj2'];
     $Subj3 = $rowTBL['Subj3'];
-    $Med1 = $rowTBL['Med1'];
-    $Med2 = $rowTBL['Med2'];
-    $Med3 = $rowTBL['Med3'];
+    if($rowTBL['Med1'] == 'Not Specified'){
+        $Med1 = "";
+    }else{
+        $Med1 = $rowTBL['Med1'];
+    }
+    if($rowTBL['Med2'] == 'Not Specified'){
+        $Med2 = "";
+    }else{
+        $Med2 = $rowTBL['Med2'];
+    }
+    if($rowTBL['Med3'] == 'Not Specified'){
+        $Med3 = "";
+    }else{
+        $Med3 = $rowTBL['Med3'];
+    }
     $Tcat1 = $rowTBL['Tcat1'];
     $Tcat2 = $rowTBL['Tcat2'];
     $Tcat3 = $rowTBL['Tcat3'];
     $TchSubject1 = $rowTBL['TchSubject1'];
     $Medium1 = $rowTBL['Medium1'];
-    $GradeCode1 = $rowTBL['GradeCode1'];
+    $GradeCode1 = trim($rowTBL['GradeCode1']);
     $TchSubject2 = $rowTBL['TchSubject2'];
     $Medium2 = $rowTBL['Medium2'];
     $GradeCode2 = $rowTBL['GradeCode2'];
@@ -245,16 +257,16 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                     // }
                     
                         // else{
-                            echo "<td style='padding: 5px;'>".$GradeCode1." - ".$Tcat1."</td>";
-                            echo "<td style='padding: 5px;'>".$TchSubject1." - ".$Subj1."</td>";
-                            echo "<td style='padding: 5px;'>".$Medium1." - ".$Med1."</td>";
-                            echo "<td style='padding: 5px;'>".$GradeCode2." - ".$Tcat2."</td>";
-                            echo "<td style='padding: 5px;'>".$TchSubject2." - ".$Subj2."</td>";
-                            echo "<td style='padding: 5px;'>".$Medium2." - ".$Med2."</td>";
-                            echo "<td style='padding: 5px;'>".$GradeCode3." - ".$Tcat3."</td>";
-                            echo "<td style='padding: 5px;'>".$TchSubject3." - ".$Subj3."</td>";
-                            echo "<td style='padding: 5px;'>".$Medium3." - ".$Med3."</td>";
-                            echo "<td style='padding: 5px;'>".$OtherSpecial." - ".$Other."</td>";
+                            echo "<td style='padding: 5px;'>".$GradeCode1."-".$Tcat1."</td>";
+                            echo "<td style='padding: 5px;'>".$TchSubject1."-".$Subj1."</td>";
+                            echo "<td style='padding: 5px;'>".$Medium1."-".$Med1."</td>";
+                            echo "<td style='padding: 5px;'>".$GradeCode2."-".$Tcat2."</td>";
+                            echo "<td style='padding: 5px;'>".$TchSubject2."-".$Subj2."</td>";
+                            echo "<td style='padding: 5px;'>".$Medium2."-".$Med2."</td>";
+                            echo "<td style='padding: 5px;'>".$GradeCode3."-".$Tcat3."</td>";
+                            echo "<td style='padding: 5px;'>".$TchSubject3."-".$Subj3."</td>";
+                            echo "<td style='padding: 5px;'>".$Medium3."-".$Med3."</td>";
+                            echo "<td style='padding: 5px;'>".$OtherSpecial."-".$Other."</td>";
                             echo "<td style='padding: 5px;' style='text-align:center'><input type='button' value='Edit' onclick='showForm()'></td>";
                         // } 
                     // var_dump($TbLD);    // echo "<td>&nbsp</td>";
@@ -277,9 +289,13 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                     <td class="box">Grade Span</td>
                     <td class="box">
                         <select id="GradTch1" name="GradTch1">
-
-                            <option>Select</option>
-                            <?php // for meium combo box
+                            <?php 
+                            if($TbLD == 0){
+                                echo "<option>Select</option>";
+                            }else{
+                                echo "<option value=" . $TchSubject1 . ">" . $Tcat1 . "</option>";
+                            } 
+                            // for meium combo box
                             $sql = "SELECT * FROM CD_TeachSubCategory WHERE ID IS NOT NULL AND ID != '9'";
                             $stmt = $db->runMsSqlQuery($sql);
                             while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
@@ -298,8 +314,11 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                     <td class="box">Subject</td>
                     <td class="box">
                         <select id="SubTch1" name="SubTch1">
-                            <option>Select</option>
+                            <!-- <option>Select</option> -->
                             <?php
+                            if($TbLD == 0){
+                                echo "<option>Select</option>";
+                            }
                             // if ($SchType == '6') {
 
                             //     $sql = "SELECT * FROM CD_PV_TeachSubjects";
@@ -337,8 +356,11 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                     <td class="box">Medium</td>
                     <td class="box">
                         <select id="MedTch1" name="MedTch1">
-                            <option>Select</option>
+                            <!-- <option>Select</option> -->
                             <?php // for meium combo box
+                            if($TbLD == 0){
+                                echo "<option>Select</option>";
+                            }
                             $sql = "SELECT * FROM CD_Medium WHERE Code != ''";
                             $stmt = $db->runMsSqlQuery($sql);
                             while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
@@ -366,9 +388,10 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                     <td class="box">Grade Span</td>
                     <td class="box">
                         <select id="GradTch2" name="GradTch2">
-
-                            <option>Select</option>
-                            <?php // for meium combo box
+                            <?php
+                            if($TbLD == 0){
+                                echo "<option>Select</option>";
+                            } // for meium combo box
                             $sql = "SELECT * FROM CD_TeachSubCategory WHERE ID IS NOT NULL AND ID != '9'";
                             $stmt = $db->runMsSqlQuery($sql);
                             while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
@@ -384,8 +407,11 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                     <td class="box">Subject</td>
                     <td class="box">
                         <select id="SubTch2" name="SubTch2">
-                            <option>Select</option>
+                            <!-- <option>Select</option> -->
                             <?php
+                            if($TbLD == 0){
+                                echo "<option>Select</option>";
+                            }
                             // if ($SchType == '6') {
 
                             //     $sql = "SELECT * FROM CD_PV_TeachSubjects";
@@ -423,8 +449,11 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                     <td class="box">Medium</td>
                     <td class="box">
                         <select id="MedTch2" name="MedTch2">
-                            <option>Select</option>
+                            <!-- <option>Select</option> -->
                             <?php // for meium combo box
+                            if($TbLD == 0){
+                                echo "<option>Select</option>";
+                            }
                             $sql = "SELECT * FROM CD_Medium WHERE Code != ''";
                             $stmt = $db->runMsSqlQuery($sql);
                             while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
@@ -452,8 +481,11 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                     <td class="box">
                         <select id="GradTch3" name="GradTch3">
 
-                            <option>Select</option>
+                            <!-- <option>Select</option> -->
                             <?php // for meium combo box
+                            if($TbLD == 0){
+                                echo "<option>Select</option>";
+                            } 
                             $sql = "SELECT * FROM CD_TeachSubCategory WHERE ID IS NOT NULL AND ID != '9'";
                             $stmt = $db->runMsSqlQuery($sql);
                             while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
@@ -469,8 +501,11 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                     <td class="box">Subject </td>
                     <td class="box">
                         <select id="SubTch3" name="SubTch3">
-                            <option>Select</option>
+                            <!-- <option>Select</option> -->
                             <?php
+                            if($TbLD == 0){
+                                echo "<option>Select</option>";
+                            }
                             // if ($SchType == '6') {
 
                             //     $sql = "SELECT * FROM CD_PV_TeachSubjects";
@@ -508,8 +543,11 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                     <td class="box">Medium</td>
                     <td class="box">
                         <select id="MedTch3" name="MedTch3">
-                            <option>Select</option>
+                            <!-- <option>Select</option> -->
                             <?php // for meium combo box
+                            if($TbLD == 0){
+                                echo "<option>Select</option>";
+                            }
                             $sql = "SELECT * FROM CD_Medium WHERE Code != ''";
                             $stmt = $db->runMsSqlQuery($sql);
                             while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
@@ -531,9 +569,12 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                     <td  class="box" style="padding-right:100px">Other Special Duties</td>
                     <td class="box">
                         <select id="otherspecial" name="otherspecial">
-                            <option>Select</option>
+                            <!-- <option>Select</option> -->
                             
                             <?php
+                            if($TbLD == 0){
+                                echo "<option>Select</option>";
+                            }
                             $sql = "SELECT * FROM CD_TeachSubjects WHERE Code = '9'";
                             $stmt = $db->runMsSqlQuery($sql);
                             while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
@@ -599,21 +640,21 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
     
     // var thisone  = <?php // echo $rowTBL['Medium1'] ?>
     // console.log(thisone)
-    var MedTch1 = document.getElementById("MedTch1").value;
-    var MedTch2 = document.getElementById("MedTch2").value;
-    var MedTch3 = document.getElementById("MedTch3").value;
-    var GradTch1 = document.getElementById("GradTch1").value;
-    var GradTch2 = document.getElementById("GradTch2").value;
-    var GradTch3 = document.getElementById("GradTch3").value;
-    var SubTch1 = document.getElementById("SubTch1").value;
-    var SubTch2 = document.getElementById("SubTch2").value;
-    var SubTch3 = document.getElementById("SubTch3").value;
-    var otherspecial = document.getElementById("otherspecial").value;
+    var MedTch1 = document.getElementById("MedTch1");
+    var MedTch2 = document.getElementById("MedTch2");
+    var MedTch3 = document.getElementById("MedTch3");
+    var GradTch1 = document.getElementById("GradTch1");
+    var GradTch2 = document.getElementById("GradTch2");
+    var GradTch3 = document.getElementById("GradTch3");
+    var SubTch1 = document.getElementById("SubTch1");
+    var SubTch2 = document.getElementById("SubTch2");
+    var SubTch3 = document.getElementById("SubTch3");
+    var otherspecial = document.getElementById("otherspecial");
 
     // var otherspecial = <?php  //echo $OtherSpecial; ?>   
     console.log(otherspecial);
 
-    selectElement('leaveCode', '11')
+    // selectElement('leaveCode', '11')
 
 function selectElement(id, valueToSelect) {    
     let element = document.getElementById(id);
@@ -622,19 +663,20 @@ function selectElement(id, valueToSelect) {
     function showForm(){
         if (tbl.style.display === "none" ) {
             tbl.style.display = "block";
+            // $("#SubTch1").val("<?php // echo $TchSubject1; ?>");
             
-            var MedTch1 = "<?php echo $Medium1; ?>";
-            var MedTch2 = "<?php echo $Medium2; ?>";
-            var MedTch3 = "<?php echo $Medium3; ?>";
-            var GradTch1 =  "<?php echo $GradeCode1; ?>";
-            var GradTch2 =  "<?php echo $GradeCode2; ?>";
-            var GradTch3 =  "<?php echo $GradeCode3; ?>";
-            var SubTch1 = "<?php echo $TchSubject1; ?>";
-            var SubTch2 = "<?php echo $TchSubject2; ?>";
-            var SubTch3 = "<?php echo $TchSubject3; ?>";
-            var otherspecial = "<?php echo $OtherSpecial; ?>";
+            // var MedTch1 = "<select value ='<?php // echo $Medium1; ?>'></select>";
+            // var MedTch2 = "<select value ='<?php // echo $Medium2; ?>'></select>";
+            // var MedTch3 = "<select value ='<?php // echo $Medium3; ?>'></select>";
+            // var GradTch1 =  "<select value ='<?php // echo $GradeCode1; ?>'></select>";
+            // var GradTch2 =  "<select value ='<?php // echo $GradeCode2; ?>'></select>";
+            // var GradTch3 =  "<select value ='<?php // echo $GradeCode3; ?>'></select>";
+            // var SubTch1 = "<select value ='<?php // echo $TchSubject1; ?>'></select>";
+            // var SubTch2 = "<select value ='<?php // echo $TchSubject2; ?>'></select>";
+            // var SubTch3 = "<select value ='<?php // echo $TchSubject3; ?>'></select>";
+            // var otherspecial = "<select value ='<?php // echo $OtherSpecial; ?>'></select>";
             
-            console.log(otherspecial);
+            // console.log(SubTch1);
         }
     }
     var schType = "<?php echo $SchType; ?>";
