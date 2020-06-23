@@ -1,6 +1,3 @@
-var x = document.getElementById("otherdiv");
-var y = document.getElementById("inputdiv");
-
 $(document).ready(function () {
   $("#AppCat").change(function () {
     var AppCat = $(this).val();
@@ -20,5 +17,20 @@ $(document).ready(function () {
         $("#SubApp").html(result);
       },
     });
+  });
+  var x = document.getElementById("otherdiv");
+  var y = document.getElementById("inputdiv");
+
+  $(document).on("change", "#SubApp", function () {
+    var SubApp_id = $(this).val();
+
+    // alert(SubApp_id);
+    if (SubApp_id == "122" || SubApp_id == "420") {
+      x.style.display = "block";
+      y.style.display = "block";
+    } else {
+      x.style.display = "none";
+      y.style.display = "none";
+    }
   });
 });

@@ -126,7 +126,7 @@ while ($row1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
     $SchType = Trim($row1['SchoolType']);
     // var_dump($SchType);
 }
-// var_dump($SchType);
+// var_dump($MedApp);
 if ($SubApp != 'Select') {
     $sql = "INSERT INTO [dbo].[Temp_AppoinmentDetails]
 ([NIC]

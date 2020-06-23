@@ -100,7 +100,7 @@ $SQLTBL = "SELECT AppoinmentDetails.ID
 ,[ApprovedDate]
 ,[ApproveComment] 
 ,[AppointmentName]
-,CD_Medium.Medium 
+,CD_Medium.Medium AS Medium
 ,[SubjectName] FROM [MOENational].[dbo].[AppoinmentDetails]  
 INNER JOIN CD_AppSubCategory ON AppCategory = CD_AppSubCategory.ID
 INNER JOIN CD_AppSubjects ON AppSubject = CD_AppSubjects.ID
@@ -109,12 +109,41 @@ WHERE NIC = '$id' AND RecordStatus = '1'";
 $stmtTBL = $db->runMsSqlQuery($SQLTBL);
 while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
     // echo "Yes";
-    $AppCategory = $rowTBL['AppCategory'];
+    $AppCategory = trim($rowTBL['AppCategory']);
     $AppSubject = $rowTBL['AppSubject'];
     $MEDCode = $rowTBL['MEDCode'];
     $AppointmentName = $rowTBL['AppointmentName'];
     $SubjectName = $rowTBL['SubjectName'];
     $Medium = $rowTBL['Medium'];
+}
+
+$TempSQLTBL = "SELECT Temp_AppoinmentDetails.ID 
+,[NIC]
+,[AppCategory]
+,[AppSubject]
+,AppoinmentDetails.Medium AS MEDCode
+,[SchoolType]
+,[OtherSub]
+,[ApprovedBy]
+,[RecordStatus]
+,[ApprovedDate]
+,[ApproveComment] 
+,[AppointmentName]
+,CD_Medium.Medium AS Medium
+,[SubjectName] FROM [MOENational].[dbo].[AppoinmentDetails]  
+INNER JOIN CD_AppSubCategory ON AppCategory = CD_AppSubCategory.ID
+INNER JOIN CD_AppSubjects ON AppSubject = CD_AppSubjects.ID
+INNER JOIN CD_Medium ON AppoinmentDetails.Medium = CD_Medium.Code 
+WHERE NIC = '$id' AND RecordStatus = '1'";
+$TempstmtTBL = $db->runMsSqlQuery($TempSQLTBL);
+while($TemprowTBL = sqlsrv_fetch_array($TempstmtTBL, SQLSRV_FETCH_ASSOC)){
+    // echo "Yes";
+    $TempAppCategory = trim($TemprowTBL['AppCategory']);
+    $TempAppSubject = $TemprowTBL['AppSubject'];
+    $TempMEDCode = trim($TemprowTBL['MEDCode']);
+    $TempAppointmentName = $TemprowTBL['AppointmentName'];
+    $TempSubjectName = $TemprowTBL['SubjectName'];
+    $TempMedium = $TemprowTBL['Medium'];
 }
 // $dateNow = date("Y/m/d");
 // echo $dateNow;
@@ -213,7 +242,9 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                         Appointment
                     </td>
                 </tr>
-                
+                <?php
+                    // var_dump($AppCategory);
+                ?>
                 <tr>
                     <td>Appointment category: </td>
                     <td>
@@ -222,14 +253,14 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                             if($TbLD == 0 || $AppCategory == ''){
                                 echo "<option>Select</option>";
                             }
-                             
+                            
                             $sql = "SELECT ID, AppointmentName FROM CD_AppSubCategory WHERE ID IS NOT NULL";
                             $stmt = $db->runMsSqlQuery($sql);
                             while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-                                $AppId = $row['ID'];
+                                $AppId = trim($row['ID']);
                                 $AppName = $row['AppointmentName'];
                                 $seltebr = "";
-                                if($TchGradeCode == $AppCategory){
+                                if($AppId == $AppCategory){
                                     $seltebr = "selected";
                                 }
                                 echo "<option value=" . $AppId . " $seltebr>". $AppName ."</option>";
@@ -284,10 +315,10 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                             if($TbLD == 0 || $MEDCode == ''){
                                 echo "<option>Select</option>";
                             }
-                            $sql = "SELECT Medium FROM CD_Medium WHERE Code != ''";
+                            $sql = "SELECT * FROM CD_Medium WHERE Code != ''";
                             $stmt = $db->runMsSqlQuery($sql);
                             while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-                                $MedID = $row['MEDCode'];
+                                $MedID = trim($row['Code']);
                                 $AppMeduim = $row['Medium'];
                                 $seltebr = "";
                                 if($MedID == $MEDCode){
@@ -321,6 +352,7 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
 <script>
 
     var Tbldata = <?php echo $TbLD; ?>;
+    console.log(Tbldata);
     var tbl = document.getElementById("AppFrmDetails")
     var itbl = document.getElementById("Tblrecord");
 
@@ -344,74 +376,9 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
     }
     // console.log(i);
     
-    var x = document.getElementById("otherdiv");
-    var y = document.getElementById("inputdiv");
-
-    $(document).on("change", "#SubApp", function () {
-    var SubApp_id = $(this).val();
-
-    // alert(SubApp_id);
-    if (SubApp_id == "4") {
-      x.style.display = "block";
-      y.style.display = "block";
-    } else {
-      x.style.display = "none";
-      y.style.display = "none";
-    }
-  });
-
-    // $(document).ready(function(){
-
-    //     load_json_data('AppCat');
-    //     // console.log('AppCat');
-    //     function load_json_data(id, category){
-    //         var html_code = '';
-
-    //         $.getJSON('AppSubject.json',function(data){
-    //             html_code += '<option value = "">'+id+'</option>';
-    //             $.each(data, function(key, value){
-    //                 if(id == 'AppCat'){
-    //                     if(value.category == '0'){
-    //                         html_code += '<option value="'+value.id+'">'+value.name+'</option>';
-    //                     }
-    //                 } 
-    //                 else{
-    //                     if(value.category == category){
-    //                         if(value.schtype == i){
-    //                             html_code += '<option value="'+value.id+'">'+value.name+'</option>';
-    //                         }                            
-    //                     }
-    //                 }
-    //             });
-    //          $('#'+id).html(html_code);
-    //         }); 
-    //     }
-    //     // console.log(html_code);
-        
-    //     $(document).on('change','#AppCat',function(){
-    //         var AppCat_id = $(this).val();
-    //         // alert(AppCat_id);
-
-    //         if(AppCat_id != ''){
-    //             // console.log(AppCat_id);
-    //                 load_json_data('SubApp',AppCat_id);
-    //         }
-    //         else{
-    //             $('#SubApp').html('<option value="">Select</option>');
-    //         }
-    //     });
-        
-    //     $(document).on('change','#SubApp',function(){
-    //         var SubApp_id = $(this).val();
-
-    //         if(SubApp_id == '12' || SubApp_id =='11'){
-    //             x.style.display = "block";
-    //             y.style.display = "block";
-    //         }else{
-    //             x.style.display = "none";
-    //             y.style.display = "none"; 
-    //         }
-    //     });
+    // $(document).on("change", "#MedApp", function () {
+    //     var MedApp = $(this).val();
+    //     console.log(MedApp)
     // });
 </script>
 <?php

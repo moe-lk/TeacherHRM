@@ -5,7 +5,7 @@ $conn = new PDO("sqlsrv:Server= DESKTOP-OESJB7N\SQLEXPRESS;Database=MOENational"
 
 
 $AppCatID = $_POST["AppCatID"];
-$option = null;
+$option = "<option>Select</option>";
 
 // echo "<script>alert('".$AppCat."')</script>";
 $sql = "SELECT * FROM CD_AppSubjects WHERE Category = '$AppCatID'";
