@@ -1,6 +1,6 @@
 <?php
 require_once '../error_handle.php';
-include "../db_config/DBManager1.php";
+// include "connection.php";
 set_error_handler("errorHandler");
 register_shutdown_function("shutdownHandler");
 session_start();
@@ -107,6 +107,15 @@ if ($pageid == 30) {
 }
 $dateNow = date("Y/m/d");
 
+$serverName = "DESKTOP-OESJB7N\SQLEXPRESS";
+$connectionInfo = array( "Database"=>"MOENational", "UID"=>"sa", "PWD"=>"na1234");
+$conn = sqlsrv_connect( $serverName, $connectionInfo);
+if( $conn === false ) {
+    die( print_r( sqlsrv_errors(), true ));
+}
+
+
+
 // var_dump($_REQUEST);
 $nicNO = $_REQUEST['id'];
 
@@ -179,6 +188,7 @@ if ($_REQUEST["otherspecial"] != 'Select') {
 } else {
     $otherspecial = "";
 }
+$state = '0';
 // $otherspecial = $_REQUEST["otherspecial"];
 
 $id = $_REQUEST["id"];
@@ -204,12 +214,15 @@ $TotalRows = $db->rowCount($sqlCheck);
 //             SET [RecStatus] = '2' WHERE NIC = '$nicNO'";
 // }
 // else{
-    // var_dump($SubTch3);
+    // var_dump($conn);
     
-function insertsub(){
-    if(sqlsrv_begin_transaction($conn) === false){
-        die(print_r(sqlsrv_errors(),true));
-    }
+// function insertsub(){
+    /* Begin transaction. */  
+if( sqlsrv_begin_transaction($conn) === false )   
+{   
+     echo "Could not begin transaction.\n";  
+     die( print_r( sqlsrv_errors(), true));  
+}
 
     $sql = "INSERT INTO [dbo].[Temp_TeachingDetails]
             ([NIC]
@@ -232,45 +245,56 @@ function insertsub(){
             ,[LastUpdate])
             VALUES
             (
-            '$nicNO', 
-            '$SubTch1', 
-            '$SubTch2', 
-            '$SubTch3',
-            '$otherTch1',
-            '$otherTch2',
-            '$otherTch3', 
-            '$MedTch1', 
-            '$MedTch2', 
-            '$MedTch3',
-            '$GradTch1',
-            '$GradTch2',
-            '$GradTch3',
-            '$otherspecial',
-            '$SchType',
-            '0',
-            '$NICUser',
-            '$dateNow'
+            ?, 
+            ?, 
+            ?, 
+            ?,
+            ?,
+            ?,
+            ?, 
+            ?, 
+            ?, 
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?
         )";
 
     // $stmt = $db->runMsSqlQuery($sql);
-    $params = array($nicNO, $SubTch1, $SubTch2, $SubTch3, $otherTch1, $otherTch2, $otherTch3, $MedTch1, $MedTch2, $MedTch3, $GradTch1, $GradTch2, $GradTch3, $otherspecial, $SchType,$NICUser,$dateNow);
+    $params = array($nicNO, $SubTch1, $SubTch2, $SubTch3, $otherTch1, $otherTch2, $otherTch3, $MedTch1, $MedTch2, $MedTch3, $GradTch1, $GradTch2, $GradTch3, $otherspecial, $SchType,$state,$NICUser,$dateNow);
     $stmt = sqlsrv_query( $conn, $sql, $params );
+    // var_dump($stmt);
     if($stmt){
         sqlsrv_commit($conn);
-        echo "Successfully Added";
-        echo "<script>alert('Successfully Added')</script>";
-    } else {
-        sqlsrv_rollback( $conn );
-        echo "Updates rolled back.<br />";
-    }
-}
-    // sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC);
-    // var_dump($sql);
-
-    echo ("<script LANGUAGE='JavaScript'>
+        // echo "Successfully Added";
+        // echo "<script>alert('Successfully Added')</script>";
+        echo ("<script LANGUAGE='JavaScript'>
         window.alert('Succesfully Updated');
         window.location.href='teaching_subj-12--$nicNO.html';
         </script>");
+    } else {
+        sqlsrv_rollback( $conn );
+        echo "Updates rolled back.<br />";
+        echo ("<script LANGUAGE='JavaScript'>
+        window.alert('Update Failed!, Please try again.');
+        window.location.href='teaching_subj-12--$nicNO.html';
+        </script>");
+    }
+// }
+
+// insertsub($sql,$conn,$stmt, $params,$nicNO, $SubTch1, $SubTch2, $SubTch3, $otherTch1, $otherTch2, $otherTch3, $MedTch1, $MedTch2, $MedTch3, $GradTch1, $GradTch2, $GradTch3, $otherspecial, $SchType,$NICUser,$dateNow);
+    // sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC);
+    // var_dump($sql);
+
+    // echo ("<script LANGUAGE='JavaScript'>
+    //     window.alert('Succesfully Updated');
+    //     window.location.href='teaching_subj-12--$nicNO.html';
+    //     </script>");
 // }
 
 
