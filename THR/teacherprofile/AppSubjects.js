@@ -53,4 +53,20 @@ $(document).ready(function () {
       y.style.display = "none";
     }
   });
+
+  var x = document.getElementById("Tempotherdiv");
+  var y = document.getElementById("Tempinputdiv");
+
+  $(document).on("change", "#TempSubApp", function () {
+    var SubApp_id = $(this).val();
+
+    // alert(SubApp_id);
+    if (SubApp_id == "122" || SubApp_id == "420") {
+      x.style.display = "block";
+      y.style.display = "block";
+    } else {
+      x.style.display = "none";
+      y.style.display = "none";
+    }
+  });
 });

@@ -402,7 +402,7 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                     <td>
                         <select id="TempAppCat" name="TempAppCat">
                         <?php
-                            if($TbLD == 0 || $TempAppCategory == ''){
+                            if($TempTbLD == 0 || $TempAppCategory == ''){
                                 echo "<option>Select</option>";
                             }
                             
@@ -428,7 +428,7 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                         <div id="SubAppDiv">
                             <select id="TempSubApp" name="TempSubApp">
                             <?php
-                                if($TbLD == 0 || $TempAppSubject == ''){
+                                if($TempTbLD == 0 || $TempAppSubject == ''){
                                     echo "<option>Select</option>";
                                 }
                                 $sql = "SELECT * FROM CD_AppSubjects WHERE ID IS NOT NULL";
@@ -464,7 +464,7 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                         <select id="TempMedApp" name="TempMedApp">
                             
                             <?php // for meium combo box
-                            if($TbLD == 0 || $MEDCode == ''){
+                            if($TempTbLD == 0 || $MEDCode == ''){
                                 echo "<option>Select</option>";
                             }
                             $sql = "SELECT * FROM CD_Medium WHERE Code != ''";

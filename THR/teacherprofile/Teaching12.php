@@ -85,6 +85,7 @@ while ($row1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
 }
 
 $TbLD=1;
+$TempTbLD = 1;
 
 $SQLTBL = "SELECT TeachingDetails.ID
 ,[NIC]
@@ -163,6 +164,83 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
     $OtherSpecial = $rowTBL['OtherSpecial'];
     $Other = $rowTBL['Other'];
 }
+
+$TempSQLTBL = "SELECT Temp_TeachingDetails.ID
+,[NIC]
+,[TchSubject1]
+,[TchSubject2]
+,[TchSubject3]
+,[Other1]
+,[Other2]
+,[Other3]
+,[Medium1]
+,[Medium2]
+,[Medium3]
+,trim([GradeCode1]) AS GradeCode1
+,trim([GradeCode2]) AS GradeCode2
+,[GradeCode3]
+,[OtherSpecial]
+,[SchoolType]
+,[RecStatus]
+,Temp_TeachingDetails.RecordLog AS RecordLog
+,[LastUpdate]
+,TC1.SubjectName AS Subj1
+,TC2.SubjectName AS Subj2
+,TC3.SubjectName AS Subj3
+,TM1.Medium AS Med1
+,TM2.Medium AS Med2
+,TM3.Medium AS Med3
+,trim(TSC1.CategoryName) AS Tcat1
+,trim(TSC2.CategoryName) AS Tcat2
+,TSC3.CategoryName AS Tcat3
+,TC4.SubjectName AS Other
+FROM Temp_TeachingDetails 
+LEFT JOIN CD_TeachSubjects AS TC1 ON Temp_TeachingDetails.TchSubject1 = TC1.ID
+LEFT JOIN CD_TeachSubjects AS TC2 ON Temp_TeachingDetails.TchSubject2 = TC2.ID
+LEFT JOIN CD_TeachSubjects AS TC3 ON Temp_TeachingDetails.TchSubject3 = TC3.ID
+LEFT JOIN CD_Medium AS TM1 ON Temp_TeachingDetails.Medium1 = TM1.Code
+LEFT JOIN CD_Medium AS TM2 ON Temp_TeachingDetails.Medium2 = TM2.Code
+LEFT JOIN CD_Medium AS TM3 ON Temp_TeachingDetails.Medium3 = TM3.Code
+LEFT JOIN CD_TeachSubCategory AS TSC1 ON Temp_TeachingDetails.GradeCode1 = TSC1.ID
+LEFT JOIN CD_TeachSubCategory AS TSC2 ON Temp_TeachingDetails.GradeCode2 = TSC2.ID
+LEFT JOIN CD_TeachSubCategory AS TSC3 ON Temp_TeachingDetails.GradeCode3 = TSC3.ID
+LEFT JOIN CD_TeachSubjects AS TC4 ON Temp_TeachingDetails.OtherSpecial = TC4.ID
+WHERE NIC = '$id' AND RecStatus = '0'";
+$TempstmtTBL = $db->runMsSqlQuery($TempSQLTBL);
+while($TemprowTBL = sqlsrv_fetch_array($TempstmtTBL, SQLSRV_FETCH_ASSOC)){
+    $TempSubj1 = $TemprowTBL['Subj1'];
+    $TempSubj2 = $TemprowTBL['Subj2'];
+    $TempSubj3 = $TemprowTBL['Subj3'];
+    if($TemprowTBL['Med1'] == 'Not Specified'){
+        $TempMed1 = "";
+    }else{
+        $TempMed1 = $TemprowTBL['Med1'];
+    }
+    if($TemprowTBL['Med2'] == 'Not Specified'){
+        $TempMed2 = "";
+    }else{
+        $TempMed2 = $TemprowTBL['Med2'];
+    }
+    if($TemprowTBL['Med3'] == 'Not Specified'){
+        $TempMed3 = "";
+    }else{
+        $TempMed3 = $TemprowTBL['Med3'];
+    }
+    $TempTcat1 = $TemprowTBL['Tcat1'];
+    $TempTcat2 = $TemprowTBL['Tcat2'];
+    $TempTcat3 = $TemprowTBL['Tcat3'];
+    $TempTchSubject1 = $TemprowTBL['TchSubject1'];
+    $TempMedium1 = $TemprowTBL['Medium1'];
+    $TempGradeCode1 = trim($TemprowTBL['GradeCode1']);
+    $TempTchSubject2 = $TemprowTBL['TchSubject2'];
+    $TempMedium2 = $TemprowTBL['Medium2'];
+    $TempGradeCode2 = $TemprowTBL['GradeCode2'];
+    $TempTchSubject3 = $TemprowTBL['TchSubject3'];
+    $TempMedium3 = $TemprowTBL['Medium3'];
+    $TempGradeCode3 = $TemprowTBL['GradeCode3'];
+    $TempOtherSpecial = $TemprowTBL['OtherSpecial'];
+    $TempOther = $TemprowTBL['Other'];
+}
 ?>
 
 <style>
@@ -187,7 +265,7 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
         border-radius: 4px;
         cursor: pointer;
     }
-    #Tblrecord {
+    #Tblrecord ,#TempTblrecord {
         border-collapse: collapse;       
         border: 1px solid black;
         padding: 5px;
@@ -276,6 +354,63 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
 
                 </tr>
             </table>
+<!-- -------------------------------------------------------------------------------------------------------------------------------------------------------------             -->
+            
+            <table name="TempTblrecord" id="TempTblrecord" border = "1px" style="width:100%; display: block; background-color:yellow;">
+                <tr id="headtbl">
+                    <td colspan="3" style="padding: 5px; padding-left: 10px; padding-right: 10px;">
+                        Hightest number of teaching periods
+                    </td>
+                    <td colspan="3" style="padding: 5px; padding-left: 10px; padding-right: 10px;">
+                        Second Highest number of teaching periods
+                    </td>
+                    <td colspan="3" style="padding: 5px; padding-left: 10px; padding-right: 10px;">
+                        Other capable subjects of teaching
+                    </td>
+                    <td style="padding: 5px; padding-left: 10px; padding-right: 10px;">
+                        Other Special Duties
+                    </td>
+                    <td style="padding: 5px; padding-left: 10px; padding-right: 10px;">
+                        Action
+                    </td>
+                </tr>
+                <tr id="headtbl">
+                    <td style="padding: 5px;">Grade Span</td>
+                    <td style="padding: 5px;">Subject</td>
+                    <td style="padding: 5px;">Medium</td>
+                    <td style="padding: 5px;">Grade Span</td>
+                    <td style="padding: 5px;">Subject</td>
+                    <td style="padding: 5px;">Medium</td>
+                    <td style="padding: 5px;">Grade Span</td>
+                    <td style="padding: 5px;">Subject</td>
+                    <td style="padding: 5px;">Medium</td>
+                    
+                    <td style="padding: 5px;">&nbsp;</td>
+                    <td style="padding: 5px;">&nbsp;</td>
+                </tr>
+                <tr>
+                <?php 
+                    $TotalRows = $db->rowCount($TempSQLTBL);
+                    // var_dump($TotaRows);
+                    if (!$TotalRows){
+                        // var_dump($TotaRows)
+                        $TempTbLD = 0;
+                    }
+                            echo "<td style='padding: 5px;'>".$TempGradeCode1."-".$TempTcat1."</td>";
+                            echo "<td style='padding: 5px;'>".$TempTchSubject1."-".$TempSubj1."</td>";
+                            echo "<td style='padding: 5px;'>".$TempMedium1."-".$TempMed1."</td>";
+                            echo "<td style='padding: 5px;'>".$TempGradeCode2."-".$TempTcat2."</td>";
+                            echo "<td style='padding: 5px;'>".$TempTchSubject2."-".$TempSubj2."</td>";
+                            echo "<td style='padding: 5px;'>".$TempMedium2."-".$TempMed2."</td>";
+                            echo "<td style='padding: 5px;'>".$TempGradeCode3."-".$TempTcat3."</td>";
+                            echo "<td style='padding: 5px;'>".$TempTchSubject3."-".$TempSubj3."</td>";
+                            echo "<td style='padding: 5px;'>".$TempMedium3."-".$TempMed3."</td>";
+                            echo "<td style='padding: 5px;'>".$TempOtherSpecial."-".$TempOther."</td>";
+                            echo "<td style='padding: 5px;' style='text-align:center'><input type='button' value='Edit' onclick='showTempForm()'></td>";    
+                ?>
+                </tr>
+            </table>
+
             <form method="POST" name="frmTchDetails" id="frmTchDetails" action="TchSubmit.php" style="display:none; padding-top: 50px;">
             <table>
                 <tr>
@@ -623,33 +758,393 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
 
             ?>
         </form>
+<!-- -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------         -->
+<?php // var_dump($TempGradeCode1) ?>
+<form method="POST" name="TempfrmTchDetails" id="TempfrmTchDetails" action="TchSubmit.php" style="display:none; padding-top: 50px;">
+            <table>
+                <tr>
+                    <td colspan="2" style="text-align: center; font-weight: bold;" class="box">
+                        <h3>Hightest number of teaching periods</h3>
+                    </td>
+                </tr>
+
+                
+                <tr>
+                    <td class="box">Grade Span</td>
+                    <td class="box">
+                        <select id="TempGradTch1" name="TempGradTch1">
+                            <?php 
+                            if($TempTbLD == 0 || $TempGradeCode1 == ''){
+                                echo "<option>Select</option>";
+                            }
+                            
+                            $sql = "SELECT * FROM CD_TeachSubCategory WHERE ID IS NOT NULL AND ID != '9'";
+                            $stmt = $db->runMsSqlQuery($sql);
+                            while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                $TchGrade = $row['CategoryName'];
+                                $TchGradeCode = $row['ID'];
+                                $seltebr = "";
+                                if($TchGradeCode == $TempGradeCode1){
+                                    $seltebr = "selected";
+                                }
+                                echo "<option value=" . $TchGradeCode . " $seltebr>" . $TchGrade . "</option>";
+                            }
+                            ?>
+                        </select>
+                        <script>
+                            // var category = document.getElementById("GradTch1");
+                        </script>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="box">Subject</td>
+                    <td class="box">
+                        <select id="TempSubTch1" name="TempSubTch1">
+                            <?php
+                            if($TempTbLD == 0 || $TempTchSubject1 == ''){
+                                echo "<option>Select</option>";
+                            } 
+                            $sql = "SELECT * FROM CD_TeachSubjects WHERE ID IS NOT NULL AND Code != '9'";
+                            $stmt = $db->runMsSqlQuery($sql);
+                            while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                $TchSub = $row['SubjectName'];
+                                $TchSubCode = $row['ID'];
+                                $seltebr = "";
+                                if($TchSubCode == $TempTchSubject1){
+                                    $seltebr = "selected";
+                                }
+                                echo "<option value=" . $TchSubCode . " $seltebr>" . $TchSub . "</option>";
+                            }
+                            ?>
+                        </select>
+                    </td>
+                </tr>
+                <!-- <tr>
+                    <td><button type="button" onclick="show_otherdiv1()">Other</button></td>
+                </tr> -->
+                <tr>
+                    <td class="box">
+                        <div style="display :none" id="Tempotherdiv1">If Other Please Specify: </div>
+                    </td>
+                    <td class="box">
+                        <input type="text" name="TempotherTch1" id="TempotherTch1" style="display:none">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="box">Medium</td>
+                    <td class="box">
+                        <select id="TempMedTch1" name="TempMedTch1">
+                            <!-- <option>Select</option> -->
+                            <?php // for meium combo box
+                            if($TempTbLD == 0 || $TempMedium1 == ''){
+                                echo "<option>Select</option>";
+                            }
+                            $sql = "SELECT * FROM CD_Medium WHERE Code != ''";
+                            $stmt = $db->runMsSqlQuery($sql);
+                            while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                $TchMedium = $row['Medium'];
+                                $TchMediumCode = $row['Code'];
+                                $seltebr = "";
+                                if($TchMediumCode == $TempMedium1){
+                                    $seltebr = "selected";
+                                }
+                                echo "<option value=" . $TchMediumCode . " $seltebr>" . $TchMedium . "</option>";
+                            }
+                            ?>
+
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <hr>
+                    </td>
+                </tr>
+                
+                <td colspan="2" style="text-align: center; font-weight: bold;" ;>
+                    <h3>Second Highest number of teaching periods</h3>
+                </td>
+                
+                <tr>
+
+                    <td class="box">Grade Span</td>
+                    <td class="box">
+                        <select id="TempGradTch2" name="TempGradTch2">
+                            <?php
+                            if($TempTbLD == 0 || $TempGradeCode2 == ''){
+                                echo "<option>Select</option>";
+                            } // for meium combo box
+                            $sql = "SELECT * FROM CD_TeachSubCategory WHERE ID IS NOT NULL AND ID != '9'";
+                            $stmt = $db->runMsSqlQuery($sql);
+                            while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                $TchGrade = $row['CategoryName'];
+                                $TchGradeCode = $row['ID'];
+                                $seltebr = "";
+                                if($TchGradeCode == $TempGradeCode2){
+                                    $seltebr = "selected";
+                                }
+                                echo "<option value=" . $TchGradeCode . " $seltebr>" . $TchGrade . "</option>";
+                            }
+                            ?>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="box">Subject</td>
+                    <td class="box">
+                        <select id="TempSubTch2" name="TempSubTch2">
+                            <!-- <option>Select</option> -->
+                            <?php
+                            if($TempTbLD == 0 || $TempTchSubject2 == ''){
+                                echo "<option>Select</option>";
+                            }
+                            $sql = "SELECT * FROM CD_TeachSubjects WHERE ID IS NOT NULL AND Code != '9'";
+                            $stmt = $db->runMsSqlQuery($sql);
+                            while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                $TchSub = $row['SubjectName'];
+                                $TchSubCode = $row['ID'];
+                                $seltebr = "";
+                                if($TchSubCode == $TempTchSubject2){
+                                    $seltebr = "selected";
+                                }
+                                echo "<option value=" . $TchSubCode . " $seltebr>" . $TchSub . "</option>";
+                            }
+                            ?>
+                        </select>
+                    </td>
+                </tr>
+                <!-- <tr>
+                    <td><button type="button" onclick="show_otherdiv2()">Other</button></td>
+                </tr> -->
+                <tr>
+                    <td class="box">
+                        <div style="display :none" id="Tempotherdiv2">If Other Please Specify: </div>
+                    </td>
+                    <td class="box">
+                        <input type="text" name="TempotherTch2" id="TempotherTch2" style="display :none">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="box">Medium</td>
+                    <td class="box">
+                        <select id="TempMedTch2" name="TempMedTch2">
+                            <!-- <option>Select</option> -->
+                            <?php // for meium combo box
+                            if($TempTbLD == 0 || $TempMedium2 == ''){
+                                echo "<option>Select</option>";
+                            }
+                            $sql = "SELECT * FROM CD_Medium WHERE Code != ''";
+                            $stmt = $db->runMsSqlQuery($sql);
+                            while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                $TchMedium = $row['Medium'];
+                                $TchMediumCode = $row['Code'];
+                                $seltebr = "";
+                                if($TchMediumCode == $TempMedium2){
+                                    $seltebr = "selected";
+                                }
+                                echo "<option value=" . $TchMediumCode . " $seltebr>" . $TchMedium . "</option>";
+                            }
+                            ?>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <hr>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: center; font-weight: bold;" ;>
+                        <h3>Other capable subjects of teaching</h3>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="box">Grade Span</td>
+                    <td class="box">
+                        <select id="TempGradTch3" name="TempGradTch3">
+
+                            <!-- <option>Select</option> -->
+                            <?php // for meium combo box
+                            if($TempTbLD == 0 || $TempGradeCode3 == ''){
+                                echo "<option>Select</option>";
+                            } 
+                            $sql = "SELECT * FROM CD_TeachSubCategory WHERE ID IS NOT NULL AND ID != '9'";
+                            $stmt = $db->runMsSqlQuery($sql);
+                            while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                $TchGrade = $row['CategoryName'];
+                                $TchGradeCode = $row['ID'];
+                                $seltebr = "";
+                                if($TchGradeCode == $TempGradeCode3){
+                                    $seltebr = "selected";
+                                }
+                                echo "<option value=" . $TchGradeCode . " $seltebr>" . $TchGrade . "</option>";
+                            }
+                            ?>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="box">Subject </td>
+                    <td class="box">
+                        <select id="TempSubTch3" name="TempSubTch3">
+                            <!-- <option>Select</option> -->
+                            <?php
+                            if($TempTbLD == 0 || $TempTchSubject3 == ''){
+                                echo "<option>Select</option>";
+                            }
+                            $sql = "SELECT * FROM CD_TeachSubjects WHERE ID IS NOT NULL AND Code != '9'";
+                            $stmt = $db->runMsSqlQuery($sql);
+                            while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                $TchSub = $row['SubjectName'];
+                                $TchSubCode = $row['ID'];
+                                $seltebr = "";
+                                if($TchSubCode == $TempTchSubject3){
+                                    $seltebr = "selected";
+                                }
+                                echo "<option value=" . $TchSubCode . " $seltebr>" . $TchSub . "</option>";
+                            }
+                            ?>
+                        </select>
+                    </td>
+                </tr>
+                <!-- <tr>
+                    <td><button type="button" onclick="show_otherdiv3()">Other</button></td>
+                </tr> -->
+                <tr>
+                    <td class="box">
+                        <div style="display :none" id="Tempotherdiv3">If Other Please Specify: </div>
+                    </td>
+                    <td class="box">
+                        <input type="text" name="TempotherTch3" id="TempotherTch3" style="display :none">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="box">Medium</td>
+                    <td class="box">
+                        <select id="TempMedTch3" name="TempMedTch3">
+                            <!-- <option>Select</option> -->
+                            <?php // for meium combo box
+                            if($TempTbLD == 0 || $TempMedium3 == ''){
+                                echo "<option>Select</option>";
+                            }
+                            $sql = "SELECT * FROM CD_Medium WHERE Code != ''";
+                            $stmt = $db->runMsSqlQuery($sql);
+                            while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                $TchMedium = $row['Medium'];
+                                $TchMediumCode = $row['Code'];
+                                $seltebr = "";
+                                if($TchMediumCode == $TempMedium3){
+                                    $seltebr = "selected";
+                                }
+                                echo "<option value=" . $TchMediumCode . " $seltebr>" . $TchMedium . "</option>";
+                            }
+                            ?>
+
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <hr>
+                    </td>
+                </tr>
+                <tr>
+                    <td  class="box" style="padding-right:100px">Other Special Duties</td>
+                    <td class="box">
+                        <select id="Tempotherspecial" name="Tempotherspecial">
+                            <!-- <option>Select</option> -->
+                            
+                            <?php
+                            if($TempTbLD == 0 || $TempOtherSpecial == ''){
+                                echo "<option>Select</option>";
+                            }
+                            $sql = "SELECT * FROM CD_TeachSubjects WHERE Code = '9'";
+                            $stmt = $db->runMsSqlQuery($sql);
+                            while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                $TchGrade = $row['SubjectName'];
+                                $TchGradeCode = $row['ID'];
+                                $seltebr = "";
+                                if($TchGradeCode  == $TempOtherSpecial){
+                                    $seltebr = "selected";
+                                }
+                                echo "<option value=" . $TchGradeCode . " $seltebr>" . $TchGrade . "</option>";
+                            }
+                            ?>
+                        </select>
+                    </td>
+                </tr>
+                <tr> 
+                    <td colspan="2">
+                        <div>
+                            <input type="submit" name="TchTempFrmSubmit" id="TchTempFrmSubmit">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="box"><input type="hidden" name="id" id="id" value="<?php echo $id ?>"></td>
+                <tr>
+            </table>
+            <?php
+            // var_dump($POST);
+            // if (isset($_POST['Submit'])) {
+            $MedTch1 = $_POST["TempMedTch1"];
+            $GradTch1 = $_POST["TempGradTch1"];
+            $SubTch1 = $_POST["TempSubTch1"];
+            $otherTch1 = $_POST["TempotherTch1"];
+            $MedTch2 = $_POST["TempMedTch2"];
+            $GradTch2 = $_POST["TempGradTch2"];
+            $SubTch2 = $_POST["TempSubTch2"];
+            $otherTch2 = $_POST["TempotherTch2"];
+            $MedTch3 = $_POST["TempMedTch3"];
+            $GradTch3 = $_POST["TempGradTch3"];
+            $SubTch3 = $_POST["TempSubTch3"];
+            $otherTch3 = $_POST["TempotherTch3"];
+            $otherspecial = $_POST["Tempotherspecial"];
+
+            // }
+            // var_dump($_SESSION['id']);
+
+            ?>
+        </form>
     </div>
 </div>
 
 <script>
     var Tbldata = <?php echo $TbLD; ?>;
-    
+    var TempTbldata = <?php echo $TempTbLD; ?>;
     // console.log(Tbldata);
-    var tbl = document.getElementById("frmTchDetails")
-    var itbl = document.getElementById("Tblrecord");
+
+    var frm = document.getElementById("frmTchDetails")
+    var tbl = document.getElementById("Tblrecord");
+    var Tempfrm = document.getElementById("TempfrmTchDetails")
+    var Temptbl = document.getElementById("TempTblrecord");
     // console.log(itbl.style.display)
-    if (itbl.style.display === "block" && Tbldata==0) {
-        itbl.style.display = "none";
+    
+
+    if(Tbldata == 1 ){
         tbl.style.display = "block";
+    }else{
+        tbl.style.display = "none";
+    }
+    if(TempTbldata == 1 ){
+        Temptbl.style.display = "block";
+    }else{
+        Temptbl.style.display = "none";
     }
 
     function showForm(){
-        if (tbl.style.display === "none" ) {
-            tbl.style.display = "block";
+        if (frm.style.display === "none" ) {
+            frm.style.display = "block";
+            Tempfrm.style.display = "none";
         }
     }
-    // var schType = "<?php //echo $SchType; ?>";
-    // var i;
-    // if(schType == 6){
-    //     i = '6';
-    // }else{
-    //     i = '1';
-    // }
+    function showTempForm(){
+        if (Tempfrm.style.display === "none" ) {
+            Tempfrm.style.display = "block";
+            frm.style.display = "none";
+        }
+    }
     
     var x = document.getElementById("otherdiv1");
     var y = document.getElementById("otherTch1");
