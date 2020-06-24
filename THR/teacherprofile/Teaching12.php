@@ -628,6 +628,7 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
 
 <script>
     var Tbldata = <?php echo $TbLD; ?>;
+    
     // console.log(Tbldata);
     var tbl = document.getElementById("frmTchDetails")
     var itbl = document.getElementById("Tblrecord");
@@ -636,40 +637,13 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
         itbl.style.display = "none";
         tbl.style.display = "block";
     }
-    // var i = document.getElementById("Tblrecord")
-    // // console.log(Tbldata);
-    // if(Tbldata = 0){
-    //     i.style.display = "block";
-    // }
-    
-    // var thisone  = <?php // echo $rowTBL['Medium1'] ?>
-    // console.log(thisone)
-    // var MedTch1 = document.getElementById("MedTch1");
-    // var MedTch2 = document.getElementById("MedTch2");
-    // var MedTch3 = document.getElementById("MedTch3");
-    // var GradTch1 = document.getElementById("GradTch1");
-    // var GradTch2 = document.getElementById("GradTch2");
-    // var GradTch3 = document.getElementById("GradTch3");
-    // var SubTch1 = document.getElementById("SubTch1");
-    // var SubTch2 = document.getElementById("SubTch2");
-    // var SubTch3 = document.getElementById("SubTch3");
-    // var otherspecial = document.getElementById("otherspecial");
 
-    // var otherspecial = <?php  //echo $OtherSpecial; ?>   
-    // console.log(otherspecial);
-
-    // selectElement('leaveCode', '11')
-
-function selectElement(id, valueToSelect) {    
-    let element = document.getElementById(id);
-    element.value = valueToSelect;
-}
     function showForm(){
         if (tbl.style.display === "none" ) {
             tbl.style.display = "block";
         }
     }
-    // var schType = "<?php echo $SchType; ?>";
+    // var schType = "<?php //echo $SchType; ?>";
     // var i;
     // if(schType == 6){
     //     i = '6';

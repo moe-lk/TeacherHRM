@@ -87,6 +87,8 @@ while ($row1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
 }
 
 $TbLD=1;
+
+$TempTbLD = 1;
 // var_dump($id);
 $SQLTBL = "SELECT AppoinmentDetails.ID 
 ,[NIC]
@@ -117,34 +119,7 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
     $Medium = $rowTBL['Medium'];
 }
 
-$TempSQLTBL = "SELECT Temp_AppoinmentDetails.ID 
-,[NIC]
-,[AppCategory]
-,[AppSubject]
-,AppoinmentDetails.Medium AS MEDCode
-,[SchoolType]
-,[OtherSub]
-,[ApprovedBy]
-,[RecordStatus]
-,[ApprovedDate]
-,[ApproveComment] 
-,[AppointmentName]
-,CD_Medium.Medium AS Medium
-,[SubjectName] FROM [MOENational].[dbo].[AppoinmentDetails]  
-INNER JOIN CD_AppSubCategory ON AppCategory = CD_AppSubCategory.ID
-INNER JOIN CD_AppSubjects ON AppSubject = CD_AppSubjects.ID
-INNER JOIN CD_Medium ON AppoinmentDetails.Medium = CD_Medium.Code 
-WHERE NIC = '$id' AND RecordStatus = '1'";
-$TempstmtTBL = $db->runMsSqlQuery($TempSQLTBL);
-while($TemprowTBL = sqlsrv_fetch_array($TempstmtTBL, SQLSRV_FETCH_ASSOC)){
-    // echo "Yes";
-    $TempAppCategory = trim($TemprowTBL['AppCategory']);
-    $TempAppSubject = $TemprowTBL['AppSubject'];
-    $TempMEDCode = trim($TemprowTBL['MEDCode']);
-    $TempAppointmentName = $TemprowTBL['AppointmentName'];
-    $TempSubjectName = $TemprowTBL['SubjectName'];
-    $TempMedium = $TemprowTBL['Medium'];
-}
+
 // $dateNow = date("Y/m/d");
 // echo $dateNow;
 ?>
@@ -170,7 +145,7 @@ while($TemprowTBL = sqlsrv_fetch_array($TempstmtTBL, SQLSRV_FETCH_ASSOC)){
         border-radius: 4px;
         cursor: pointer;
     }
-    #Tblrecord {
+    #Tblrecord, #TempTblrecord {
         border-collapse: collapse;       
         /* border: 1px solid black;
         padding: 5px; */
@@ -224,16 +199,80 @@ while($TemprowTBL = sqlsrv_fetch_array($TempstmtTBL, SQLSRV_FETCH_ASSOC)){
                         // var_dump($TotaRows)
                         $TbLD = 0;
                     }
-
+                    // var_dump($TbLD);
                     // $rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC);
                         echo "<td style='padding: 5px;'>".$AppCategory." - ".$AppointmentName."</td>";
                         echo "<td style='padding: 5px;'>".$AppSubject." - ".$SubjectName."</td>";
                         echo "<td style='padding: 5px;'>".$MEDCode." - ".$Medium."</td>";
                         echo "<td style='text-align:center'><input type='button' value='Edit' onclick='showForm()'></td>";
                 ?>
-
                 </tr>
             </table>
+
+            <table name="TempTblrecord" id="TempTblrecord" border = "1px" style="width:100%; display: block; background-color:yellow;">
+                <tr id="headtbl">
+                    <td style="padding: 5px; padding-left: 10px; padding-right: 150px;">
+                        Appointment Category
+                    </td>
+                    <td style="padding: 5px; padding-left: 10px; padding-right: 150px;">
+                        Appointment subject
+                    </td>
+                    <td style="padding: 5px; padding-left: 10px; padding-right: 50px;">
+                        Appointment Medium
+                    </td>
+                    <!-- <td>
+                        Effective date
+                    </td> -->
+                    <td style="padding: 5px; padding-left: 10px; padding-right: 10px;">
+                        Action
+                    </td>
+                <tr>
+                <tr>
+                <?php 
+                $TempSQLTBL = "SELECT Temp_AppoinmentDetails.ID 
+                ,[NIC]
+                ,[AppCategory]
+                ,[AppSubject]
+                ,Temp_AppoinmentDetails.Medium AS MEDCode
+                ,[SchoolType]
+                ,[OtherSub]
+                ,Temp_AppoinmentDetails.RecordLog
+                ,[RecordStatus]
+                ,Temp_AppoinmentDetails.LastUpdate
+                ,[AppointmentName]
+                ,CD_Medium.Medium AS Medium
+                ,[SubjectName] FROM [MOENational].[dbo].[Temp_AppoinmentDetails]  
+                INNER JOIN CD_AppSubCategory ON AppCategory = CD_AppSubCategory.ID
+                INNER JOIN CD_AppSubjects ON AppSubject = CD_AppSubjects.ID
+                INNER JOIN CD_Medium ON Temp_AppoinmentDetails.Medium = CD_Medium.Code 
+                WHERE NIC = '$id' AND RecordStatus = '0'";
+                $TempstmtTBL = $db->runMsSqlQuery($TempSQLTBL);
+                while($TemprowTBL = sqlsrv_fetch_array($TempstmtTBL, SQLSRV_FETCH_ASSOC)){
+                    // echo "Yes";
+                    $TempAppCategory = trim($TemprowTBL['AppCategory']);
+                    $TempAppSubject = $TemprowTBL['AppSubject'];
+                    $TempMEDCode = trim($TemprowTBL['MEDCode']);
+                    $TempAppointmentName = $TemprowTBL['AppointmentName'];
+                    $TempSubjectName = $TemprowTBL['SubjectName'];
+                    $TempMedium = $TemprowTBL['Medium'];
+                }         
+                    // var_dump($AppointmentName);
+                    $TotaRows = $db->rowCount($TempSQLTBL);
+                    // var_dump($TotaRows);
+                    if (!$TotaRows){
+                        // var_dump($TotaRows)
+                        $TempTbLD = 0;
+                    }
+                    // var_dump($TbLD);
+                    // $rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC);
+                        echo "<td style='padding: 5px;'>".$TempAppCategory." - ".$TempAppointmentName."</td>";
+                        echo "<td style='padding: 5px;'>".$TempAppSubject." - ".$TempSubjectName."</td>";
+                        echo "<td style='padding: 5px;'>".$TempMEDCode." - ".$TempMedium."</td>";
+                        echo "<td style='text-align:center'><input type='button' value='Edit' onclick='showTempForm()'></td>";
+                ?> 
+                </tr>
+            </table>
+
         <!-- </div> -->
         <form method="POST" name="AppFrmDetails" id="AppFrmDetails" action="AppSubmit.php" style="display:none; padding-top: 50px;">
             <table>
@@ -285,7 +324,7 @@ while($TemprowTBL = sqlsrv_fetch_array($TempstmtTBL, SQLSRV_FETCH_ASSOC)){
                                     $AppSubId = trim($row['ID']);
                                     $AppSubName = $row['SubjectName'];
                                     $seltebr = "";
-                                    var_dump($AppSubId);
+                                    // var_dump($AppSubId);
                                     if($AppSubId == $AppSubject){
                                         $seltebr = "selected";
                                     }
@@ -347,26 +386,157 @@ while($TemprowTBL = sqlsrv_fetch_array($TempstmtTBL, SQLSRV_FETCH_ASSOC)){
                 <tr>
             </table>
         </form>
+<!-- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------         -->
+        <form method="POST" name="TempAppFrmDetails" id="TempAppFrmDetails" action="TempAppSubmit.php" style="display:none; padding-top: 50px;">
+            <table>
+                <tr>
+                    <td colspan="2" style="text-align: center; font-weight: bold;" ;>
+                        Appointment
+                    </td>
+                </tr>
+                <?php
+                    // var_dump($AppCategory);
+                ?>
+                <tr>
+                    <td>Appointment category: </td>
+                    <td>
+                        <select id="TempAppCat" name="TempAppCat">
+                        <?php
+                            if($TbLD == 0 || $TempAppCategory == ''){
+                                echo "<option>Select</option>";
+                            }
+                            
+                            $sql = "SELECT ID, AppointmentName FROM CD_AppSubCategory WHERE ID IS NOT NULL";
+                            $stmt = $db->runMsSqlQuery($sql);
+                            while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                $AppId = trim($row['ID']);
+                                $AppName = $row['AppointmentName'];
+                                $seltebr = "";
+                                if($AppId == $TempAppCategory){
+                                    $seltebr = "selected";
+                                }
+                                echo "<option value=" . $AppId . " $seltebr>". $AppName ."</option>";
+                            }
+                        ?>
+
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding-right: 50px">Subject/Degree Appointed: </td>
+                    <td>
+                        <div id="SubAppDiv">
+                            <select id="TempSubApp" name="TempSubApp">
+                            <?php
+                                if($TbLD == 0 || $TempAppSubject == ''){
+                                    echo "<option>Select</option>";
+                                }
+                                $sql = "SELECT * FROM CD_AppSubjects WHERE ID IS NOT NULL";
+                                $stmt = $db->runMsSqlQuery($sql);
+                                while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                    $AppSubId = trim($row['ID']);
+                                    $AppSubName = $row['SubjectName'];
+                                    $seltebr = "";
+                                    // var_dump($AppSubId);
+                                    if($AppSubId == $TempAppSubject){
+                                        $seltebr = "selected";
+                                    }
+                                    echo "<option value=" . $AppSubId . " $seltebr>". $AppSubName ."</option>";
+                                }
+                            ?>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <div>
+                        <td><div style="display :none" id="Tempotherdiv">If Other Please Specify: </div></td>
+                        <td>
+                        <div style="display :none" id="inputdiv">
+                            <input type="text" name="TempotherSub" id="TempotherSub">
+                            </div>
+                        </td>
+                    </div>
+                </tr>
+                <tr>
+                    <td>Appointed Medium: </td>
+                    <td>
+                        <select id="TempMedApp" name="TempMedApp">
+                            
+                            <?php // for meium combo box
+                            if($TbLD == 0 || $MEDCode == ''){
+                                echo "<option>Select</option>";
+                            }
+                            $sql = "SELECT * FROM CD_Medium WHERE Code != ''";
+                            $stmt = $db->runMsSqlQuery($sql);
+                            while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                $MedID = trim($row['Code']);
+                                $AppMeduim = $row['Medium'];
+                                $seltebr = "";
+                                if($MedID == $TempMEDCode){
+                                    $seltebr = "selected";
+                                }
+                                echo "<option value=" . $MedID . " $seltebr>" . $AppMeduim . "</option>";
+                            }
+                            ?>
+
+                        </select>
+                    </td>
+                </tr>
+                <!-- <tr>
+                    <td><button type="button" onclick="show_otherdiv()">Other</button></td>
+                </tr> -->
+                
+                </tr>
+                <td colspan="2">
+                    <div>
+                        <input type="submit" name="TempAppFrmSubmit" id="TempAppFrmSubmit">
+                    </div>
+                </td>
+                </tr>
+                <tr>
+                    <td class="box"><input type="hidden" name="id" id="id" value="<?php echo $id ?>"></td>
+                <tr>
+            </table>
+        </form>
     </div>
 </div>
+
 <script>
-
     var Tbldata = <?php echo $TbLD; ?>;
-    console.log(Tbldata);
-    var tbl = document.getElementById("AppFrmDetails")
-    var itbl = document.getElementById("Tblrecord");
+    var TempTbldata = <?php echo $TempTbLD; ?>;
 
-    if (itbl.style.display === "block" && Tbldata==0) {
-        itbl.style.display = "none";
+    var frm = document.getElementById("AppFrmDetails")
+    var tbl = document.getElementById("Tblrecord");
+    var Tempfrm = document.getElementById("TempAppFrmDetails")
+    var Temptbl = document.getElementById("TempTblrecord");
+    // console.log(TempTbldata);
+
+    if(Tbldata == 1 ){
         tbl.style.display = "block";
+    }else{
+        tbl.style.display = "none";
+    }
+    if(TempTbldata == 1 ){
+        Temptbl.style.display = "block";
+    }else{
+        Temptbl.style.display = "none";
     }
 
-    
     function showForm(){
-        if (tbl.style.display === "none" ) {
-            tbl.style.display = "block";
+        if (frm.style.display === "none" ) {
+            frm.style.display = "block";
+            Tempfrm.style.display = "none";
         }
     }
+    function showTempForm(){
+        if (Tempfrm.style.display === "none" ) {
+            Tempfrm.style.display = "block";
+            frm.style.display = "none";
+        }
+    }
+
+
     var schType = "<?php echo $SchType; ?>";
     var i;
     if(schType == 6){
