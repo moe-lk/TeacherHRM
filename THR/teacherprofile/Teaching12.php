@@ -399,7 +399,7 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                                 if($TchGradeCode == $GradeCode2){
                                     $seltebr = "selected";
                                 }
-                                echo "<option value=" . $TchGradeCode . "$seltebr>" . $TchGrade . "</option>";
+                                echo "<option value=" . $TchGradeCode . " $seltebr>" . $TchGrade . "</option>";
                             }
                             ?>
                         </select>
@@ -458,7 +458,7 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                                 if($TchMediumCode == $Medium2){
                                     $seltebr = "selected";
                                 }
-                                echo "<option value=" . $TchMediumCode . "$seltebr>" . $TchMedium . "</option>";
+                                echo "<option value=" . $TchMediumCode . " $seltebr>" . $TchMedium . "</option>";
                             }
                             ?>
                         </select>
@@ -494,7 +494,7 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                                 if($TchGradeCode == $GradeCode3){
                                     $seltebr = "selected";
                                 }
-                                echo "<option value=" . $TchGradeCode . "$seltebr>" . $TchGrade . "</option>";
+                                echo "<option value=" . $TchGradeCode . " $seltebr>" . $TchGrade . "</option>";
                             }
                             ?>
                         </select>

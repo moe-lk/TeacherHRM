@@ -104,7 +104,7 @@ if ($pageid == 30) {
     $row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
     $LastUpdate = trim($row['LastUpdate']);
 }
-$dateNow = date("Y/m/d");
+$dateNow = date("Y-m-d");
 
 // var_dump($_REQUEST);
 $nicNO = $_REQUEST['id'];
@@ -112,7 +112,7 @@ $AppCat = $_REQUEST["AppCat"];
 $MedApp = $_REQUEST["MedApp"];
 $SubApp = $_REQUEST["SubApp"];
 $otherSub = $_REQUEST["otherSub"];
-
+$state = '0';
 $SQL1 = "SELECT TOP(1)
 *
 FROM
@@ -126,56 +126,55 @@ while ($row1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
     $SchType = Trim($row1['SchoolType']);
     // var_dump($SchType);
 }
-// var_dump($MedApp);
-if ($SubApp != 'Select') {
-    $sql = "INSERT INTO [dbo].[Temp_AppoinmentDetails]
-([NIC]
-,[AppCategory]
-,[AppSubject]
-,[Medium]
-,[SchoolType]
-,[OtherSub]
-,[RecordStatus]
-,[LastUpdate]
-,[RecordLog])
-VALUES
-('$nicNO', 
-'$AppCat', 
-'$SubApp', 
-'$MedApp', 
-'$SchType',
-NULL, 
-'0',
-'$dateNow',
-'$NICUser')";
-} else {
-    $sql = "INSERT INTO [dbo].[Temp_AppoinmentDetails]
-([NIC]
-,[AppCategory]
-,[AppSubject]
-,[Medium]
-,[SchoolType]
-,[OtherSub]
-,[RecordStatus]
-,[LastUpdate]
-,[RecordLog])
-VALUES
-('$nicNO', 
-'$AppCat', 
-NULL, 
-'$MedApp', 
-'$SchType',
-'$otherSub', 
-'0',
-'$dateNow',
-'$NICUser')";
+
+$serverName = "DESKTOP-OESJB7N\SQLEXPRESS";
+$connectionInfo = array( "Database"=>"MOENational", "UID"=>"sa", "PWD"=>"na1234");
+$conn = sqlsrv_connect( $serverName, $connectionInfo);
+if( $conn === false ) {
+    die( print_r( sqlsrv_errors(), true ));
 }
 
-$stmt = $db->runMsSqlQuery($sql);
-sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC);
+if( sqlsrv_begin_transaction($conn) === false )   
+{   
+     echo "Could not begin transaction.\n";  
+     die( print_r( sqlsrv_errors(), true));  
+}
+$sql = "INSERT INTO [dbo].[Temp_AppoinmentDetails]
+    ([NIC]
+    ,[AppCategory]
+    ,[AppSubject]
+    ,[Medium]
+    ,[SchoolType]
+    ,[OtherSub]
+    ,[RecordLog]
+    ,[RecordStatus]
+    ,[LastUpdate])
+VALUES
+(?, ?, ?, ?, ?, ?, ? ,? ,? )";
 
-// var_dump($sql);
-echo ("<script LANGUAGE='JavaScript'>
-    window.alert('Succesfully Updated');
-    window.location.href='Appoint_subj-13--$nicNO.html';
-    </script>");
+    $params = array($nicNO, $AppCat, $SubApp, $MedApp, $SchType, $otherSub, $NICUser, $state, $dateNow);
+    $stmt = sqlsrv_query( $conn, $sql, $params );
+    // var_dump($stmt);
+    if($stmt){
+        sqlsrv_commit($conn);
+        echo ("<script LANGUAGE='JavaScript'>
+        window.alert('Succesfully Updated');
+        window.location.href='teaching_subj-12--$nicNO.html';
+        </script>");
+    } else {
+        sqlsrv_rollback( $conn );
+        echo "Updates rolled back.<br />";
+        // var_dump($sql);
+        echo ("<script LANGUAGE='JavaScript'>
+        window.alert('Update Failed!, Please try again.');
+        window.location.href='teaching_subj-12--$nicNO.html';
+        </script>");
+    }
+// $stmt = $db->runMsSqlQuery($sql);
+// sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC);
+
+// // var_dump($sql);
+// echo ("<script LANGUAGE='JavaScript'>
+//     window.alert('Succesfully Updated');
+//     window.location.href='Appoint_subj-13--$nicNO.html';
+//     </script>");

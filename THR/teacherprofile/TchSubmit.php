@@ -209,14 +209,6 @@ $id = $_REQUEST["id"];
 $sqlCheck = "SELECT * FROM TeachingDetails WHERE NIC = '$nicNO' AND RecStatus = '1'";
 $TotalRows = $db->rowCount($sqlCheck);
 
-// if(!$TotalRows){
-//     $SQLU = "UPDATE [dbo].[TeachingDetails]
-//             SET [RecStatus] = '2' WHERE NIC = '$nicNO'";
-// }
-// else{
-    // var_dump($conn);
-    
-// function insertsub(){
     /* Begin transaction. */  
 if( sqlsrv_begin_transaction($conn) === false )   
 {   
@@ -271,8 +263,6 @@ if( sqlsrv_begin_transaction($conn) === false )
     // var_dump($stmt);
     if($stmt){
         sqlsrv_commit($conn);
-        // echo "Successfully Added";
-        // echo "<script>alert('Successfully Added')</script>";
         echo ("<script LANGUAGE='JavaScript'>
         window.alert('Succesfully Updated');
         window.location.href='teaching_subj-12--$nicNO.html';
@@ -285,23 +275,4 @@ if( sqlsrv_begin_transaction($conn) === false )
         window.location.href='teaching_subj-12--$nicNO.html';
         </script>");
     }
-// }
 
-// insertsub($sql,$conn,$stmt, $params,$nicNO, $SubTch1, $SubTch2, $SubTch3, $otherTch1, $otherTch2, $otherTch3, $MedTch1, $MedTch2, $MedTch3, $GradTch1, $GradTch2, $GradTch3, $otherspecial, $SchType,$NICUser,$dateNow);
-    // sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC);
-    // var_dump($sql);
-
-    // echo ("<script LANGUAGE='JavaScript'>
-    //     window.alert('Succesfully Updated');
-    //     window.location.href='teaching_subj-12--$nicNO.html';
-    //     </script>");
-// }
-
-
-
-    // // } else {
-    // //     echo ("<script LANGUAGE='JavaScript'>
-    //     window.alert('ERROR OCCURED!');
-    //     window.location.href='Location: teaching_subj-12--NIC.html';
-    //     </script>");
-// }

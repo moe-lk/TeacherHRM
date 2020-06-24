@@ -12,7 +12,7 @@ if (isset($_POST["FrmSubmit"])) {
 
         $dateU = date('Y-m-d H:i:s');
         $dateUP = date('Y-m-d');
-        $UpdateBy = "Add by $NICUser";
+        
         //teacher mast
         $RegID = $_REQUEST['RegID'];
         $IsApproved = $_REQUEST['IsApproved'];
@@ -31,7 +31,7 @@ if (isset($_POST["FrmSubmit"])) {
         ,[OtherSub]
         ,[RecordStatus]
         ,Temp_AppoinmentDetails. LastUpdate
-        ,Temp_AppoinmentDetails.RecordLog
+        ,Temp_AppoinmentDetails.RecordLog AS RecordLog
         FROM Temp_AppoinmentDetails
         INNER JOIN [TeacherMast] ON Temp_AppoinmentDetails.NIC = TeacherMast.NIC WHERE Temp_AppoinmentDetails.ID='$RegID'";
 
@@ -47,6 +47,8 @@ if (isset($_POST["FrmSubmit"])) {
         $SchoolType = $rowE['SchoolType'];
         $OtherSub = $rowE['OtherSub'];
         $RecordStatus = $rowE['RecordStatus'];
+        $UpdateBy = trim($rowE['RecordLog']);
+
         // $LastUpdate = $rowE['LastUpdate'];
         // $RecordLog = $rowE['RecordLog'];
 
@@ -483,6 +485,9 @@ WHERE RecordStatus = '0'";
                 <tr>
                     <td colspan="2" align="left" valign="top"><strong>Request By
                             <?php
+                            $UpdateBy = trim($rowE['RecordLog']);
+                            $LastUpdate = $rowE['LastUpdate']->format('Y-m-d');
+                            // var_dump($UpdateBy);
                             $sqlTName = "SELECT SurnameWithInitials FROM TeacherMast where NIC='$UpdateBy'";
                             $stmtTn = $db->runMsSqlQuery($sqlTName);
                             $rowTn = sqlsrv_fetch_array($stmtTn, SQLSRV_FETCH_ASSOC);

@@ -1,7 +1,7 @@
 <?php
 
 //$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-$conn = new PDO("sqlsrv:Server= DESKTOP-OESJB7N\SQLEXPRESS;Database=MOENational", "sa", "na1234");
+include "connection.php";
 
 
 $AppCatID = $_POST["AppCatID"];

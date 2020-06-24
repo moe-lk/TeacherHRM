@@ -164,6 +164,7 @@ if (isset($_POST["FrmSubmit"])) {
             audit_trail($NIC, $_SESSION["NIC"], 'approval\teachingSubjects.php', 'Update', 'TeachingDetails', 'Approve Teaching details.');
 
             $msg .= "Your Update was successfully submitted.<br>";
+            // var_dump($sqlupdate);
         }
     } 
     else {
@@ -211,7 +212,7 @@ WHERE Temp_TeachingDetails.ID = '$id'";
     // $PermResiID = trim($rowE['PermResiID']);
     // $CurrResID = trim($rowE['CurrResID']);
     $UpdateBy = trim($rowE['RecordLog']);
-    $LastUpdateE = $rowE['LastUpdate'];
+    $LastUpdateE = $rowE['LastUpdate']->format('Y-m-d');
     $TchSubject1E = $rowE["TchSubject1"];
     $TchSubject2E = $rowE["TchSubject2"];
     $TchSubject3E = $rowE["TchSubject3"];
@@ -833,7 +834,7 @@ WHERE Temp_TeachingDetails.RecStatus = '0'";
                             $rowTn = sqlsrv_fetch_array($stmtTn, SQLSRV_FETCH_ASSOC);
                             $SurnameWithInitialsU = $rowTn['SurnameWithInitials'];
                             ?>
-                        </strong> <?php echo $SurnameWithInitialsU ?> on <?php echo $LastUpdate ?></td>
+                        </strong> <?php echo $SurnameWithInitialsU ?> on <?php echo $LastUpdateE ?></td>
                 </tr>
                 <tr>
                     <td valign="top">&nbsp;</td>
