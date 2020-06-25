@@ -760,7 +760,7 @@ while($TemprowTBL = sqlsrv_fetch_array($TempstmtTBL, SQLSRV_FETCH_ASSOC)){
         </form>
 <!-- -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------         -->
 <?php // var_dump($TempGradeCode1) ?>
-<form method="POST" name="TempfrmTchDetails" id="TempfrmTchDetails" action="TchSubmit.php" style="display:none; padding-top: 50px;">
+<form method="POST" name="TempfrmTchDetails" id="TempfrmTchDetails" action="TempTchSubmit.php" style="display:none; padding-top: 50px;">
             <table>
                 <tr>
                     <td colspan="2" style="text-align: center; font-weight: bold;" class="box">
