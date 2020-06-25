@@ -121,7 +121,7 @@ if (isset($_POST["FrmSubmit"])) {
 
             $sqlTempUpdate = "UPDATE [dbo].[Temp_TeachingDetails]
                                 SET [RecStatus] = '1'
-                                WHERE NIC = '$NIC'";
+                                WHERE Temp_TeachingDetails.ID = '$RegID'";
             
             $db->runMsSqlQueryInsert($sqlTempUpdate);
 
@@ -156,7 +156,7 @@ if (isset($_POST["FrmSubmit"])) {
           
           $sqlTempUpdate = "UPDATE [dbo].[Temp_TeachingDetails]
             SET [RecStatus] = '1'
-            WHERE Temp_TeachingDetails.NIC = '$NIC'";
+            WHERE Temp_TeachingDetails.ID = '$RegID'";
             // var_dump($sqlTempUpdate);
             $db->runMsSqlQueryInsert($sqlTempUpdate);
 
@@ -168,7 +168,7 @@ if (isset($_POST["FrmSubmit"])) {
         }
     } 
     else {
-        $sqlreject = "DELETE FROM [dbo].[Temp_TeachingDetails] WHERE NIC = '$NIC'";
+        $sqlreject = "DELETE FROM [dbo].[Temp_TeachingDetails] WHERE Temp_TeachingDetails.ID = '$RegID'";
         $db->runMsSqlQueryInsert($sqlreject);
         
         $msg .= "Your Reject was successffully submitted.<br>";

@@ -92,7 +92,7 @@ if (isset($_POST["FrmSubmit"])) {
 
                 $sqlTempUpdate = "UPDATE [dbo].[Temp_AppoinmentDetails]
                                 SET [RecordStatus] = '1'
-                                WHERE NIC = '$NIC'";
+                                WHERE Temp_AppoinmentDetails.ID = '$RegID'";
             
                 $db->runMsSqlQueryInsert($sqlTempUpdate);
             
@@ -118,7 +118,7 @@ if (isset($_POST["FrmSubmit"])) {
 
             $sqlTempUpdate = "UPDATE [dbo].[Temp_AppoinmentDetails]
                                 SET [RecordStatus] = '1'
-                                WHERE NIC = '$NIC'";
+                                WHERE Temp_AppoinmentDetails.ID = '$RegID'";
             $db->runMsSqlQueryInsert($sqlTempUpdate);
             // var_dump($sqlTempUpdate);
             audit_trail($NIC, $_SESSION["NIC"], 'approval\appointmentSubjects.php', 'Update', 'AppoinmentDetails', 'Approve appointment info.');
@@ -128,7 +128,7 @@ if (isset($_POST["FrmSubmit"])) {
         }
     } else {
 
-        $sqlreject = "DELETE FROM [dbo].[Temp_AppoinmentDetails] WHERE NIC = '$NIC'";
+        $sqlreject = "DELETE FROM [dbo].[Temp_AppoinmentDetails] WHERE Temp_AppoinmentDetails.ID = '$RegID'";
         // $sqlcomment = "UPDATE [dbo].[Temp_AppoinmentDetails] SET ApproveComment = '$ApproveComment' WHERE NIC = '$NIC'";
         $db->runMsSqlQueryInsert($sqlreject);
         
