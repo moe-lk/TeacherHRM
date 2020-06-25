@@ -384,7 +384,7 @@ VALUES
                                     <tr>
                                         <td width="30%" align="left" valign="top">NIC <span class="form_error_sched">*</span> </td>
                                         <td width="3%" align="left" valign="top"><strong>:</strong></td>
-                                        <td width="67%" align="left" valign="top"><input name="NIC" type="text" class="input2_n" id="NIC" value="" tabindex="1"/>
+                                        <td width="67%" align="left" valign="top"><input name="NIC" type="text" class="input2_n" id="NIC" value="" tabindex="1" onchange="CheckNIC()"/>
                                             <input type="hidden" name="perAddStatus" value="<?php echo $perAddStatus ?>" />
                                             <input type="hidden" name="curAddStatus" value="<?php echo $curAddStatus ?>" />
                                             <input type="hidden" name="pMastStatus" value="<?php echo $pMastStatus ?>" />
@@ -1252,10 +1252,66 @@ VALUES
 
         </form>
         <script>
-            console.log(AppDateF);
+            // console.log(AppDateF);
         </script>
 
         <script>
+        // $(document).ready(function () {
+        //     $("#NIC").change(function () {
+        //         var NicNo = $(this).val();
+        //         alert(NicNo.length);
+        //     });
+        // });
+
+        document.getElementById("NIC").addEventListener("change",CheckNIC);  
+                                         
+        function CheckNIC(){
+            var NicNo = document.getElementById("NIC").value;
+            // alert(NicNo.charAt(1)*2);
+            if(NicNo != "") {
+                if(NicNo.length < 10){
+                    alert("Please Enter a valid NIC");
+                    document.getElementById("NIC").value = "";
+                }else if(NicNo.legth == 10){
+                    alert("Please Enter a valid NIC");
+                    document.getElementById("NIC").value = "";
+                }else if(NicNo.length > 12){
+                    alert("Please Enter a valid NIC");
+                    document.getElementById("NIC").value = "";
+                }else{
+                    if(NicNo.length == 10){
+                        var res = 11 - (NicNo.charAt(0)*3 + NicNo.charAt(1)*2 + NicNo.charAt(2)*7 + NicNo.charAt(3)*6 + NicNo.charAt(4)*5 + NicNo.charAt(5)*4 + NicNo.charAt(6)*3 + NicNo.charAt(7)*2) % 11;
+
+                        if(res == 11){
+                            res = 0;
+                        }else if(res == 10){
+                            res = 0;
+                        }
+                        if((res == NicNo.charAt(8)) && ((NicNo.charAt(9) == 'v') || (NicNo.charAt(9) == 'x') || (NicNo.charAt(9) == 'V') || (NicNo.charAt(9) == 'X'))){
+                            console.log("1");
+                        }else{
+                            alert("Please Enter a valid NIC");
+                            document.getElementById("NIC").value = "";
+                        }
+                        
+                    }else if(NicNo.length == 12){
+                        var res = 11 - (NicNo.charAt(0)*8 + NicNo.charAt(1)*4 + NicNo.charAt(2)*3 + NicNo.charAt(3)*2 + NicNo.charAt(4)*7 + NicNo.charAt(5)*6 + NicNo.charAt(6)*5 + NicNo.charAt(7)*8 + NicNo.charAt(8)*4 + NicNo.charAt(9)*3 + NicNo.charAt(10)*2) % 11;
+
+                        if(res == 11){
+                            res = 0;
+                        }else if(res == 10){
+                            res = 0;
+                        }
+                        if(res == NicNo.charAt(11)){
+                            console.log("1");
+                        }else{
+                            alert("Please Enter a valid NIC");
+                            document.getElementById("NIC").value = "";
+                        }
+                    }
+                }                    
+            } 
+        }
 
             $("#frmSave").submit(function (event) {
                 //alert('hi');
@@ -1584,7 +1640,7 @@ VALUES
                 if (e.which == 13) {
                     e.preventDefault();
                     var $next = $('[tabIndex=' + (+this.tabIndex + 1) + ']');
-                    console.log($next.length);
+                    // console.log($next.length);
                     if (!$next.length) {
                         $next = $('[tabIndex=1]');
                     }

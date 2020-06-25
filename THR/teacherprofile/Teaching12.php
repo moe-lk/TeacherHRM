@@ -345,7 +345,7 @@ while($TemprowTBL = sqlsrv_fetch_array($TempstmtTBL, SQLSRV_FETCH_ASSOC)){
                             echo "<td style='padding: 5px;'>".$TchSubject3."-".$Subj3."</td>";
                             echo "<td style='padding: 5px;'>".$Medium3."-".$Med3."</td>";
                             echo "<td style='padding: 5px;'>".$OtherSpecial."-".$Other."</td>";
-                            echo "<td style='padding: 5px;' style='text-align:center'><input type='button' value='Edit' onclick='showForm()'></td>";
+                            echo "<td style='padding: 5px;' style='text-align:center'><input type='button' id='btn-frm' value='Edit' onclick='showForm()'></td>";
                         // } 
                     // var_dump($GradeCode3);    // echo "<td>&nbsp</td>";
 
@@ -356,7 +356,7 @@ while($TemprowTBL = sqlsrv_fetch_array($TempstmtTBL, SQLSRV_FETCH_ASSOC)){
             </table>
 <!-- -------------------------------------------------------------------------------------------------------------------------------------------------------------             -->
             
-            <table name="TempTblrecord" id="TempTblrecord" border = "1px" style="width:100%; display: block; background-color:yellow;">
+            <table name="TempTblrecord" id="TempTblrecord" border = "1px" style="width:100%; display: block; background-color:#FCCDD5;">
                 <tr id="headtbl">
                     <td colspan="3" style="padding: 5px; padding-left: 10px; padding-right: 10px;">
                         Hightest number of teaching periods
@@ -1120,7 +1120,7 @@ while($TemprowTBL = sqlsrv_fetch_array($TempstmtTBL, SQLSRV_FETCH_ASSOC)){
     var Tempfrm = document.getElementById("TempfrmTchDetails")
     var Temptbl = document.getElementById("TempTblrecord");
     // console.log(itbl.style.display)
-    
+    var btn = document.getElementById("btn-frm");
 
     if(Tbldata == 1 ){
         tbl.style.display = "block";
@@ -1129,8 +1129,10 @@ while($TemprowTBL = sqlsrv_fetch_array($TempstmtTBL, SQLSRV_FETCH_ASSOC)){
     }
     if(TempTbldata == 1 ){
         Temptbl.style.display = "block";
+        btn.disabled = true;
     }else{
         Temptbl.style.display = "none";
+        btn.style.display = "block";
     }
 
     function showForm(){

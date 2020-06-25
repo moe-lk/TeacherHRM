@@ -204,12 +204,12 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                         echo "<td style='padding: 5px;'>".$AppCategory." - ".$AppointmentName."</td>";
                         echo "<td style='padding: 5px;'>".$AppSubject." - ".$SubjectName."</td>";
                         echo "<td style='padding: 5px;'>".$MEDCode." - ".$Medium."</td>";
-                        echo "<td style='text-align:center'><input type='button' value='Edit' onclick='showForm()'></td>";
+                        echo "<td style='text-align:center'><input type='button' id='btn-frm' value='Edit' onclick='showForm()'></td>";
                 ?>
                 </tr>
             </table>
 
-            <table name="TempTblrecord" id="TempTblrecord" border = "1px" style="width:100%; display: block; background-color:yellow;">
+            <table name="TempTblrecord" id="TempTblrecord" border = "1px" style="width:100%; display: block; background-color:#FCCDD5;">
                 <tr id="headtbl">
                     <td style="padding: 5px; padding-left: 10px; padding-right: 150px;">
                         Appointment Category
@@ -284,6 +284,7 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                 <?php
                     // var_dump($AppCategory);
                 ?>
+                
                 <tr>
                     <td>Appointment category: </td>
                     <td>
@@ -511,6 +512,7 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
     var Tempfrm = document.getElementById("TempAppFrmDetails")
     var Temptbl = document.getElementById("TempTblrecord");
     // console.log(TempTbldata);
+    var btn = document.getElementById("btn-frm");
 
     if(Tbldata == 1 ){
         tbl.style.display = "block";
@@ -519,8 +521,11 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
     }
     if(TempTbldata == 1 ){
         Temptbl.style.display = "block";
+        btn.disabled = true;
+
     }else{
         Temptbl.style.display = "none";
+        btn.style.display = "block";
     }
 
     function showForm(){
