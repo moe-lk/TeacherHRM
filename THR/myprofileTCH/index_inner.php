@@ -329,7 +329,8 @@ if ($pageid == 9) {
                                         <div class="productsAreaRight">
                                             <ul id="menu" class="menu">
                                                 <?php
-                                                // ParentID "1" is for Administrator 
+                                                // ParentID "1" is for Administrator
+                                                // var_dump($AccessRoleID);  
                                                 $sqlMChild = "SELECT
 TG_DynMenu.ID,
 TG_DynMenu.Icon,
@@ -348,11 +349,12 @@ TG_DynMenu
 INNER JOIN TG_Privilage ON TG_DynMenu.ID = TG_Privilage.FormID
 WHERE
 dbo.TG_Privilage.AccessRoleID = $AccessRoleID AND
-dbo.TG_DynMenu.ParentID = 4 AND
+dbo.TG_DynMenu.ParentID = 15 AND
 dbo.TG_DynMenu.ShowMenu = 1";
                                                 $stCh = $db->runMsSqlQuery($sqlMChild);
                                                 $count = 0;
                                                 $arrPageID = array();
+                                                
                                                 while ($rowC = sqlsrv_fetch_array($stCh, SQLSRV_FETCH_ASSOC)) {
                                                     $active_class = "";
                                                     $count++;
@@ -367,13 +369,13 @@ dbo.TG_DynMenu.ShowMenu = 1";
                                                     $show_menu = $rowC['ShowMenu'];
 
                                                     $arrPageID[] = array($rowC['PageID'], $rowC['PHPPage']);
-
+                                                    // var_dump($arrPageID);
                                                     $url = str_replace("NIC",$id,$url);
 
                                                     if (str_replace("-tab", "", basename($_SERVER['REQUEST_URI'])) == $url) {
                                                         $active_class = "active";
                                                     } else {
-                                                        if ($count == 1 && basename($_SERVER['REQUEST_URI']) == "myprofile") {
+                                                        if ($count == 1 && basename($_SERVER['REQUEST_URI']) == "myprofileTCH") {
                                                             $active_class = "active";
                                                         }
                                                     }
@@ -400,7 +402,7 @@ dbo.TG_DynMenu.ShowMenu = 1";
                                     <?php
                                     for ($index = 0; $index < count($arrPageID); $index++) {
                                         if ($pageid == $arrPageID[$index][0] || ($index == 0 && $pageid==0)) {
-                                          //  echo $pageid . '----' . $arrPageID[$index][1];
+                                        //    echo $pageid . '----' . $arrPageID[$index][1];
                                             include $arrPageID[$index][1];
                                         }
                                     }

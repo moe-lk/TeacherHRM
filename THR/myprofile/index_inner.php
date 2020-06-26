@@ -329,7 +329,8 @@ if ($pageid == 9) {
                                         <div class="productsAreaRight">
                                             <ul id="menu" class="menu">
                                                 <?php
-                                                // ParentID "1" is for Administrator 
+                                                // ParentID "1" is for Administrator
+                                                // var_dump($AccessRoleID); 
                                                 $sqlMChild = "SELECT
 TG_DynMenu.ID,
 TG_DynMenu.Icon,
@@ -400,7 +401,7 @@ dbo.TG_DynMenu.ShowMenu = 1";
                                     <?php
                                     for ($index = 0; $index < count($arrPageID); $index++) {
                                         if ($pageid == $arrPageID[$index][0] || ($index == 0 && $pageid==0)) {
-                                          //  echo $pageid . '----' . $arrPageID[$index][1];
+                                        //    echo $pageid . '----' . $arrPageID[$index][1];
                                             include $arrPageID[$index][1];
                                         }
                                     }

@@ -10,7 +10,9 @@ if(isset($_POST["FrmSubmit"])){
 	$passwordMD5=md5($passwordCur);
 	
 	$passwordNew=$_REQUEST['passwordNew'];
-	$passwordNew2=$_REQUEST['passwordNew2'];
+  $passwordNew2=$_REQUEST['passwordNew2'];
+  // var_dump($passwordNew);
+  // var_dump($passwordNew2);
 	
 	$LastUpdate=date('Y-m-d H:i:s');
 	$hide="N";
@@ -18,7 +20,9 @@ if(isset($_POST["FrmSubmit"])){
 	$countSql="SELECT * FROM Passwords where NICNo='$NIC' and CurPassword='$passwordMD5'";
 	$isAvailable=$db->rowAvailable($countSql);
 	if($isAvailable==1){
-		if($passwordNew!=$passwordNew2  && ($passwordNew2!='')){
+    if($passwordNew == '' || $passwordNew2 == ''){
+      $msg="Please fill all the fields.";
+    }else	if($passwordNew != $passwordNew2  && ($passwordNew != '') && ($passwordNew2 != '')){
 			$msg="Re-typed password mismatch. Please try again.";
 		}else{
 			$passwordMD5New=md5($passwordNew);

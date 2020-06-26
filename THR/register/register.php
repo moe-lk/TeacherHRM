@@ -338,7 +338,7 @@ VALUES
         <div class="mcib_middleReg"><form method="post" action="" name="frmSrch" id="frmSrch"><table width="100%" cellspacing="1" cellpadding="1">
                     <tr>
                         <td width="19%">Check Availability</td>
-                        <td width="27%"><input name="NICSearch" type="text" class="input2_n" id="NICSearch" value="" placeholder="NIC"/></td>
+                        <td width="27%"><input name="NICSearch" type="text" class="input2_n" id="NICSearch" value="" placeholder="NIC" /></td>
                         <td width="11%"><div style="margin-top:5px;"><a onClick="Javascript:show_available('availabaleS', document.frmSrch.NICSearch.value, '');"><img src="../cms/images/searchN.png" width="84" height="26" /></a></div></td>
                         <td width="43%"><div id="txt_available" style="font-weight:bold;"></div></td>
                     </tr>
@@ -1272,7 +1272,7 @@ VALUES
                 if(NicNo.length < 10){
                     alert("Please Enter a valid NIC");
                     document.getElementById("NIC").value = "";
-                }else if(NicNo.legth == 10){
+                }else if(NicNo.legth == 11){
                     alert("Please Enter a valid NIC");
                     document.getElementById("NIC").value = "";
                 }else if(NicNo.length > 12){

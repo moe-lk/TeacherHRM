@@ -170,7 +170,11 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
 </style>
 <div class="main_content_inner_block">
     <div class="mcib_middle1">
-        <?php // var_dump($SchType); 
+        <?php 
+            // var_dump($id); 
+            // $newID = "19". $id[0] . $id[1]. $id[2]. $id[3]. $id[4]."0". $id[5] .$id[6]. $id[7]. $id[8];
+            // var_dump($newID);
+            
         ?>
         <!-- <div> -->
             <table name="Tblrecord" id="Tblrecord" border = "1px" style="width:100%; display: block;">
