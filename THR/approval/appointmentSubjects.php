@@ -48,7 +48,7 @@ if (isset($_POST["FrmSubmit"])) {
         $OtherSub = $rowE['OtherSub'];
         $RecordStatus = $rowE['RecordStatus'];
         $UpdateBy = trim($rowE['RecordLog']);
-
+        $status = '1';
         // $LastUpdate = $rowE['LastUpdate'];
         // $RecordLog = $rowE['RecordLog'];
 
@@ -56,14 +56,19 @@ if (isset($_POST["FrmSubmit"])) {
     if ($IsApproved == 'Y') {
         $RecordLog = "Approved by $NICUser";
         $ApprovedDate = date("Y-m-d H:i:s");
-        // var_dump($ApprovedDate);
-        // var_dump($RecordLog);
+
+        include "../connectionNEW.php";
 
         $SQLTBL = "SELECT * FROM [MOENational].[dbo].[AppoinmentDetails] WHERE NIC = '$NIC' AND RecordStatus = '1'";
         $TotalRows = $db->rowCount($SQLTBL);
 
         // var_dump($TotalRows);
         if (!$TotalRows){
+            if( sqlsrv_begin_transaction($conn) === false )   
+            {   
+                echo "Could not begin transaction.\n";  
+                die( print_r( sqlsrv_errors(), true));  
+            }
             $queryMainInsert = "INSERT INTO [dbo].[AppoinmentDetails]
             ([NIC]
             ,[AppCategory]
@@ -76,25 +81,36 @@ if (isset($_POST["FrmSubmit"])) {
             ,[ApprovedDate]
             ,[ApproveComment])
             VALUES
-            ('$NIC' 
-            , '$AppCategory'
-            , '$AppSubject' 
-            , '$Medium'
-            , '$SchoolType'
-            , '$OtherSub'
-            , '$RecordLog'
-            , '1'
-            , '$ApprovedDate'
-            ,'$ApproveComment')";
+            (?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
 
-            $db->runMsSqlQueryInsert($queryMainInsert);
+            // $db->runMsSqlQueryInsert($queryMainInsert);
+            $params1 = array($NIC , $AppCategory, $AppSubject , $Medium, $SchoolType, $OtherSub, $RecordLog, $status, $ApprovedDate, $ApproveComment);
+            $stmt1 = sqlsrv_query( $conn, $queryMainInsert, $params1 );
 
-
-                $sqlTempUpdate = "UPDATE [dbo].[Temp_AppoinmentDetails]
+            $sqlTempUpdate = "UPDATE [dbo].[Temp_AppoinmentDetails]
                                 SET [RecordStatus] = '1'
-                                WHERE Temp_AppoinmentDetails.ID = '$RegID'";
-            
-                $db->runMsSqlQueryInsert($sqlTempUpdate);
+                                WHERE Temp_AppoinmentDetails.ID = ?";
+            $params2 = array($RegID);
+            // $db->runMsSqlQueryInsert($sqlTempUpdate);
+            $stmt2 = sqlsrv_query( $conn, $sqlTempUpdate, $params2 );
+    
+
+    // var_dump($stmt);
+    if($stmt1 && $stmt2){
+        sqlsrv_commit($conn);
+        echo ("<script LANGUAGE='JavaScript'>
+        window.alert('Succesfully Updated');
+        window.location.href='teaching_subj-12--$nicNO.html';
+        </script>");
+    } else {
+        sqlsrv_rollback( $conn );
+        echo "Updates rolled back.<br />";
+        // var_dump($sql);
+        echo ("<script LANGUAGE='JavaScript'>
+        window.alert('Update Failed!, Please try again.');
+        window.location.href='teaching_subj-12--$nicNO.html';
+        </script>");
+    }
             
                 // $sqlcomment = "UPDATE [dbo].[AppoinmentDetails] SET ApproveComment = '$ApproveComment' WHERE NIC = '$NIC'";
                 // $db->runMsSqlQueryInsert($sqlcomment);
@@ -103,24 +119,45 @@ if (isset($_POST["FrmSubmit"])) {
 
                 $msg .= "Your Approve was successfully submitted.<br>";
         }else{
+
             $qryupdate = "UPDATE [dbo].[AppoinmentDetails]
                         SET 
-                        [AppCategory] = '$AppCategory'
-                        ,[AppSubject] = '$AppSubject'
-                        ,[Medium] = '$Medium'
-                        ,[OtherSub] = '$OtherSub'
-                        ,[ApprovedBy] = '$RecordLog'
-                        ,[RecordStatus] = '1'
-                        ,[ApprovedDate] = '$ApprovedDate'
-                        ,[ApproveComment] = '$ApproveComment'
-                        WHERE NIC = '$NIC'";
-            $db->runMsSqlQueryInsert($qryupdate);
-
+                        [AppCategory] = ?
+                        ,[AppSubject] = ?
+                        ,[Medium] = ?
+                        ,[OtherSub] = ?
+                        ,[ApprovedBy] = ?
+                        ,[RecordStatus] = ?
+                        ,[ApprovedDate] = ?
+                        ,[ApproveComment] = 
+                        WHERE NIC = ?";
+            // $db->runMsSqlQueryInsert($qryupdate);
+            $params1 = array($AppCategory, $AppSubject, $Medium, $OtherSub, $RecordLog, $status, $ApprovedDate, $ApproveComment, $NIC);
+            $stmt1 = sqlsrv_query( $conn, $qryupdate, $params1 );
+            
             $sqlTempUpdate = "UPDATE [dbo].[Temp_AppoinmentDetails]
                                 SET [RecordStatus] = '1'
-                                WHERE Temp_AppoinmentDetails.ID = '$RegID'";
-            $db->runMsSqlQueryInsert($sqlTempUpdate);
+                                WHERE Temp_AppoinmentDetails.ID = ?";
+            // $db->runMsSqlQueryInsert($sqlTempUpdate);
+            $params2 = array($RegID);
+            $stmt2 = sqlsrv_query( $conn, $sqlTempUpdate, $params2 );
             // var_dump($sqlTempUpdate);
+            if($stmt1 && $stmt2){
+                sqlsrv_commit($conn);
+                echo ("<script LANGUAGE='JavaScript'>
+                window.alert('Succesfully Updated');
+                window.location.href='teaching_subj-12--$nicNO.html';
+                </script>");
+            } else {
+                sqlsrv_rollback( $conn );
+                echo "Updates rolled back.<br />";
+                // var_dump($sql);
+                echo ("<script LANGUAGE='JavaScript'>
+                window.alert('Update Failed!, Please try again.');
+                window.location.href='teaching_subj-12--$nicNO.html';
+                </script>");
+            }
+            
             audit_trail($NIC, $_SESSION["NIC"], 'approval\appointmentSubjects.php', 'Update', 'AppoinmentDetails', 'Approve appointment info.');
 
             $msg .= "Your Update was successfully submitted.<br>";

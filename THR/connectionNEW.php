@@ -1,0 +1,9 @@
+<?php
+$serverName = "DESKTOP-OESJB7N\SQLEXPRESS";
+$connectionInfo = array( "Database"=>"MOENational", "UID"=>"sa", "PWD"=>"na1234");
+$conn = sqlsrv_connect( $serverName, $connectionInfo);
+if( $conn === false ) {
+    die( print_r( sqlsrv_errors(), true ));
+}
+
+?>

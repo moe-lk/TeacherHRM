@@ -127,12 +127,7 @@ while ($row1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
     // var_dump($SchType);
 }
 
-$serverName = "DESKTOP-OESJB7N\SQLEXPRESS";
-$connectionInfo = array( "Database"=>"MOENational", "UID"=>"sa", "PWD"=>"na1234");
-$conn = sqlsrv_connect( $serverName, $connectionInfo);
-if( $conn === false ) {
-    die( print_r( sqlsrv_errors(), true ));
-}
+include "../connectionNEW.php";
 
 if( sqlsrv_begin_transaction($conn) === false )   
 {   

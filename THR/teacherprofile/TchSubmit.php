@@ -107,24 +107,9 @@ if ($pageid == 30) {
 }
 $dateNow = date("Y/m/d");
 
-$serverName = "DESKTOP-OESJB7N\SQLEXPRESS";
-$connectionInfo = array( "Database"=>"MOENational", "UID"=>"sa", "PWD"=>"na1234");
-$conn = sqlsrv_connect( $serverName, $connectionInfo);
-if( $conn === false ) {
-    die( print_r( sqlsrv_errors(), true ));
-}
-
-
-
+include "../connectionNEW.php";
 // var_dump($_REQUEST);
 $nicNO = $_REQUEST['id'];
-
-
-// $MedTch2 = $_REQUEST["MedTch2"];
-// $MedTch3 = $_REQUEST["MedTch3"];
-// $GradTch1 = $_REQUEST["GradTch1"];
-// $GradTch2 = $_REQUEST["GradTch2"];
-// $GradTch3 = $_REQUEST["GradTch3"];
 
 if ($_REQUEST["MedTch1"] != 'Select') {
     $MedTch1 = $_REQUEST["MedTch1"];

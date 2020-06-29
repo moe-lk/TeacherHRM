@@ -58,12 +58,13 @@ if (isset($_POST["FrmSubmit"])) {
     $GradeCode3 = $rowE['GradeCode3'];
     $OtherSpecial = $rowE['OtherSpecial'];
     $SchoolType = $rowE['SchoolType'];
-
+    $status = '1';
     $TeacherMastID = trim($rowE['TeacherMastID']);
     $PermResiID = trim($rowE['PermResiID']);
     $CurrResID = trim($rowE['CurrResID']);
 
     if ($IsApproved == 'Y') {
+        include "../connectionNEW.php";
 
         $RecordLog = "Approved by $NICUser";
         $ApprovedDate = date("Y-m-d H:i:s");
@@ -97,34 +98,33 @@ if (isset($_POST["FrmSubmit"])) {
             ,[ApprovedDate]
             ,[ApproveComment])
              VALUES
-             ('$NIC'
-             ,'$TchSubject1'
-             ,'$TchSubject2'
-             ,'$TchSubject3'
-             ,'$Other1'
-             ,'$Other2'
-             ,'$Other3'
-             ,'$Medium1'
-             ,'$Medium2'
-             ,'$Medium3'
-             ,'$GradeCode1'
-             ,'$GradeCode2'
-             ,'$GradeCode3'
-             ,'$OtherSpecial'
-             ,'$SchoolType'
-             ,'1'
-             ,'$RecordLog'
-             ,'$ApprovedDate'
-             ,'$ApproveComment')";
+            (? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,?)";
 
-            $db->runMsSqlQueryInsert($queryMainInsert);
+            // $db->runMsSqlQueryInsert($queryMainInsert);
+            $params1 = array($NIC ,$TchSubject1 ,$TchSubject2 ,$TchSubject3 ,$Other1 ,$Other2 ,$Other3 ,$Medium1 ,$Medium2 ,$Medium3 ,$GradeCode1 ,$GradeCode2 ,$GradeCode3 ,$OtherSpecial ,$SchoolType , $status ,$RecordLog ,$ApprovedDate ,$ApproveComment);
+            $stmt1 = sqlsrv_query( $conn, $queryMainInsert, $params1 );
 
             $sqlTempUpdate = "UPDATE [dbo].[Temp_TeachingDetails]
                                 SET [RecStatus] = '1'
-                                WHERE Temp_TeachingDetails.ID = '$RegID'";
-            
-            $db->runMsSqlQueryInsert($sqlTempUpdate);
-
+                                WHERE Temp_TeachingDetails.ID = ?";
+            $params2 = array($RegID);
+            $stmt2 = sqlsrv_query( $conn, $sqlTempUpdate, $params2 );
+            // $db->runMsSqlQueryInsert($sqlTempUpdate);
+            if($stmt1 && $stmt2){
+                sqlsrv_commit($conn);
+                echo ("<script LANGUAGE='JavaScript'>
+                window.alert('Succesfully Updated');
+                window.location.href='teaching_subj-12--$nicNO.html';
+                </script>");
+            } else {
+                sqlsrv_rollback( $conn );
+                echo "Updates rolled back.<br />";
+                // var_dump($sql);
+                echo ("<script LANGUAGE='JavaScript'>
+                window.alert('Update Failed!, Please try again.');
+                window.location.href='teaching_subj-12--$nicNO.html';
+                </script>");
+            }
             
 
             audit_trail($NIC, $_SESSION["NIC"], 'approval\teachingSubjects.php', 'Insert', 'TeachingDetails', 'Approve Teaching details.');
@@ -133,33 +133,52 @@ if (isset($_POST["FrmSubmit"])) {
         
         }else{
             $sqlupdate = "UPDATE [dbo].[TeachingDetails]
-            SET [TchSubject1] = '$TchSubject1'
-               ,[TchSubject2] = '$TchSubject2'
-               ,[TchSubject3] = '$TchSubject3'
-               ,[Other1] = '$Other1'
-               ,[Other2] = '$Other2'
-               ,[Other3] = '$Other3'
-               ,[Medium1] = '$Medium1'
-               ,[Medium2] = '$Medium2'
-               ,[Medium3] = '$Medium3'
-               ,[GradeCode1] = '$GradeCode1'
-               ,[GradeCode2] = '$GradeCode2'
-               ,[GradeCode3] = '$GradeCode3'
-               ,[OtherSpecial] = '$OtherSpecial'
-               ,[RecStatus] = '1'
-               ,[ApprovedBy] = '$RecordLog'
-               ,[ApprovedDate] = '$ApprovedDate'
-               ,[ApproveComment] = '$ApproveComment'
-          WHERE NIC = '$NIC'";
-          $db->runMsSqlQueryInsert($sqlupdate);
+            SET [TchSubject1] = ?
+               ,[TchSubject2] = ?
+               ,[TchSubject3] = ?
+               ,[Other1] = ?
+               ,[Other2] = ?
+               ,[Other3] = ?
+               ,[Medium1] = ?
+               ,[Medium2] = ?
+               ,[Medium3] = ?
+               ,[GradeCode1] = ?
+               ,[GradeCode2] = ?
+               ,[GradeCode3] = ?
+               ,[OtherSpecial] = ?
+               ,[SchoolType] = ?
+               ,[RecStatus] = ?
+               ,[ApprovedBy] = ?
+               ,[ApprovedDate] = ?
+               ,[ApproveComment] = ?
+          WHERE NIC = ?";
+        //   $db->runMsSqlQueryInsert($sqlupdate);
+        $params1 = array($TchSubject1 ,$TchSubject2 ,$TchSubject3 ,$Other1 ,$Other2 ,$Other3 ,$Medium1 ,$Medium2 ,$Medium3 ,$GradeCode1 ,$GradeCode2 ,$GradeCode3 ,$OtherSpecial ,$SchoolType , $status ,$RecordLog ,$ApprovedDate ,$ApproveComment,$NIC );
+        $stmt1 = sqlsrv_query( $conn, $sqlupdate, $params1 );
 
-          
-          $sqlTempUpdate = "UPDATE [dbo].[Temp_TeachingDetails]
+        $sqlTempUpdate = "UPDATE [dbo].[Temp_TeachingDetails]
             SET [RecStatus] = '1'
             WHERE Temp_TeachingDetails.ID = '$RegID'";
             // var_dump($sqlTempUpdate);
-            $db->runMsSqlQueryInsert($sqlTempUpdate);
+            // $db->runMsSqlQueryInsert($sqlTempUpdate);
+        $params2 = array($RegID);
+        $stmt2 = sqlsrv_query( $conn, $sqlTempUpdate, $params2 );
 
+        if($stmt1 && $stmt2){
+            sqlsrv_commit($conn);
+            echo ("<script LANGUAGE='JavaScript'>
+            window.alert('Succesfully Updated');
+            window.location.href='teaching_subj-12--$nicNO.html';
+            </script>");
+        } else {
+            sqlsrv_rollback( $conn );
+            echo "Updates rolled back.<br />";
+            // var_dump($sql);
+            echo ("<script LANGUAGE='JavaScript'>
+            window.alert('Update Failed!, Please try again.');
+            window.location.href='teaching_subj-12--$nicNO.html';
+            </script>");
+        }
 
             audit_trail($NIC, $_SESSION["NIC"], 'approval\teachingSubjects.php', 'Update', 'TeachingDetails', 'Approve Teaching details.');
 
