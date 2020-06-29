@@ -71,7 +71,8 @@ if (isset($_POST["FrmSubmit"])) {
     $EthnicityCode = $_REQUEST['EthnicityCode'];
     $GenderCode = $_REQUEST['GenderCode'];
     $ReligionCode = $_REQUEST['ReligionCode'];
-
+    $WnopNo = $_REQUEST['WnopNo'];
+    $RegNo = $_REQUEST['RegNo'];
     //address history
     $Address = $_REQUEST['Address'];
     $DISTCode = $_REQUEST['DISTCode'];
@@ -256,6 +257,8 @@ if (isset($_POST["FrmSubmit"])) {
 	GenderCode,
 	EthnicityCode,
 	ReligionCode,
+    WNOPNo,
+    RegNo,
 	CivilStatusCode,
 	CurServiceRef,
 	LastUpdate,
@@ -278,6 +281,8 @@ VALUES
 		'$GenderCode',
 		'$EthnicityCode',
 		'$ReligionCode',
+        '$WnopNo',
+        '$RegNo',
 		'$CivilStatusCode',
 		'$CurServiceRefID',
 		'$dateU',
@@ -542,11 +547,21 @@ VALUES
                                             </select></td>
                                     </tr>
                                     <tr>
-                                        <td align="left" valign="top">&nbsp;</td>
-                                        <td align="left" valign="top">&nbsp;</td>
-                                        <td align="left" valign="top">&nbsp;</td>
+                                        <td align="left" valign="top">WNOP Number</td>
+                                        <td align="left" valign="top"><strong>:</strong></td>
+                                        <td align="left" valign="top">
+                                        <input name="WnopNo" type="text" class="input2_n" id="WnopNo" tabindex="10"/>
+                                        </td>
                                     </tr>
-                                </table></td>
+                                    <tr>
+                                        <td align="left" valign="top">Registration Number</td>
+                                        <td align="left" valign="top"><strong>:</strong></td>
+                                        <td align="left" valign="top">
+                                        <input name="RegNo" type="text" class="input2_n" id="RegNo" tabindex="11"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
                         </tr>
                         <tr>
                             <td valign="top">&nbsp;</td>
@@ -1332,7 +1347,8 @@ VALUES
                 var EthnicityCode = trim($("#EthnicityCode").val());
                 var GenderCode = trim($("#GenderCode").val());
                 var ReligionCode = trim($("#ReligionCode").val());
-
+                var WnopNo = trim($("#WnopNo").val());
+                var RegNo = trim($("#RegNo").val());
 
                 var SecGRCode = trim($("#SecGRCode").val());
                 var PositionCode = trim($("#PositionCode").val());
