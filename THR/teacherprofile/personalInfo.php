@@ -372,7 +372,7 @@ if ($isAvailableCurAdd != 1) {
                                 <td align="left" valign="top"><?php echo $DOB ?></td>
                             </tr>
                             <tr>
-                                <td align="left" valign="top"><strong>WNOP No.</strong></td>
+                                <td align="left" valign="top"><strong>W & OP No.</strong></td>
                                 <td align="left" valign="top"><strong>:</strong></td>
                                 <td align="left" valign="top"><?php echo $WNOPNo ?></td>
                             </tr>

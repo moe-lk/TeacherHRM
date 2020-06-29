@@ -547,7 +547,7 @@ VALUES
                                             </select></td>
                                     </tr>
                                     <tr>
-                                        <td align="left" valign="top">WNOP Number</td>
+                                        <td align="left" valign="top">W & OP Number</td>
                                         <td align="left" valign="top"><strong>:</strong></td>
                                         <td align="left" valign="top">
                                         <input name="WnopNo" type="text" class="input2_n" id="WnopNo" tabindex="10"/>
