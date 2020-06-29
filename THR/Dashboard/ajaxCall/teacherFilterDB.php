@@ -220,7 +220,7 @@ if($RequestType == "getDataAccordingToSCStatus"){ // Get according to school sta
         array($cmbSchoolStatus, SQLSRV_PARAM_IN) // Added school status
     );
     // $sql = "{call SP_TG_GetCensesFor_LooggedUser( ?, ?, ?, ?, ?, ?, ?)}";
-    $sql = "SELECT * FROM "
+    $sql = "SELECT * FROM ";
     $dataSchool = "<option value=\"\">All</option>";
     $stmt = $db->runMsSqlQuery($sql, $params1);
     while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {

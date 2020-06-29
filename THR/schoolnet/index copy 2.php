@@ -404,8 +404,8 @@ $params4 = array(
                                                                             
                                                                         ?>
                                                                     </select>
-                                                                    <?php// var_dump( trim($ProCodex));?>
-                                                                    <?php// var_dump( trim($ProCoded));?>
+                                                                    <?php // var_dump( trim($ProCodex)); ?>
+                                                                    <?php // var_dump( trim($ProCoded)); ?>
                                                                     <?php
                                                                         // $sql = "SELECT ProCode,Province FROM CD_Provinces order by Province asc";
                                                                         // $stmt = $db->runMsSqlQuery($sql);
@@ -422,7 +422,7 @@ $params4 = array(
 
                                                                 <div class="divSimple"  id="txt_district">
                                                                     <select class="select2a_n1" style="width:260px;" id="DistrictCode" name="DistrictCode" onchange="Javascript:show_zone('zonelist', this.options[this.selectedIndex].value, ''); loadAccordingToDistrict();" <?php echo $disaTxt ?><?php echo $disaTxtDiv ?> <?php echo $disaTxtDis ?>>
-                                                                        <?php//District //District //District //District //District //District //District //District //District
+                                                                        <?php //District //District //District //District //District //District //District //District //District
                                                                             $sql = "SELECT DistCode,DistName FROM CD_Districts where ProCode='$ProCodex' order by DistName asc"; //x
                                                                             $stmt = $db->runMsSqlQuery($sql);
 
@@ -461,7 +461,7 @@ $params4 = array(
                                                                 ?>
                                                                 <div class="divSimple" style="margin-left:22px;"  id="txt_zone">
                                                                     <select  class="select2a_n1" style="width:260px;" id="ZoneCode" name="ZoneCode" onchange="Javascript:show_division('divisionList', this.options[this.selectedIndex].value, document.frmSave.DistrictCode.value); loadAccordingToZone();" <?php echo $disaTxt ?><?php echo $disaTxtDiv ?>>
-                                                                        <?php//Zone //Zone //Zone //Zone //Zone //Zone //Zone //Zone //Zone //Zone //Zone //Zone //Zone //Zone //Zone //Zone 
+                                                                        <?php //Zone //Zone //Zone //Zone //Zone //Zone //Zone //Zone //Zone //Zone //Zone //Zone //Zone //Zone //Zone //Zone 
                                                                         echo $DistrictCodex;
                                                                         $sql = "SELECT CenCode,InstitutionName FROM CD_Zone where DistrictCode='$DistrictCodex' order by InstitutionName asc";
                                                                         $stmt = $db->runMsSqlQuery($sql);
@@ -538,7 +538,7 @@ $params4 = array(
                                                                 <div class="divSimple" style="margin-left:22px; width:880px;" id="txt_showInstitute">
                                                                     <select style="width:853px;" id="InstCode" name="InstCode" onchange="disableCheckBox();">
                                                                         <option value="">School Name</option>
-                                                                        <?php//School //School //School //School //School //School //School //School //School //School 
+                                                                        <?php //School //School //School //School //School //School //School //School //School //School 
                                                                             $DivisionCode = "abc";
                                                                             if ($AccessRoleType == "ZN") {
                                                                                 $sql = "SELECT [InstType],[CenCode],[InstitutionName],[DistrictCode],[RecordLog],[ZoneCode],[DivisionCode],[IsNationalSchool],[SchoolType] FROM [dbo].[CD_CensesNo] where DivisionCode='$DivisionCodex' order by InstitutionName";
