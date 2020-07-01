@@ -204,4 +204,4 @@ $stmt = $db->runMsSqlQuery($sql);
     // echo $row['Appdate'].'<br>';
     // echo $Duration.'<br>';
     // echo $Duration2.'<br>';
-} -->
+// } 

@@ -65,7 +65,7 @@ if(isset($_POST["FrmSubmit"])){
                     <tr>
                       <td>Current Password</td>
                       <td>:</td>
-                      <td><input name="passwordCur" type="text" class="input2" id="passwordCur" value=""/><input type="hidden" name="NICNo" value="<?php echo $id ?>" /></td>
+                      <td><input name="passwordCur" type="password" class="input2" id="passwordCur" value=""/><input type="hidden" name="NICNo" value="<?php echo $id ?>" /></td>
                     </tr>
                     <tr>
                       <td>New Password</td>

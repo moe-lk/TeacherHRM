@@ -18,8 +18,9 @@
 <?php
 $curser = "document.frmSave.NIC.focus()";
 include_once '../approveProcessfunction.php';
-include('../smservices/sms.php');
-include('../activityLog.php');
+include ('../smservices/sms.php');
+include ('../activityLog.php');
+include "../connectionNEW.php";
 $msg = "";
 $success = "";
 
@@ -160,13 +161,19 @@ if (isset($_POST["FrmSubmit"])) {
 
     if ($msg == "") {
 
+        if( sqlsrv_begin_transaction($conn) === false )   
+        {   
+            echo "Could not begin transaction.\n";  
+            die( print_r( sqlsrv_errors(), true));  
+        }
         // Insert contact info
         $queryMainSave = "INSERT INTO ArchiveUP_StaffAddrHistory
 				   (NIC,AddrType,Address,DSCode,DISTCode,Tel,AppDate,UpdateBy,LastUpdate,RecordLog,GSDivision)
 			 VALUES
-				   ('$NIC','PER','$Address','$DSCode','$DISTCode','$Tel','$AppDateAdd','$UpdateBy','$dateU','register','$GSDivision')";
-
-        $db->runMsSqlQuery($queryMainSave);
+				   (?,'PER',?,?,?,?,?,?,?,'register',?)";
+        // $db->runMsSqlQuery($queryMainSave);
+        $params1 = array($NIC,$Address,$DSCode,$DISTCode,$Tel,$AppDateAdd,$UpdateBy,$dateU,$GSDivision);
+        $stmt1 = sqlsrv_query( $conn, $queryMainSave, $params1 );
 
         $reqTabMobAc = "SELECT ID FROM ArchiveUP_StaffAddrHistory where NIC='$NIC' and AddrType='PER' ORDER BY ID DESC";
         $stmtMobAc = $db->runMsSqlQuery($reqTabMobAc);
@@ -177,9 +184,11 @@ if (isset($_POST["FrmSubmit"])) {
         $queryMainSaveCUR = "INSERT INTO ArchiveUP_StaffAddrHistory
 				   (NIC,AddrType,Address,DSCode,DISTCode,Tel,AppDate,UpdateBy,LastUpdate,RecordLog,GSDivision)
 			 VALUES
-				   ('$NIC','CUR','$AddressT','$DSCodeT','$DISTCodeT','$TelT','$AppDateAddT','$UpdateBy','$dateU','register','$GSDivisionT')";
-
-        $db->runMsSqlQuery($queryMainSaveCUR);
+				   (?,'CUR',?,?,?,?,?,?,?,'register',?)";
+        $params2 = array($NIC,$AddressT,$DSCodeT,$DISTCodeT,$TelT,$AppDateAddT,$UpdateBy,$dateU,$GSDivisionT);
+        // $db->runMsSqlQuery($queryMainSaveCUR);
+        $stmt2 = sqlsrv_query( $conn, $queryMainSaveCUR, $params2 );
+        
 
         $reqTabMobAc = "SELECT ID FROM ArchiveUP_StaffAddrHistory where NIC='$NIC' and AddrType='CUR' ORDER BY ID DESC";
         $stmtMobAc = $db->runMsSqlQuery($reqTabMobAc);
@@ -189,29 +198,45 @@ if (isset($_POST["FrmSubmit"])) {
         // Insert service info
 
         if($firstAppStatus=="Y"){
-                $ServiceRecTypeCodeF = 'NA01';
-
-
+            $ServiceRecTypeCodeF = 'NA01';
+            
+            if( sqlsrv_begin_transaction($conn) === false ){   
+                echo "Could not begin transaction.\n";  
+                die( print_r( sqlsrv_errors(), true));  
+            }
                 //first appointment  start
-                $queryMainSave = "INSERT INTO ArchiveUP_StaffServiceHistory
-                                       (NIC,ServiceRecTypeCode,AppDate,InstCode,SecGRCode,WorkStatusCode,ServiceTypeCode,EmpTypeCode,PositionCode,Cat2003Code,Reference,UpdateBy,LastUpdate,RecordLog)
-                             VALUES
-                                       ('$NIC','$ServiceRecTypeCodeF','$AppDateF','$InstCodeF','$SecGRCodeF','$WorkStatusCode','$ServiceTypeCodeF','$EmpTypeCode','$PositionCodeF','$Cat2003CodeF','$PFReferenceF','$UpdateBy','$dateU','register')";
+            $queryMainSave = "INSERT INTO ArchiveUP_StaffServiceHistory
+                            (NIC,ServiceRecTypeCode,AppDate,InstCode,SecGRCode,WorkStatusCode,ServiceTypeCode,EmpTypeCode,PositionCode,Cat2003Code,Reference,UpdateBy,LastUpdate,RecordLog)
+                            VALUES
+                            (?,?,?,?,?,?,?,?,?,?,?,?,?,'register')";
+                // $db->runMsSqlQuery($queryMainSave);
+            $params3 = array($NIC,$ServiceRecTypeCodeF,$AppDateF,$InstCodeF,$SecGRCodeF,$WorkStatusCode,$ServiceTypeCodeF,$EmpTypeCode,$PositionCodeF,$Cat2003CodeF,$PFReferenceF,$UpdateBy,$dateU);
+            $stmt3 = sqlsrv_query( $conn, $queryMainSave, $params3);
 
-                $db->runMsSqlQuery($queryMainSave);
+            $reqTabMobAc = "SELECT ID FROM ArchiveUP_StaffServiceHistory where NIC='$NIC' ORDER BY ID DESC";
+            $stmtMobAc = $db->runMsSqlQuery($reqTabMobAc);
+            $rowMobAc = sqlsrv_fetch_array($stmtMobAc, SQLSRV_FETCH_ASSOC);
+            $FirstAppID = trim($rowMobAc['ID']);
 
-                $reqTabMobAc = "SELECT ID FROM ArchiveUP_StaffServiceHistory where NIC='$NIC' ORDER BY ID DESC";
-                $stmtMobAc = $db->runMsSqlQuery($reqTabMobAc);
-                $rowMobAc = sqlsrv_fetch_array($stmtMobAc, SQLSRV_FETCH_ASSOC);
-                $FirstAppID = trim($rowMobAc['ID']);
-
-                //first appointment assign start
-                $queryfirstAss = "INSERT INTO ArchiveUP_StaffAssignDetails			   (NIC,ServiceRecRef,AssignInstCode,AssignInstDetails,StartDate,EndDate,AssignbedPositionCode,Reference,UpdateBy,LastUpdate,RecordLog)
-                                     VALUES			   ('$NIC','$FirstAppID','$InstCodeF','$AssignInstDetails','$AppDateF','','$PositionCodeF','register','$UpdateBy','$dateU','register')";
-                $db->runMsSqlQuery($queryfirstAss);
-
-                //first appointment assign end
-
+            //first appointment assign start
+            $queryfirstAss = "INSERT INTO ArchiveUP_StaffAssignDetails (NIC,ServiceRecRef,AssignInstCode,AssignInstDetails,StartDate,EndDate,AssignbedPositionCode,Reference,UpdateBy,LastUpdate,RecordLog)
+                            VALUES	(?,?,?,?,?,'',?,'register',?,?,'register')";
+            // $db->runMsSqlQuery($queryfirstAss);
+            $params4 = array($NIC,$FirstAppID,$InstCodeF,$AssignInstDetails,$AppDateF,$PositionCodeF,$UpdateBy,$dateU);
+            //first appointment assign end
+            $stmt4 = sqlsrv_query( $conn, $queryfirstAss, $params4);
+            if($stmt3 && $stmt4){
+                sqlsrv_commit($conn);
+                // echo ("<script LANGUAGE='JavaScript'>
+                // window.alert('Succesfully Updated');
+                // </script>");
+            } else {
+                sqlsrv_rollback( $conn );
+                echo "Updates rolled back.<br />";
+                // echo ("<script LANGUAGE='JavaScript'>
+                // window.alert('Update Failed!, Please try again.');
+                // </script>");
+            }
         }
 
 
@@ -219,12 +244,13 @@ if (isset($_POST["FrmSubmit"])) {
         //
         //current appointment start
 
-        $queryCurrentSave = "INSERT INTO ArchiveUP_StaffServiceHistory			   (NIC,ServiceRecTypeCode,AppDate,InstCode,SecGRCode,WorkStatusCode,ServiceTypeCode,EmpTypeCode,PositionCode,Cat2003Code,Reference,UpdateBy,LastUpdate,RecordLog)
+        $queryCurrentSave = "INSERT INTO ArchiveUP_StaffServiceHistory (NIC,ServiceRecTypeCode,AppDate,InstCode,SecGRCode,WorkStatusCode,ServiceTypeCode,EmpTypeCode,PositionCode,Cat2003Code,Reference,UpdateBy,LastUpdate,RecordLog)
 			 VALUES
-				   ('$NIC','$ServiceRecTypeCode','$AppDate','$InstCode','$SecGRCode','$WorkStatusCode','$ServiceTypeCode','$EmpTypeCode','$PositionCode','$Cat2003Code','$PFReference','$UpdateBy','$dateU','register')";
-
-        $db->runMsSqlQuery($queryCurrentSave);
-
+			(?,?,?,?,?,?,?,?,?,?,?,?,?,'register')";
+        $params5 = array($NIC,$ServiceRecTypeCode,$AppDate,$InstCode,$SecGRCode,$WorkStatusCode,$ServiceTypeCode,$EmpTypeCode,$PositionCode,$Cat2003Code,$PFReference,$UpdateBy,$dateU);
+        // $db->runMsSqlQuery($queryCurrentSave);
+        $stmt5 = sqlsrv_query( $conn, $queryCurrentSave, $params5);
+        
         $reqTabMobAc = "SELECT ID FROM ArchiveUP_StaffServiceHistory where NIC='$NIC' ORDER BY ID DESC";
         $stmtMobAc = $db->runMsSqlQuery($reqTabMobAc);
         $rowMobAc = sqlsrv_fetch_array($stmtMobAc, SQLSRV_FETCH_ASSOC);
@@ -232,10 +258,11 @@ if (isset($_POST["FrmSubmit"])) {
 
 
         //current appointment assign start
-        $querycurrentAss = "INSERT INTO ArchiveUP_StaffAssignDetails				   (NIC,ServiceRecRef,AssignInstCode,AssignInstDetails,StartDate,EndDate,AssignbedPositionCode,Reference,UpdateBy,LastUpdate,RecordLog)
-				 VALUES				   ('$NIC','$CurServiceRefID','$InstCode','$AssignInstDetails','$AppDate','','$PositionCode','register','$UpdateBy','$dateU','register')";
-        $db->runMsSqlQuery($querycurrentAss);
-
+        $querycurrentAss = "INSERT INTO ArchiveUP_StaffAssignDetails (NIC,ServiceRecRef,AssignInstCode,AssignInstDetails,StartDate,EndDate,AssignbedPositionCode,Reference,UpdateBy,LastUpdate,RecordLog)
+				 VALUES	(?,?,?,?,?,'',?,'register',?,?,'register')";
+        // $db->runMsSqlQuery($querycurrentAss);
+        $params6 = array($NIC,$CurServiceRefID,$InstCode,$AssignInstDetails,$AppDate,$PositionCode,$UpdateBy,$dateU);
+        $stmt6 = sqlsrv_query( $conn, $querycurrentAss, $params6);
         //current appointment assign end
         // End insert service info
 
@@ -269,46 +296,40 @@ if (isset($_POST["FrmSubmit"])) {
         DOACAT
 )
 VALUES
-	(
-		'$NIC',
-		'$SurnameWithInitials',
-		'$FullName',
-		'$Title',
-		'$PerResRefID',
-		'$MobileTel',
-		'$emailaddr',
-		'$DOB',
-		'$GenderCode',
-		'$EthnicityCode',
-		'$ReligionCode',
-        '$WnopNo',
-        '$RegNo',
-		'$CivilStatusCode',
-		'$CurServiceRefID',
-		'$dateU',
-		'$UpdateBy',
-		'register',
-		'$CurResRefID',
-                '$AppDateF',
-                '$Cat2003CodeF'
-	)";
+	(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,'register',?,?,?)";
 
-        $db->runMsSqlQuery($queryMainSavex);
+    // $db->runMsSqlQuery($queryMainSavex);
+    $params7 = array($NIC,$SurnameWithInitials,$FullName,$Title,$PerResRefID,$MobileTel,$emailaddr,$DOB,$GenderCode,$EthnicityCode,$ReligionCode,$WnopNo,$RegNo,$CivilStatusCode,$CurServiceRefID,$dateU,$UpdateBy,$CurResRefID,$AppDateF,$Cat2003CodeF);
+    $stmt7 = sqlsrv_query( $conn, $queryMainSavex, $params7);
 
-        $reqTabMobAc = "SELECT ID FROM ArchiveUP_TeacherMast where NIC='$NIC'";
-        $stmtMobAc = $db->runMsSqlQuery($reqTabMobAc);
-        $rowMobAc = sqlsrv_fetch_array($stmtMobAc, SQLSRV_FETCH_ASSOC);
-        $newIDMast = trim($rowMobAc['ID']);
+    if($stmt1 && $stmt2 && $stmt5 && $stmt6 && $stmt7){
+        sqlsrv_commit($conn);
+        echo ("<script LANGUAGE='JavaScript'>
+        window.alert('Succesfully Updated');
+        </script>");
+    } else {
+        sqlsrv_rollback( $conn );
+        echo "Updates rolled back.<br />";
+        echo ("<script LANGUAGE='JavaScript'>
+        window.alert('Update Failed!, Please try again.');
+        </script>");
+    }
 
-        if ($newIDMast == 0)
-            $msg = "Error on page. Please check your internet connection, Details without special character and try again";
+    $reqTabMobAc = "SELECT ID FROM ArchiveUP_TeacherMast where NIC='$NIC'";
+    $stmtMobAc = $db->runMsSqlQuery($reqTabMobAc);
+    $rowMobAc = sqlsrv_fetch_array($stmtMobAc, SQLSRV_FETCH_ASSOC);
+    $newIDMast = trim($rowMobAc['ID']);
+
+    if ($newIDMast == 0)
+        $msg = "Error on page. Please check your internet connection, Details without special character and try again";
 
         //}
         //teacher mast end
         if ($msg == '') {
-            $queryRegis = "INSERT INTO TG_EmployeeRegister				   (NIC,TeacherMastID,ServisHistCurrentID,ServisHistFirstID,AddressHistID,dDateTime,ZoneCode,IsApproved,ApproveComment,ApproveDate,ApprovedBy,UpdateBy,AddressHistIDCur)
-					 VALUES				   ('$NIC','$newIDMast','$CurServiceRefID','$FirstAppID','$PerResRefID','$dateU','$ZoneCode','N','','','','$NICUser','$CurResRefID')";
-            $db->runMsSqlQuery($queryRegis);
+            $queryRegis = "INSERT INTO TG_EmployeeRegister (NIC,TeacherMastID,ServisHistCurrentID,ServisHistFirstID,AddressHistID,dDateTime,ZoneCode,IsApproved,ApproveComment,ApproveDate,ApprovedBy,UpdateBy,AddressHistIDCur)
+					 VALUES	('$NIC','$newIDMast','$CurServiceRefID','$FirstAppID','$PerResRefID','$dateU','$ZoneCode','N','','','','$NICUser','$CurResRefID')";
+            // $db->runMsSqlQuery($queryRegis);
+
 
             $success = "Form submitted successfully. Data will be appeared after the management approvals";
 

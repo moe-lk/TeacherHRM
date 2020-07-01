@@ -1,0 +1,115 @@
+@charset "utf-8";
+/* CSS Document */
+
+.aboutus_button{
+	font-family: 'roboto_condensedregular';
+	font-size:22px;
+	color:#15b3b8;
+	text-transform:uppercase;
+	text-align:center;
+	
+}
+
+
+.founder_text{
+	text-align:justify;
+	font-family: 'roboto_condensedregular';
+	font-size:16px;
+	color:#ffffff;
+	
+}
+
+
+.pro_name{
+	font-size:36px;
+	font-family: 'roboto_condensedlight';
+}
+
+.pro_post{
+	font-size:18px;
+	font-family: 'roboto_condensedlight';
+	padding-bottom:2px;
+}
+
+.tittle_inner{
+	font-family: 'roboto_condensedregular';
+	font-size:16px;
+	color:#282929;
+	text-transform:uppercase;
+}
+
+.container_text{
+	font-family: 'roboto_condensedregular';
+	font-size:14px;
+	color:#535455;
+	text-align:justify;
+	line-height:20px;
+	
+}
+
+
+.container_text ul li{
+	font-family: 'roboto_condensedregular';
+	font-size:14px;
+	color:#535455;
+	text-align:justify;
+	line-height:20px;
+}
+
+
+
+.vision{
+	font-family: 'roboto_condensedregular';
+	font-size:24px;
+	color:#0076c0;
+	text-align:center;
+	text-transform:uppercase;
+}
+
+
+.vision_text{
+	font-family: 'roboto_condensedregular';
+	font-size:16px;
+	color:#373737;
+	text-align:center;
+}
+
+
+.mission{
+	font-family: 'roboto_condensedregular';
+	font-size:24px;
+	color:#0076c0;
+	text-align:center;
+	text-transform:uppercase;
+}
+
+
+.mission_text{
+	font-family: 'roboto_condensedregular';
+	font-size:16px;
+	color:#373737;
+	text-align:center;
+}
+
+
+.objectives_tittle{
+	font-family: 'roboto_condensedregular';
+	font-size:24px;
+	color:#0076c0;
+	text-align:center;
+	text-transform:uppercase;
+	
+}
+
+
+.objectives_text ul li{
+	text-align:justify;
+	font-family: 'roboto_condensedregular';
+	font-size:14px;
+	color:#4e4e4f;
+}
+.tittle_inner_para{
+	font-family: 'roboto_condensedregular';
+	font-size:16px;
+	color:#282929;
+}

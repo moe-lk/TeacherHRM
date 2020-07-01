@@ -2,8 +2,8 @@
 <?php
 $msg = "";
 $success = "";
-include('../smservices/sms.php');
-
+include ('../smservices/sms.php');
+include "../connectionNEW.php";
 if (isset($_POST["FrmSubmit"])) {
 include('../activityLog.php');
 
@@ -59,6 +59,8 @@ include('../activityLog.php');
         $Ar_EthnicityCode = trim($rowTec['EthnicityCode']);
         $Ar_ReligionCode = trim($rowTec['ReligionCode']);
         $Ar_CivilStatusCode = trim($rowTec['CivilStatusCode']);
+        $Ar_WNOPNo = trim($rowTec['WNOPNo']);
+        $Ar_RegNo = trim($rowTec['RegNo']);
         $Ar_CurServiceRef = trim($rowTec['CurServiceRef']);
         $Ar_RecStatus = trim($rowTec['RecStatus']);
         $Ar_LastUpdate = trim($rowTec['LastUpdate']);
@@ -68,53 +70,39 @@ include('../activityLog.php');
         $Ar_DOFA = $rowTec['DOFA'];
         $Ar_DOACAT = trim($rowTec['DOACAT']);
 
-        $sqlCopyMaster = "INSERT INTO TeacherMast (
-	NIC,
-	SurnameWithInitials,
-	FullName,
-	Title,
-	PerResRef,
-	MobileTel,
-	emailaddr,
-	DOB,
-	GenderCode,
-	EthnicityCode,
-	ReligionCode,
-	CivilStatusCode,
-	CurServiceRef,
-	RecStatus,
-	LastUpdate,
-	UpdateBy,
-	RecordLog,
-	CurResRef,
-	DOFA,
-	DOACAT
-)
-VALUES
-	(
-		'$Ar_NIC',
-		'$Ar_SurnameWithInitials',
-		'$Ar_FullName',
-		'$Ar_Title',
-		'$Ar_PerResRef',
-		'$Ar_MobileTel',
-		'$Ar_emailaddr',
-		'$Ar_DOB',
-		'$Ar_GenderCode',
-		'$Ar_EthnicityCode',
-		'$Ar_ReligionCode',
-		'$Ar_CivilStatusCode',
-		'$Ar_CurServiceRef',
-		'$Ar_RecStatus',
-		'$Ar_LastUpdate',
-		'$Ar_UpdateBy',
-		'$Ar_RecordLog',
-		'$Ar_CurResRef',
-                '$Ar_DOFA',
-                '$Ar_DOACAT'
-	)";
+        if( sqlsrv_begin_transaction($conn) === false )   
+        {   
+            echo "Could not begin transaction.\n";  
+            die( print_r( sqlsrv_errors(), true));  
+        }
 
-        $db->runMsSqlQuery($sqlCopyMaster);
+        $sqlCopyMaster = "INSERT INTO TeacherMast (
+	    NIC,
+	    SurnameWithInitials,
+	    FullName,
+	    Title,
+	    PerResRef,
+	    MobileTel,
+	    emailaddr,
+	    DOB,
+	    GenderCode,
+	    EthnicityCode,
+	    ReligionCode,
+	    CivilStatusCode,
+        WNOPNo,
+        RegNo,
+	    CurServiceRef,
+	    RecStatus,
+	    LastUpdate,
+	    UpdateBy,
+	    RecordLog,
+	    CurResRef,
+	    DOFA,
+	    DOACAT)
+    VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    $params1 = array($Ar_NIC,$Ar_SurnameWithInitials,$Ar_FullName,$Ar_Title,$Ar_PerResRef,$Ar_MobileTel,$Ar_emailaddr,$Ar_DOB,$Ar_GenderCode,$Ar_EthnicityCode,$Ar_ReligionCode,$Ar_CivilStatusCode,$Ar_WNOPNo,$Ar_RegNo,$Ar_CurServiceRef,$Ar_RecStatus,$Ar_LastUpdate,$Ar_UpdateBy,$Ar_RecordLog,$Ar_CurResRef,$Ar_DOFA,$Ar_DOACAT);
+    $stmt1 = sqlsrv_query( $conn, $sqlCopyMaster, $params1 );
+    // $db->runMsSqlQuery($sqlCopyMaster);
 
 
         $reqTabMobAc = "SELECT ID FROM TeacherMast where NIC='$NIC' ORDER BY ID DESC";
@@ -124,8 +112,10 @@ VALUES
 
 
         $sqlCopyMaster = "INSERT INTO StaffAddrHistory (NIC,AddrType,Address,DSCode,DISTCode,Tel,AppDate,UpdateBy,LastUpdate,RecordLog,GSDivision)
-	SELECT NIC,AddrType,Address,DSCode,DISTCode,Tel,AppDate,UpdateBy,LastUpdate,RecordLog,GSDivision FROM ArchiveUP_StaffAddrHistory where ID='$AddressHistID'";
-        $db->runMsSqlQuery($sqlCopyMaster);
+	    SELECT NIC,AddrType,Address,DSCode,DISTCode,Tel,AppDate,UpdateBy,LastUpdate,RecordLog,GSDivision FROM ArchiveUP_StaffAddrHistory where ID=?";
+        // $db->runMsSqlQuery($sqlCopyMaster);
+        $params2 = array($AddressHistID);
+        $stmt2 = sqlsrv_query( $conn, $sqlCopyMaster, $params2);
 
         $reqTabMobAc = "SELECT ID FROM StaffAddrHistory where NIC='$NIC' and AddrType='PER' ORDER BY ID DESC";
         $stmtMobAc = $db->runMsSqlQuery($reqTabMobAc);
@@ -134,8 +124,10 @@ VALUES
 
 
         $sqlCopyMasterC = "INSERT INTO StaffAddrHistory	NIC,AddrType,Address,DSCode,DISTCode,Tel,AppDate,UpdateBy,LastUpdate,RecordLog,GSDivision)
-	SELECT NIC,AddrType,Address,DSCode,DISTCode,Tel,AppDate,UpdateBy,LastUpdate,RecordLog,GSDivision FROM ArchiveUP_StaffAddrHistory where ID='$AddressHistIDCur'";
-        $db->runMsSqlQuery($sqlCopyMasterC);
+	    SELECT NIC,AddrType,Address,DSCode,DISTCode,Tel,AppDate,UpdateBy,LastUpdate,RecordLog,GSDivision FROM ArchiveUP_StaffAddrHistory where ID=?";
+        // $db->runMsSqlQuery($sqlCopyMasterC);
+        $params3 = array($AddressHistIDCur);
+        $stmt3 = sqlsrv_query( $conn, $sqlCopyMasterC, $params3);
 
         $reqTabMobAc = "SELECT ID FROM StaffAddrHistory where NIC='$NIC' and AddrType='CUR' ORDER BY ID DESC";
         $stmtMobAc = $db->runMsSqlQuery($reqTabMobAc);
@@ -144,10 +136,12 @@ VALUES
 
 
 
-        $sqlCopyMaster = "INSERT INTO StaffServiceHistory			   (NIC,ServiceRecTypeCode,AppDate,InstCode,SecGRCode,WorkStatusCode,ServiceTypeCode,EmpTypeCode,PositionCode,Cat2003Code,Reference,UpdateBy,LastUpdate,RecordLog)
-	SELECT NIC,ServiceRecTypeCode,AppDate,InstCode,SecGRCode,WorkStatusCode,ServiceTypeCode,EmpTypeCode,PositionCode,Cat2003Code,Reference,UpdateBy,LastUpdate,RecordLog FROM ArchiveUP_StaffServiceHistory where ID='$ServisHistCurrentID'";
+        $sqlCopyMaster = "INSERT INTO StaffServiceHistory (NIC,ServiceRecTypeCode,AppDate,InstCode,SecGRCode,WorkStatusCode,ServiceTypeCode,EmpTypeCode,PositionCode,Cat2003Code,Reference,UpdateBy,LastUpdate,RecordLog)
+	SELECT NIC,ServiceRecTypeCode,AppDate,InstCode,SecGRCode,WorkStatusCode,ServiceTypeCode,EmpTypeCode,PositionCode,Cat2003Code,Reference,UpdateBy,LastUpdate,RecordLog FROM ArchiveUP_StaffServiceHistory where ID=?";
         //$db->runMsSqlQuery($sqlCopyMaster);
-        $db->runMsSqlQuery($sqlCopyMaster);
+        // $db->runMsSqlQuery($sqlCopyMaster);
+        $params4 = array($ServisHistCurrentID);
+        $stmt4 = sqlsrv_query( $conn, $sqlCopyMaster, $params4);
 
         $reqTabMobAc = "SELECT ID FROM StaffServiceHistory where NIC='$NIC' ORDER BY ID DESC";
         $stmtMobAc = $db->runMsSqlQuery($reqTabMobAc);
@@ -156,14 +150,17 @@ VALUES
 
         //update data into master table - End
         //update TeacherMaster
-        $queryMainUpdate = "UPDATE TeacherMast SET PerResRef='$perAddressID', CurResRef='$curAddressID', CurServiceRef='$curMasterID' WHERE NIC='$NIC'";
-        $db->runMsSqlQuery($queryMainUpdate);
+        $queryMainUpdate = "UPDATE TeacherMast SET PerResRef=?, CurResRef=?, CurServiceRef=? WHERE NIC='$NIC'";
+        // $db->runMsSqlQuery($queryMainUpdate);
+        $params5 = array($perAddressID, $curAddressID, $curMasterID );
+        $stmt5 = sqlsrv_query( $conn, $queryMainUpdate, $params5 );
 
-
-        $sqlCopyMaster = "INSERT INTO StaffServiceHistory			   (NIC,ServiceRecTypeCode,AppDate,InstCode,SecGRCode,WorkStatusCode,ServiceTypeCode,EmpTypeCode,PositionCode,Cat2003Code,Reference,UpdateBy,LastUpdate,RecordLog)
-	SELECT NIC,ServiceRecTypeCode,AppDate,InstCode,SecGRCode,WorkStatusCode,ServiceTypeCode,EmpTypeCode,PositionCode,Cat2003Code,Reference,UpdateBy,LastUpdate,RecordLog FROM ArchiveUP_StaffServiceHistory where ID='$ServisHistFirstID'";
+        $sqlCopyMaster = "INSERT INTO StaffServiceHistory (NIC,ServiceRecTypeCode,AppDate,InstCode,SecGRCode,WorkStatusCode,ServiceTypeCode,EmpTypeCode,PositionCode,Cat2003Code,Reference,UpdateBy,LastUpdate,RecordLog)
+	SELECT NIC,ServiceRecTypeCode,AppDate,InstCode,SecGRCode,WorkStatusCode,ServiceTypeCode,EmpTypeCode,PositionCode,Cat2003Code,Reference,UpdateBy,LastUpdate,RecordLog FROM ArchiveUP_StaffServiceHistory where ID=?";
         //$db->runMsSqlQuery($sqlCopyMaster);
-        $db->runMsSqlQuery($sqlCopyMaster);
+        // $db->runMsSqlQuery($sqlCopyMaster);
+        $params6 = array($ServisHistFirstID);
+        $stmt6 = sqlsrv_query( $conn, $sqlCopyMaster, $params6);
 
         $reqTabMobAc = "SELECT ID FROM StaffServiceHistory where NIC='$NIC' ORDER BY ID DESC";
         $stmtMobAc = $db->runMsSqlQuery($reqTabMobAc);
@@ -175,8 +172,10 @@ VALUES
         //update data into master table - End
 
 
-        $queryMainUpdate = "UPDATE TG_EmployeeRegister SET IsApproved='Y',ApproveDate='$dateU',ApprovedBy='$NICUser', ApproveComment='$ApproveComment' WHERE id='$RegID'";
-        $db->runMsSqlQuery($queryMainUpdate);
+        $queryMainUpdate = "UPDATE TG_EmployeeRegister SET IsApproved='Y',ApproveDate=?,ApprovedBy=?, ApproveComment=? WHERE id='$RegID'";
+        // $db->runMsSqlQuery($queryMainUpdate);
+        $params7 = array($dateU, $NICUser, $ApproveComment );
+        $stmt7 = sqlsrv_query( $conn, $queryMainUpdate, $params7 );
 
         $TeacherMastID = trim($rowE['TeacherMastID']);
         $ServisHistCurrentID = trim($rowE['ServisHistCurrentID']);
@@ -184,28 +183,45 @@ VALUES
         $AddressHistID = trim($rowE['AddressHistID']);
         $AddressHistIDCur = trim($rowE['AddressHistIDCur']);
         //Delete temp record
-        $queryTmpDel = "DELETE FROM ArchiveUP_TeacherMast WHERE ID='$TeacherMastID'";
-        $db->runMsSqlQuery($queryTmpDel);
+        $queryTmpDel1 = "DELETE FROM ArchiveUP_TeacherMast WHERE ID=?";
+        // $db->runMsSqlQuery($queryTmpDel);
+        $params8 = array($TeacherMastID);
+        $stmt8 = sqlsrv_query( $conn, $queryTmpDel1, $params8 );
 
-        $queryTmpDel = "DELETE FROM ArchiveUP_StaffAddrHistory WHERE ID='$AddressHistID'";
-        $db->runMsSqlQuery($queryTmpDel);
+        $queryTmpDel2 = "DELETE FROM ArchiveUP_StaffAddrHistory WHERE ID=?";
+        // $db->runMsSqlQuery($queryTmpDel);
+        $params9 = array($AddressHistID);
+        $stmt9 = sqlsrv_query( $conn, $queryTmpDel2, $params9 );
 
-        $queryTmpDel = "DELETE FROM ArchiveUP_StaffAddrHistory WHERE ID='$AddressHistIDCur'";
-        $db->runMsSqlQuery($queryTmpDel);
+        $queryTmpDel3 = "DELETE FROM ArchiveUP_StaffAddrHistory WHERE ID=?";
+        // $db->runMsSqlQuery($queryTmpDel);
+        $params10 = array($AddressHistIDCur);
+        $stmt10 = sqlsrv_query( $conn, $queryTmpDel3, $params10 );
 
-        $queryTmpDel = "DELETE FROM ArchiveUP_StaffServiceHistory WHERE ID='$ServisHistCurrentID'";
-        $db->runMsSqlQuery($queryTmpDel);
+        $queryTmpDel4 = "DELETE FROM ArchiveUP_StaffServiceHistory WHERE ID=?";
+        // $db->runMsSqlQuery($queryTmpDel);
+        $params11 = array($ServisHistCurrentID);
+        $stmt11 = sqlsrv_query( $conn, $queryTmpDel4, $params11 );
 
-        $queryTmpDel = "DELETE FROM ArchiveUP_StaffServiceHistory WHERE ID='$ServisHistFirstID'";
-        $db->runMsSqlQuery($queryTmpDel);
+        $queryTmpDel5 = "DELETE FROM ArchiveUP_StaffServiceHistory WHERE ID=?";
+        // $db->runMsSqlQuery($queryTmpDel);
+        $params12 = array($ServisHistFirstID);
+        $stmt12 = sqlsrv_query( $conn, $queryTmpDel5, $params12 );
 
-        $queryTmpDel = "DELETE FROM ArchiveUP_StaffAssignDetails WHERE ServiceRecRef='$ServisHistCurrentID'";
-        $db->runMsSqlQuery($queryTmpDel);
-        $queryTmpDel = "DELETE FROM ArchiveUP_StaffAssignDetails WHERE ServiceRecRef='$ServisHistFirstID'";
-        $db->runMsSqlQuery($queryTmpDel);
+        $queryTmpDel6 = "DELETE FROM ArchiveUP_StaffAssignDetails WHERE ServiceRecRef=?";
+        // $db->runMsSqlQuery($queryTmpDel);
+        $params13 = array($ServisHistCurrentID);
+        $stmt13 = sqlsrv_query( $conn, $queryTmpDel6, $params13 );
 
-        $queryTmpDel = "DELETE FROM TG_EmployeeRegister WHERE id='$RegID'";
-        $db->runMsSqlQuery($queryTmpDel);
+        $queryTmpDel7 = "DELETE FROM ArchiveUP_StaffAssignDetails WHERE ServiceRecRef=?";
+        // $db->runMsSqlQuery($queryTmpDel);
+        $params14 = array($ServisHistFirstID);
+        $stmt14 = sqlsrv_query( $conn, $queryTmpDel7, $params14 );
+
+        $queryTmpDel8 = "DELETE FROM TG_EmployeeRegister WHERE id=?";
+        // $db->runMsSqlQuery($queryTmpDel);
+        $params15 = array($RegID);
+        $stmt15 = sqlsrv_query( $conn, $queryTmpDel8, $params15 );
 
 
         $msg .= "Your action was successffully submitted.<br>";
@@ -216,7 +232,18 @@ VALUES
         $MobileTel = trim($rowMob['MobileTel']);
 
         $tpNumber = numberFormat($MobileTel);
-
+        if($stmt1 && $stmt2 && $stmt3 && $stmt4 && $stmt5 && $stmt6 && $stmt7 && $stmt8 && $stmt9 && $stmt10 && $stmt11 && $stmt12 && $stmt13 && $stmt14 && $stmt15){
+            sqlsrv_commit($conn);
+            echo ("<script LANGUAGE='JavaScript'>
+            window.alert('Succesfully Updated');
+            </script>");
+        } else {
+            sqlsrv_rollback( $conn );
+            echo "Updates rolled back.<br />";
+            echo ("<script LANGUAGE='JavaScript'>
+            window.alert('Update Failed!, Please try again.');
+            </script>");
+        }
 
         audit_trail($Ar_NIC, $_SESSION["NIC"], 'approval\newRegistration.php', 'insert,update', 'TeacherMast', 'User Account Approved.');
 
@@ -244,7 +271,7 @@ VALUES
             $queryRegissms = "INSERT INTO TG_SMS (NIC,ModuleName,dDateTime,StatusOf,RecID) VALUES ('$NIC','Registration Approved','$dateU','$statusOf','$thsTeacherMasterID')";
             $db->runMsSqlQuery($queryRegissms);
         }
-    } else {
+    } else { // END of IsApproved = 'Y'
         //Delete temp record
         $queryTmpDel = "DELETE FROM ArchiveUP_TeacherMast WHERE ID='$TeacherMastID'";
         $db->runMsSqlQuery($queryTmpDel);
@@ -444,12 +471,12 @@ WHERE        (ArchiveUP_StaffServiceHistory.ID = '$ServisHistCurrentID')";
     $InstCodeC = trim($rowCA['InstCode']);
     $PFReferenceC = trim($rowCA['Reference']);
 
-    $sqlCurrDis = "SELECT        CD_Districts.DistName, CD_Zone.InstitutionName, CD_Division.InstitutionName AS Expr1, CD_CensesNo.CenCode
-FROM            CD_CensesNo INNER JOIN
-                         CD_Districts ON CD_CensesNo.DistrictCode = CD_Districts.DistCode INNER JOIN
-                         CD_Zone ON CD_CensesNo.ZoneCode = CD_Zone.CenCode INNER JOIN
-                         CD_Division ON CD_CensesNo.DivisionCode = CD_Division.CenCode
-WHERE        (CD_CensesNo.CenCode = N'$InstCodeC')";
+    $sqlCurrDis = "SELECT CD_Districts.DistName, CD_Zone.InstitutionName, CD_Division.InstitutionName AS Expr1, CD_CensesNo.CenCode
+FROM CD_CensesNo INNER JOIN
+CD_Districts ON CD_CensesNo.DistrictCode = CD_Districts.DistCode INNER JOIN
+CD_Zone ON CD_CensesNo.ZoneCode = CD_Zone.CenCode INNER JOIN
+CD_Division ON CD_CensesNo.DivisionCode = CD_Division.CenCode
+WHERE (CD_CensesNo.CenCode = N'$InstCodeC')";
     $stmtCA = $db->runMsSqlQuery($sqlCurrDis);
     $rowCA = sqlsrv_fetch_array($stmtCA, SQLSRV_FETCH_ASSOC);
     $DistNameC = trim($rowCA['DistName']);
