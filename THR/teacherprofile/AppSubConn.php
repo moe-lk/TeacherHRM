@@ -1,7 +1,7 @@
 <?php
 
 //$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-include "../connectionPDO.php";
+include "../db_config/connectionPDO.php";
 
 
 $AppCatID = $_POST["AppCatID"];

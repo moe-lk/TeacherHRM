@@ -20,7 +20,7 @@ $curser = "document.frmSave.NIC.focus()";
 include_once '../approveProcessfunction.php';
 include ('../smservices/sms.php');
 include ('../activityLog.php');
-include "../connectionNEW.php";
+include "../db_config/connectionNEW.php";
 $msg = "";
 $success = "";
 

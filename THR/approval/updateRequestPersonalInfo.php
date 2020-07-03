@@ -2,7 +2,8 @@
 <?php
 $msg = "";
 $success = "";
-include('../activityLog.php');
+include ('../activityLog.php');
+include "../db_config/connectionNEW.php";
 if (isset($_POST["FrmSubmit"])) {
 
     $dateU = date('Y-m-d H:i:s');
@@ -54,44 +55,84 @@ if (isset($_POST["FrmSubmit"])) {
         $MobileTel = trim($rowABC['MobileTel']);
         $RecordLog = "Approved by $NICUser";
 
-        $queryMainUpdate = "UPDATE TeacherMast SET Title='$Title',SurnameWithInitials='$SurnameWithInitials',FullName='$FullName',DOB='$DOB',LastUpdate='$dateU',UpdateBy='$UpdateBy', RecordLog='$RecordLog', emailaddr='$emailaddr', EthnicityCode='$EthnicityCode', GenderCode='$GenderCode', ReligionCode='$ReligionCode', MobileTel='$MobileTel' WHERE NIC='$NIC'";
+        if( sqlsrv_begin_transaction($conn) === false )   {   
+            echo "Could not begin transaction.\n";  
+            die( print_r( sqlsrv_errors(), true));  
+        }
 
-        $db->runMsSqlQueryInsert($queryMainUpdate);
+        $queryMainUpdate = "UPDATE TeacherMast SET Title = ?, SurnameWithInitials = ?, FullName = ?, DOB = ?,LastUpdate = ?,UpdateBy = ?, RecordLog = ?, emailaddr = ?, EthnicityCode = ? , GenderCode = ? , ReligionCode = ?, MobileTel = ? WHERE NIC=?";
+        $params1 = array($Title, $SurnameWithInitials, $FullName, $DOB, $dateU, $UpdateBy, $RecordLog, $emailaddr, $EthnicityCode, $GenderCode, $ReligionCode, $ReligionCode, $NIC);
+        $stmt1 = sqlsrv_query($conn, $queryMainUpdate, $params1 );
+
+        // $db->runMsSqlQueryInsert($queryMainUpdate);
         //update data into master table - End
         //update data into master table - Start
-        $sqlCopyMaster = "INSERT INTO StaffAddrHistory			   (NIC,AddrType,Address,DSCode,DISTCode,Tel,AppDate,UpdateBy,LastUpdate,RecordLog,GSDivision)
-	SELECT NIC,AddrType,Address,DSCode,DISTCode,Tel,AppDate,UpdateBy,LastUpdate,RecordLog,GSDivision FROM UP_StaffAddrHistory where ID='$CurrResID'";
-        $curAddressID = $db->runMsSqlQueryInsert($sqlCopyMaster);
+        $sqlCopyMaster = "INSERT INTO StaffAddrHistory (NIC,AddrType,Address,DSCode,DISTCode,Tel,AppDate,UpdateBy,LastUpdate,RecordLog,GSDivision)
+	        SELECT NIC,AddrType,Address,DSCode,DISTCode,Tel,AppDate,UpdateBy,LastUpdate,RecordLog,GSDivision FROM UP_StaffAddrHistory where ID=?";
+        $params2 = array($CurrResID);
+        $stmt2 = sqlsrv_query($conn, $sqlCopyMaster, $params2 );
+        // $curAddressID = $db->runMsSqlQueryInsert($sqlCopyMaster);
         
         //update data into master table - End
         //update data into master table - Start
-        $sqlCopyMaster = "INSERT INTO StaffAddrHistory			   (NIC,AddrType,Address,DSCode,DISTCode,Tel,AppDate,UpdateBy,LastUpdate,RecordLog,GSDivision)
-	SELECT NIC,AddrType,Address,DSCode,DISTCode,Tel,AppDate,UpdateBy,LastUpdate,RecordLog,GSDivision FROM UP_StaffAddrHistory where ID='$PermResiID'";
-        $perAddressID = $db->runMsSqlQueryInsert($sqlCopyMaster);
+        $sqlCopyMaster2 = "INSERT INTO StaffAddrHistory (NIC,AddrType,Address,DSCode,DISTCode,Tel,AppDate,UpdateBy,LastUpdate,RecordLog,GSDivision)
+	            SELECT NIC,AddrType,Address,DSCode,DISTCode,Tel,AppDate,UpdateBy,LastUpdate,RecordLog,GSDivision FROM UP_StaffAddrHistory where ID=?";
+        $params3 = array($PermResiID);
+        $stmt3 = sqlsrv_query($conn, $sqlCopyMaster2, $params3 );
+        // $perAddressID = $db->runMsSqlQueryInsert($sqlCopyMaster);
         //update data into master table - End
 
-        $sqlDelete = "DELETE FROM StaffAddrHistory WHERE (NIC='$NIC') AND (ID!='$curAddressID') AND (ID!='$perAddressID')";
-        $db->runMsSqlQuery($sqlDelete);
+        $sqlDelete = "DELETE FROM StaffAddrHistory WHERE (NIC=?) AND (ID!=?) AND (ID!=?)";
+        $params4 = array($NIC, $curAddressID, $curAddressID);
+        $stmt4 = sqlsrv_query($conn, $sqlDelete, $params4);
+        // $db->runMsSqlQuery($sqlDelete);
 
 
         //update TeacherMaster
-        $queryMainUpdate = "UPDATE TeacherMast SET PerResRef='$perAddressID', CurResRef='$curAddressID' WHERE NIC='$NIC'";
-        $db->runMsSqlQuery($queryMainUpdate);
+        $queryMainUpdate2 = "UPDATE TeacherMast SET PerResRef=? , CurResRef=? WHERE NIC= ?";
+        $params5 = array($perAddressID, $curAddressID, $NIC);
+        $stmt5 = sqlsrv_query($conn, $queryMainUpdate2, $params5);
+        // $db->runMsSqlQuery($queryMainUpdate2);
 
 
-        $queryMainUpdate = "UPDATE TG_EmployeeUpdatePersInfo SET IsApproved='Y',ApproveDate='$dateU',ApprovedBy='$NICUser', ApproveComment='$ApproveComment' WHERE id='$RegID'";
-        $db->runMsSqlQuery($queryMainUpdate);
+        $queryMainUpdate3 = "UPDATE TG_EmployeeUpdatePersInfo SET IsApproved='Y',ApproveDate=? ,ApprovedBy=? , ApproveComment=? WHERE id=?";
+        $params6 = array($dateU, $NICUser, $ApproveComment, $RegID);
+        $stmt6 = sqlsrv_query($conn, $queryMainUpdate3, $params6);
+        // $db->runMsSqlQuery($queryMainUpdate3);
+
 
 
         //make it approved
-        $sqlUpdateUp = "UPDATE UP_TeacherMast SET IsApproved='Y' WHERE ID='$TeacherMastID'";
-        $db->runMsSqlQuery($sqlUpdateUp);
+        $sqlUpdateUp = "UPDATE UP_TeacherMast SET IsApproved='Y' WHERE ID = ?";
+        $params7 = array($TeacherMastID);
+        $stmt7 = sqlsrv_query($conn, $sqlUpdateUp, $params7);
+        // $db->runMsSqlQuery($sqlUpdateUp);
 
-        $sqlUpdateUp1 = "UPDATE UP_StaffAddrHistory SET IsApproved='Y' WHERE ID='$PermResiID'";
-        $db->runMsSqlQuery($sqlUpdateUp1);
+        $sqlUpdateUp1 = "UPDATE UP_StaffAddrHistory SET IsApproved='Y' WHERE ID = ?";
+        $params8 = array($PermResiID);
+        $stmt8 = sqlsrv_query($conn, $sqlUpdateUp1, $params8);
+        // $db->runMsSqlQuery($sqlUpdateUp1);
 
-        $sqlUpdateUp2 = "UPDATE UP_StaffAddrHistory SET IsApproved='Y' WHERE ID='$CurrResID'";
-        $db->runMsSqlQuery($sqlUpdateUp2);
+        $sqlUpdateUp2 = "UPDATE UP_StaffAddrHistory SET IsApproved='Y' WHERE ID = ?";
+        $params9 = array($CurrResID);
+        $stmt9 = sqlsrv_query($conn, $sqlUpdateUp2, $params9);
+        // $db->runMsSqlQuery($sqlUpdateUp2);
+        if($stmt1 && $stmt2 && $stmt3 && $stmt4 && $stmt5 && $stmt6 && $stmt7 && $stmt8 && $stmt9){
+            sqlsrv_commit($conn);
+            echo ("<script LANGUAGE='JavaScript'>
+            window.alert('Succesfully Updated');
+            window.location.href='updateRequestPersonalInfo-15.html';
+            </script>");
+        } else {
+            sqlsrv_rollback( $conn );
+            // var_dump($stmt4);
+            echo "Updates rolled back.<br />";
+            // var_dump($sql);
+            echo ("<script LANGUAGE='JavaScript'>
+            window.alert('Update Failed!, Please try again.');
+            window.location.href='updateRequestPersonalInfo-15.html';
+            </script>");
+        }
 
 
         //Delete temp record
@@ -109,17 +150,25 @@ if (isset($_POST["FrmSubmit"])) {
         $msg .= "Your action(Approve) was successffully submitted.<br>";
     } else {
 
-        $queryTmpDel = "DELETE FROM UP_TeacherMast WHERE ID='$TeacherMastID'";
-        $db->runMsSqlQuery($queryTmpDel);
+        $queryTmpDel = "DELETE FROM UP_TeacherMast WHERE ID = ?";
+        $params1 = array($TeacherMastID);
+        $stmt1 = sqlsrv_query($conn , $queryTmpDel,$params1); 
+        // $db->runMsSqlQuery($queryTmpDel);
 
-        $queryTmpDel = "DELETE FROM UP_StaffAddrHistory WHERE ID='$PermResiID'";
-        $db->runMsSqlQuery($queryTmpDel);
+        $queryTmpDel2 = "DELETE FROM UP_StaffAddrHistory WHERE ID = ?";
+        $params2 = array($PermResiID);
+        $stmt2 = sqlsrv_query($conn , $queryTmpDel2,$params2);
+        // $db->runMsSqlQuery($queryTmpDel2);
 
-        $queryTmpDel = "DELETE FROM UP_StaffAddrHistory WHERE ID='$CurrResID'";
-        $db->runMsSqlQuery($queryTmpDel);
+        $queryTmpDel3 = "DELETE FROM UP_StaffAddrHistory WHERE ID = ?";
+        $params3 = array($CurrResID);
+        $stmt3 = sqlsrv_query($conn , $queryTmpDel3,$params3);
+        // $db->runMsSqlQuery($queryTmpDel3);
 
-        $queryTG = "DELETE FROM TG_EmployeeUpdatePersInfo WHERE ID='$RegID'";
-        $db->runMsSqlQuery($queryTG);
+        $queryTG = "DELETE FROM TG_EmployeeUpdatePersInfo WHERE ID = ?";
+        $params4 = array($RegID);
+        $stmt4 = sqlsrv_query($conn , $queryTG,$params4);
+        // $db->runMsSqlQuery($queryTG);
 
         audit_trail($NIC, $_SESSION["NIC"], 'approval\updateRequestPersonalInfo.php', 'Delete', 'UP_StaffAddrHistory,TG_EmployeeUpdatePersInfo', 'Reject personal info.');
 
@@ -152,15 +201,15 @@ if ($id != '') {
     $UpdateBy = trim($rowE['UpdateBy']);
     $LastUpdate = $rowE['dDateTime'];
 
-    $sqlteachrMst = "SELECT        UP_TeacherMast.ID, UP_TeacherMast.NIC, UP_TeacherMast.SurnameWithInitials, UP_TeacherMast.FullName, 
-                         UP_TeacherMast.MobileTel, CONVERT(varchar(20), UP_TeacherMast.DOB, 121) AS DOB, UP_TeacherMast.emailaddr, CD_Title.TitleName, 
-                         CD_Gender.[Gender Name], CD_nEthnicity.EthnicityName, CD_Religion.ReligionName
-FROM            CD_Religion LEFT JOIN
-                         CD_Gender LEFT JOIN
-                         UP_TeacherMast LEFT JOIN
-                         CD_Title ON UP_TeacherMast.Title = CD_Title.TitleCode ON CD_Gender.GenderCode = UP_TeacherMast.GenderCode LEFT JOIN
-                         CD_nEthnicity ON UP_TeacherMast.EthnicityCode = CD_nEthnicity.Code ON CD_Religion.Code = UP_TeacherMast.ReligionCode
-WHERE        (UP_TeacherMast.ID = '$TeacherMastID')"; //(UP_TeacherMast.NIC = '850263230V')
+    $sqlteachrMst = "SELECT UP_TeacherMast.ID, UP_TeacherMast.NIC, UP_TeacherMast.SurnameWithInitials, UP_TeacherMast.FullName, 
+                        UP_TeacherMast.MobileTel, CONVERT(varchar(20), UP_TeacherMast.DOB, 121) AS DOB, UP_TeacherMast.emailaddr, CD_Title.TitleName, 
+                        CD_Gender.[Gender Name], CD_nEthnicity.EthnicityName, CD_Religion.ReligionName
+                        FROM CD_Religion LEFT JOIN
+                        CD_Gender LEFT JOIN
+                        UP_TeacherMast LEFT JOIN
+                        CD_Title ON UP_TeacherMast.Title = CD_Title.TitleCode ON CD_Gender.GenderCode = UP_TeacherMast.GenderCode LEFT JOIN
+                        CD_nEthnicity ON UP_TeacherMast.EthnicityCode = CD_nEthnicity.Code ON CD_Religion.Code = UP_TeacherMast.ReligionCode
+                        WHERE (UP_TeacherMast.ID = '$TeacherMastID')"; //(UP_TeacherMast.NIC = '850263230V')
 
     /* if($accLevel=='99999'){
       echo $sqlteachrMst;

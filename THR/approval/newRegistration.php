@@ -3,7 +3,7 @@
 $msg = "";
 $success = "";
 include ('../smservices/sms.php');
-include "../connectionNEW.php";
+include "../db_config/connectionNEW.php";
 if (isset($_POST["FrmSubmit"])) {
 include('../activityLog.php');
 

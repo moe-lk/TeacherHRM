@@ -57,7 +57,7 @@ if (isset($_POST["FrmSubmit"])) {
         $RecordLog = "Approved by $NICUser";
         $ApprovedDate = date("Y-m-d H:i:s");
 
-        include "../connectionNEW.php";
+        include "../db_config/connectionNEW.php";
 
         $SQLTBL = "SELECT * FROM [MOENational].[dbo].[AppoinmentDetails] WHERE NIC = '$NIC' AND RecordStatus = '1'";
         $TotalRows = $db->rowCount($SQLTBL);
@@ -100,7 +100,7 @@ if (isset($_POST["FrmSubmit"])) {
         sqlsrv_commit($conn);
         echo ("<script LANGUAGE='JavaScript'>
         window.alert('Succesfully Updated');
-        window.location.href='teaching_subj-12--$nicNO.html';
+        window.location.href='appontmentSubjects-34.html';
         </script>");
     } else {
         sqlsrv_rollback( $conn );
@@ -108,7 +108,7 @@ if (isset($_POST["FrmSubmit"])) {
         // var_dump($sql);
         echo ("<script LANGUAGE='JavaScript'>
         window.alert('Update Failed!, Please try again.');
-        window.location.href='teaching_subj-12--$nicNO.html';
+        window.location.href='appontmentSubjects-34.html';
         </script>");
     }
             

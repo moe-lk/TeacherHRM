@@ -1,16 +1,22 @@
-use MOENational
-
+Use MOENational
 SELECT CenCode, TchSubject1, Medium1, Count(TeachingDetails.NIC) AS AvailableTCH
-INTO #TchAll
-FROM TeachingDetails 
-INNER JOIN TeacherMast ON TeachingDetails.NIC = TeacherMast.NIC
-INNER JOIN StaffServiceHistory ON StaffServiceHistory.ID = TeacherMast.CurServiceRef
-INNER JOIN CD_CensesNo ON CD_CensesNo.CenCode = StaffServiceHistory.InstCode
-GROUP BY CenCode, TchSubject1, Medium1
+    INTO #Table2
+    FROM TeachingDetails 
+    INNER JOIN TeacherMast ON TeachingDetails.NIC = TeacherMast.NIC
+    INNER JOIN StaffServiceHistory ON StaffServiceHistory.ID = TeacherMast.CurServiceRef
+    INNER JOIN CD_CensesNo ON CD_CensesNo.CenCode = StaffServiceHistory.InstCode
+    GROUP BY CenCode, TchSubject1, Medium1
 
-SELECT * FROM #TchAll
+UPDATE AvaliableTeachers 
+SET AvaliableTeachers.AvailableTch = p.AvailableTCH
+FROM AvaliableTeachers av
+INNER JOIN #Table2 p
+ON av.CenCode = p.CenCode 
+Inner Join #Table2 q
+ON av.SubCode = q.TchSubject1
+Inner JOIN #Table2 r
+ON av.Medium = r.Medium1
+ 
+ SELECT * FROM #Table2 WHERE CenCode = 'SC07105'
 
-DELETE #TchAll
-
-UPDATE [dbo].[AvaliableTeachers]
-   SET [AvailableTch] = (SELECT AvailableTCH FROM #TchAll)
+DROP TABLE  #Table2

@@ -107,7 +107,7 @@ if ($pageid == 30) {
 }
 $dateNow = date("Y/m/d");
 
-include "../connectionNEW.php";
+include "../db_config/connectionNEW.php";
 // var_dump($_REQUEST);
 $nicNO = $_REQUEST['id'];
 

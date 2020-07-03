@@ -5,7 +5,7 @@ register_shutdown_function("shutdownHandler");
 session_start();
 include '../db_config/DBManager.php';
 $db = new DBManager();
-
+include '../db_config/connectionNEW.php';
 
 $NICUser = $_SESSION["NIC"];
 $accLevel = $_SESSION["accLevel"];
@@ -81,38 +81,61 @@ if ($theam == "theam3") {
     $theamMenuFontColor = "#c2379b";
     $theamMenuButtonColor = "#8839b1";
 }
-include '../connectionNEW.php';
 
-function calculation1() {
-    $sqld = "DELETE #TchAll";
-    $stmtd = sqlsrv_query($conn, $sqld);
-    if( $stmtd === false) {
-        // var_dump($stmtd);
-        die( print_r( sqlsrv_errors(), true) );
-    }
-
+// var_dump($_SESSION);
+function calculation1($conn) {
 
     $sql = "SELECT CenCode, TchSubject1, Medium1, Count(TeachingDetails.NIC) AS AvailableTCH
-    INTO #TchAll
+    INTO #Table2$NICUser
     FROM TeachingDetails 
     INNER JOIN TeacherMast ON TeachingDetails.NIC = TeacherMast.NIC
     INNER JOIN StaffServiceHistory ON StaffServiceHistory.ID = TeacherMast.CurServiceRef
     INNER JOIN CD_CensesNo ON CD_CensesNo.CenCode = StaffServiceHistory.InstCode
     GROUP BY CenCode, TchSubject1, Medium1";
 
+    $sqlu = "UPDATE AvailableTeachers 
+    SET 
+    AvailableTeachers.AvailableTch = p.AvailableTCH,
+    AvailableTeachers.RecordStatus = 1
+    FROM AvailableTeachers av
+    INNER JOIN #Table2 p
+    ON av.CenCode = p.CenCode 
+    Inner Join #Table2 q
+    ON av.SubCode = q.TchSubject1
+    Inner JOIN #Table2 r
+    ON av.Medium = r.Medium1";
+
     // var_dump($conn);
-    $stmt = sqlsrv_query($conn, $sql);
-    if( $stmt === false) {
+    $stmt1 = sqlsrv_query($conn, $sql);
+    $stmt2 = sqlsrv_query($conn, $sqlu);
+
+    if( $stmt1 === false || $stmt2 === false) {
         die( print_r( sqlsrv_errors(), true) );
     }
     else{
         echo "<script LANGUAGE='JavaScript'>window.alert('Succesfully Updated');</script>";
     }
 }
-;
-if (isset($_GET['calc'])) {
-    calculation1();
+
+function calculation2($conn){
+    $sqlc2 = "";
+ 
+    $sqld = "DROP TABLE  #Table2$NICUser";
+    $stmtd = sqlsrv_query($conn, $sqld);
+    if( $stmtd === false) {
+        // var_dump($conn);
+        die( print_r( sqlsrv_errors(), true) );
+    }
 }
+
+if (isset($_GET['calc'])) {
+    calculation1($conn);
+}
+
+if(isset($_GET['calc2'])){
+    calculation2($conn);
+}
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -212,7 +235,7 @@ if (isset($_GET['calc'])) {
                                     <!-- <a href='index.php?hello=true'>Run PHP Function</a> -->
                                     <br>
                                     <br>
-                                    <a href = "" class="bton">Caculate Cardre</a>
+                                    <a href = "index.php?calc2=true" class="bton">Caculate Cardre</a>
                                     <br>
                                     <br>
                                     <hr>

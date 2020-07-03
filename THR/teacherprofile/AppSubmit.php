@@ -127,7 +127,7 @@ while ($row1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
     // var_dump($SchType);
 }
 
-include "../connectionNEW.php";
+include "../db_config/connectionNEW.php";
 
 if( sqlsrv_begin_transaction($conn) === false )   
 {   

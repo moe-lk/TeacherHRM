@@ -2,7 +2,7 @@
 
 //$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 // $conn = new PDO("sqlsrv:Server= DESKTOP-OESJB7N\SQLEXPRESS;Database=MOENational", "sa", "na1234");
-include "../connectionPDO.php";
+include "../db_config/connectionPDO.php";
 
 $GradTchID = $_POST["GradTchID"];
 $option = "<option>Select</option>";

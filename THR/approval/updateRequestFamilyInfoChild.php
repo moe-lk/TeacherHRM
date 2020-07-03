@@ -1,6 +1,6 @@
 <link href="../cms/css/screen.css" rel="stylesheet" type="text/css" />
 <?php
-
+include "../db_config/connectionNEW.php";
 $msg = "";
 $success = "";
 if (isset($_POST["FrmSubmit"])) {
@@ -34,31 +34,76 @@ include('../activityLog.php');
         //get data from temp table - Start       
         //update data into archive table - End
         //update data into master table - Start
-        $sqlCopyMaster = "INSERT INTO StaffChildren (NIC,ChildName,Gender,DOB,LastUpdate,UpdateBy,RecordLog)
-	SELECT NIC,ChildName,Gender,DOB,LastUpdate,UpdateBy,RecordLog FROM UP_StaffChildren where ID='$StaffChildID'";
+        if( sqlsrv_begin_transaction($conn) === false )   {   
+            echo "Could not begin transaction.\n";  
+            die( print_r( sqlsrv_errors(), true));  
+        }
 
-        $db->runMsSqlQuery($sqlCopyMaster);
+        $sqlCopyMaster = "INSERT INTO StaffChildren (NIC,ChildName,Gender,DOB,LastUpdate,UpdateBy,RecordLog)
+	                SELECT NIC,ChildName,Gender,DOB,LastUpdate,UpdateBy,RecordLog FROM UP_StaffChildren where ID = ?";
+        $params1 = array($StaffChildID);
+        $stmt1 = sqlsrv_query($conn, $sqlCopyMaster, $params1 );
+        // $db->runMsSqlQuery($sqlCopyMaster);
         
 
         //update data into master table - End
         ///////////////////////////////////////////////
         //TeacherMastID='$TeacherMastID',PermResiID='$PermResiID',CurrResID='$CurrResID',
-        $queryMainUpdate = "UPDATE TG_EmployeeUpdateChildInfo SET IsApproved='Y',ApproveDate='$dateU',ApprovedBy='$NICUser', ApproveComment='$ApproveComment' WHERE id='$RegID'";
-        $db->runMsSqlQuery($queryMainUpdate);
+        $queryMainUpdate = "UPDATE TG_EmployeeUpdateChildInfo SET IsApproved='Y',ApproveDate = ?,ApprovedBy = ?, ApproveComment = ? WHERE id = ?";
+        $params2 = array($dateU, $NICUser, $ApproveComment, $RegID);
+        $stmt2 = sqlsrv_query($conn, $queryMainUpdate, $params2 );
+        // $db->runMsSqlQuery($queryMainUpdate);
 
         //Delete temp record
-        $queryTmpDel = "DELETE FROM UP_StaffChildren WHERE ID='$StaffChildID'";
-        $db->runMsSqlQuery($queryTmpDel);
+        $queryTmpDel = "DELETE FROM UP_StaffChildren WHERE ID = ?";
+        $params3 = array($StaffChildID);
+        $stmt3 = sqlsrv_query($conn, $queryTmpDel, $params3 );
+
+        if($stmt1 && $stmt2 && $stmt3){
+            sqlsrv_commit($conn);
+            echo ("<script LANGUAGE='JavaScript'>
+            window.alert('Succesfully Updated');
+            window.location.href='updateRequestFamilyInfoChild-17a.html';
+            </script>");
+        } else {
+            sqlsrv_rollback( $conn );
+            // var_dump($stmt4);
+            echo "Updates rolled back.<br />";
+            // var_dump($sql);
+            echo ("<script LANGUAGE='JavaScript'>
+            window.alert('Update Failed!, Please try again.');
+            window.location.href='updateRequestFamilyInfoChild-17a.html';
+            </script>");
+        }
+        // $db->runMsSqlQuery($queryTmpDel);
         
         audit_trail($NIC, $_SESSION["NIC"], 'approval\updateRequestFamilyInfoChild.php', 'Update', 'TeacherMast', 'Approve Family info.');
 
         $msg .= "Your action(Approve) was successffully submitted.<br>";
     } else {
-        $queryMainUpdate = "UPDATE TG_EmployeeUpdateChildInfo SET IsApproved='R',ApproveDate='$dateU',ApprovedBy='$NICUser', ApproveComment='$ApproveComment' WHERE id='$RegID'";
-        $db->runMsSqlQuery($queryMainUpdate);
+        $queryMainUpdate = "UPDATE TG_EmployeeUpdateChildInfo SET IsApproved='R',ApproveDate=?,ApprovedBy=?, ApproveComment=? WHERE id=?";
+        $params1 = array($dateU, $NICUser, $ApproveComment, $RegID);
+        $stmt1 = sqlsrv_query($conn, $queryMainUpdate, $params1 );
+        // $db->runMsSqlQuery($queryMainUpdate);
         
-        $queryTmpDel = "DELETE FROM UP_StaffChildren WHERE ID='$StaffChildID'";
-        $db->runMsSqlQuery($queryTmpDel);
+        $queryTmpDel = "DELETE FROM UP_StaffChildren WHERE ID=?";
+        $params2 = array($StaffChildID);
+        $stmt2 = sqlsrv_query($conn, $queryTmpDel, $params2 );
+        // $db->runMsSqlQuery($queryTmpDel);
+        if($stmt1 && $stmt2){
+            sqlsrv_commit($conn);
+            echo ("<script LANGUAGE='JavaScript'>
+            window.alert('Succesfully Updated');
+            window.location.href='updateRequestFamilyInfoChild-17a.html';
+            </script>");
+        } else {
+            sqlsrv_rollback( $conn );
+            echo "Updates rolled back.<br />";
+            echo ("<script LANGUAGE='JavaScript'>
+            window.alert('Update Failed!, Please try again.');
+            window.location.href='updateRequestFamilyInfoChild-17a.html';
+            </script>");
+        }
         
         audit_trail($NIC, $_SESSION["NIC"], 'approval\updateRequestFamilyInfoChild.php', 'Update,Delete', 'TG_EmployeeUpdateChildInfo,UP_StaffChildren', 'Reject Family info.');
         
