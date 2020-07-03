@@ -83,6 +83,77 @@ if ($theam == "theam3") {
 }
 
 // var_dump($_SESSION);
+function calculation1($conn) {
+
+    $sql = "SELECT CenCode, TchSubject1, Medium1, Count(TeachingDetails.NIC) AS AvailableTCH
+    INTO #Table2$NICUser
+    FROM TeachingDetails 
+    INNER JOIN TeacherMast ON TeachingDetails.NIC = TeacherMast.NIC
+    INNER JOIN StaffServiceHistory ON StaffServiceHistory.ID = TeacherMast.CurServiceRef
+    INNER JOIN CD_CensesNo ON CD_CensesNo.CenCode = StaffServiceHistory.InstCode
+    GROUP BY CenCode, TchSubject1, Medium1";
+
+    $sqlu = "UPDATE AvailableTeachers 
+    SET 
+    AvailableTeachers.AvailableTch = p.AvailableTCH,
+    AvailableTeachers.RecordStatus = 1
+    FROM AvailableTeachers av
+    INNER JOIN #Table2 p
+    ON av.CenCode = p.CenCode 
+    Inner Join #Table2 q
+    ON av.SubCode = q.TchSubject1
+    Inner JOIN #Table2 r
+    ON av.Medium = r.Medium1";
+
+    // var_dump($conn);
+    $stmt1 = sqlsrv_query($conn, $sql);
+    $stmt2 = sqlsrv_query($conn, $sqlu);
+
+    if( $stmt1 === false || $stmt2 === false) {
+        die( print_r( sqlsrv_errors(), true) );
+    }
+    else{
+        echo "<script LANGUAGE='JavaScript'>window.alert('Succesfully Updated');</script>";
+    }
+}
+
+function calculation2($conn){
+    $sqlc2 = "UPDATE ExcessDeposit
+    SET ExcDep = a.ApprCardre - p.AvailableTch
+    FROM ExcessDeposit ed
+    INNER JOIN AvailableTeachers p
+    ON ed.CenCode = p.CenCode 
+    Inner Join AvailableTeachers q
+    ON ed.SubCode = q.SubCode
+    Inner JOIN AvailableTeachers r
+    ON ed.Medium = r.Medium
+    Inner Join ApprovedCardre a
+    ON ed.CenCode = a.CenCode
+    INNER JOIN ApprovedCardre b
+    ON ed.SubCode = b.SubCode
+    INNER JOIN ApprovedCardre c
+    ON ed.Medium = c.Medium";
+    $sqlc2 = sqlsrv_query($conn, $sqld);
+    if( $sqlc2 === false) {
+        // var_dump($conn);
+        die( print_r( sqlsrv_errors(), true));
+    }
+
+    $sqld = "DROP TABLE  #Table2$NICUser";
+    $stmtd = sqlsrv_query($conn, $sqld);
+    if( $stmtd === false) {
+        // var_dump($conn);
+        die( print_r( sqlsrv_errors(), true) );
+    }
+}
+
+if (isset($_GET['calc'])) {
+    calculation1($conn);
+}
+
+if(isset($_GET['calc2'])){
+    calculation2($conn);
+}
 
 ?>
 <!DOCTYPE html>
@@ -127,10 +198,6 @@ if ($theam == "theam3") {
             border-radius: 5px;
             color: white;
         }
-        form{
-            padding: 20px; 
-            text-align: center;
-        }
     </style>
     <body>
         <!-- Begin Page Content -->
@@ -164,10 +231,10 @@ if ($theam == "theam3") {
                         <div class="containerHeaderOne">
                             <div class="midArea"> 
                                 <div class="productsAreaRight">
-                                    <form action="calculation1.php">
+                                    <form>
                                     <div class="form-group">
                                         <label for="exampleFormControlSelect1">School Category</label>
-                                        <select class="form-control" id="SchType" name="SchType">
+                                        <select class="form-control" id="exampleFormControlSelect1">
                                         <?php
                                             $sql = "SELECT * FROM [MOENational].[dbo].[CD_CensesCategory]";
                                             $stmt = $db->runMsSqlQuery($sql);
@@ -178,24 +245,20 @@ if ($theam == "theam3") {
                                                 if($AppId == $AppCategory){
                                                     $seltebr = "selected";
                                                 }
-                                                echo "<option value=" . $AppId . ">". $AppId."-".$AppName ."</option>";
+                                                echo "<option value=" . $AppId . ">". $AppName ."</option>";
                                             }
                                         ?>
                                         </select>
-                                        
                                     </div>
-                                    <input type="hidden" name="NICUser" id="NICUser" value="<?php echo $NICUser ?>">
+                                    <a href='index.php?calc=true' class="bton">Caculate Available Teachers</a>
+                                    <!-- <a href='index.php?hello=true'>Run PHP Function</a> -->
                                     <br>
-                                    <input type="submit" id="btncalc1" class="btn btn-primary" value = "calculate Available Teachers">
-                                    </form>
                                     <br>
-                                    <hr>
-                                    <form  action="calculation2.php">
-                                        <input type="hidden" name="NICUser2" id="NICUser2" value="<?php echo $NICUser ?>">
-                                        <input type="submit" id="btncalc2" class="btn btn-primary" value = "calculate Cardre">
-                                    </form>
+                                    <a href = "index.php?calc2=true" class="bton">Caculate Cardre</a>
+                                    <br>
                                     <br>
                                     <hr>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -205,83 +268,3 @@ if ($theam == "theam3") {
         </div>
     </body>
 </html>
-<?php
-$SchType = $_POST['SchType'];
-$NICUser = $_POST['NICUser'];
-$NICUser2 = $_POST['NICUser2'];
-// var_dump($NICUser);
-
-// function calculation1($conn) {
-    
-//     $sql = "SELECT CenCode, TchSubject1, Medium1, Count(TeachingDetails.NIC) AS AvailableTCH
-//     INTO #Table2$NICUser
-//     FROM TeachingDetails 
-//     INNER JOIN TeacherMast ON TeachingDetails.NIC = TeacherMast.NIC
-//     INNER JOIN StaffServiceHistory ON StaffServiceHistory.ID = TeacherMast.CurServiceRef
-//     INNER JOIN CD_CensesNo ON CD_CensesNo.CenCode = StaffServiceHistory.InstCode
-//     GROUP BY CenCode, TchSubject1, Medium1";
-
-//     $sqlu = "UPDATE AvailableTeachers 
-//     SET 
-//     AvailableTeachers.AvailableTch = p.AvailableTCH,
-//     AvailableTeachers.RecordStatus = 1
-//     FROM AvailableTeachers av
-//     INNER JOIN #Table2 p
-//     ON av.CenCode = p.CenCode 
-//     Inner Join #Table2 q
-//     ON av.SubCode = q.TchSubject1
-//     Inner JOIN #Table2 r
-//     ON av.Medium = r.Medium1";
-
-//     // var_dump($conn);
-//     $stmt1 = sqlsrv_query($conn, $sql);
-//     $stmt2 = sqlsrv_query($conn, $sqlu);
-
-//     if( $stmt1 === false || $stmt2 === false) {
-//         die( print_r( sqlsrv_errors(), true) );
-//     }
-//     else{
-//         var_dump($SchType);
-//         echo "<script LANGUAGE='JavaScript'>window.alert('Succesfully Updated');</script>";
-//     }
-// }
-
-// function calculation2($conn){
-//     $sqlc2 = "UPDATE ExcessDeposit
-//     SET ExcDep = a.ApprCardre - p.AvailableTch
-//     FROM ExcessDeposit ed
-//     INNER JOIN AvailableTeachers p
-//     ON ed.CenCode = p.CenCode 
-//     Inner Join AvailableTeachers q
-//     ON ed.SubCode = q.SubCode
-//     Inner JOIN AvailableTeachers r
-//     ON ed.Medium = r.Medium
-//     Inner Join ApprovedCardre a
-//     ON ed.CenCode = a.CenCode
-//     INNER JOIN ApprovedCardre b
-//     ON ed.SubCode = b.SubCode
-//     INNER JOIN ApprovedCardre c
-//     ON ed.Medium = c.Medium";
-//     $sqlc2 = sqlsrv_query($conn, $sqld);
-//     if( $sqlc2 === false) {
-//         // var_dump($conn);
-//         die( print_r( sqlsrv_errors(), true));
-//     }
-
-//     $sqld = "DROP TABLE  #Table2$NICUser";
-//     $stmtd = sqlsrv_query($conn, $sqld);
-//     if( $stmtd === false) {
-//         // var_dump($conn);
-//         die( print_r( sqlsrv_errors(), true) );
-//     }
-// }
-
-// if (isset($_GET['calc'])) {
-//     calculation1($conn);
-// }
-
-// if(isset($_GET['calc2'])){
-//     calculation2($conn);
-// }
-
-?>
