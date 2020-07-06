@@ -164,7 +164,8 @@ if ($theam == "theam3") {
                         <div class="containerHeaderOne">
                             <div class="midArea"> 
                                 <div class="productsAreaRight">
-                                    <form action="calculation1.php">
+                                    <form action="calculation1.php" id="frm1">
+                                    <!-- <form id="frm1" method = "POST"> -->
                                     <div class="form-group">
                                         <label for="exampleFormControlSelect1">School Category</label>
                                         <select class="form-control" id="SchType" name="SchType">
@@ -189,6 +190,12 @@ if ($theam == "theam3") {
                                     <input type="submit" id="btncalc1" class="btn btn-primary" value = "calculate Available Teachers">
                                     </form>
                                     <br>
+                                    <div class="form-group" id="process" style="display:none;">
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" style=""></div>
+                                        </div>
+                                    </div>
+ 
                                     <hr>
                                     <form  action="calculation2.php">
                                         <input type="hidden" name="NICUser2" id="NICUser2" value="<?php echo $NICUser ?>">
@@ -196,6 +203,7 @@ if ($theam == "theam3") {
                                     </form>
                                     <br>
                                     <hr>
+
                                 </div>
                             </div>
                         </div>
@@ -209,79 +217,59 @@ if ($theam == "theam3") {
 $SchType = $_POST['SchType'];
 $NICUser = $_POST['NICUser'];
 $NICUser2 = $_POST['NICUser2'];
-// var_dump($NICUser);
-
-// function calculation1($conn) {
-    
-//     $sql = "SELECT CenCode, TchSubject1, Medium1, Count(TeachingDetails.NIC) AS AvailableTCH
-//     INTO #Table2$NICUser
-//     FROM TeachingDetails 
-//     INNER JOIN TeacherMast ON TeachingDetails.NIC = TeacherMast.NIC
-//     INNER JOIN StaffServiceHistory ON StaffServiceHistory.ID = TeacherMast.CurServiceRef
-//     INNER JOIN CD_CensesNo ON CD_CensesNo.CenCode = StaffServiceHistory.InstCode
-//     GROUP BY CenCode, TchSubject1, Medium1";
-
-//     $sqlu = "UPDATE AvailableTeachers 
-//     SET 
-//     AvailableTeachers.AvailableTch = p.AvailableTCH,
-//     AvailableTeachers.RecordStatus = 1
-//     FROM AvailableTeachers av
-//     INNER JOIN #Table2 p
-//     ON av.CenCode = p.CenCode 
-//     Inner Join #Table2 q
-//     ON av.SubCode = q.TchSubject1
-//     Inner JOIN #Table2 r
-//     ON av.Medium = r.Medium1";
-
-//     // var_dump($conn);
-//     $stmt1 = sqlsrv_query($conn, $sql);
-//     $stmt2 = sqlsrv_query($conn, $sqlu);
-
-//     if( $stmt1 === false || $stmt2 === false) {
-//         die( print_r( sqlsrv_errors(), true) );
-//     }
-//     else{
-//         var_dump($SchType);
-//         echo "<script LANGUAGE='JavaScript'>window.alert('Succesfully Updated');</script>";
-//     }
-// }
-
-// function calculation2($conn){
-//     $sqlc2 = "UPDATE ExcessDeposit
-//     SET ExcDep = a.ApprCardre - p.AvailableTch
-//     FROM ExcessDeposit ed
-//     INNER JOIN AvailableTeachers p
-//     ON ed.CenCode = p.CenCode 
-//     Inner Join AvailableTeachers q
-//     ON ed.SubCode = q.SubCode
-//     Inner JOIN AvailableTeachers r
-//     ON ed.Medium = r.Medium
-//     Inner Join ApprovedCardre a
-//     ON ed.CenCode = a.CenCode
-//     INNER JOIN ApprovedCardre b
-//     ON ed.SubCode = b.SubCode
-//     INNER JOIN ApprovedCardre c
-//     ON ed.Medium = c.Medium";
-//     $sqlc2 = sqlsrv_query($conn, $sqld);
-//     if( $sqlc2 === false) {
-//         // var_dump($conn);
-//         die( print_r( sqlsrv_errors(), true));
-//     }
-
-//     $sqld = "DROP TABLE  #Table2$NICUser";
-//     $stmtd = sqlsrv_query($conn, $sqld);
-//     if( $stmtd === false) {
-//         // var_dump($conn);
-//         die( print_r( sqlsrv_errors(), true) );
-//     }
-// }
-
-// if (isset($_GET['calc'])) {
-//     calculation1($conn);
-// }
-
-// if(isset($_GET['calc2'])){
-//     calculation2($conn);
-// }
-
 ?>
+<script>
+ 
+//  $(document).ready(function(){
+  
+//   $('#frm1').on('submit', function(event){
+//    event.preventDefault();
+// //    var count_error = 0;
+
+// //    if(count_error == 0)
+// //    {
+//     $.ajax({
+//      url:"calculation.php",
+//      method:"POST",
+//      data:$(this).serialize(),
+//      beforeSend:function()
+//      {
+//       $('#save').attr('disabled', 'disabled');
+//       $('#process').css('display', 'block');
+//      },
+//      success:function(data)
+//      {
+//       var percentage = 0;
+
+//       var timer = setInterval(function(){
+//        percentage = percentage + 20;
+//        progress_bar_process(percentage, timer);
+//       }, 1000);
+//      }
+//     })
+// //    }
+// //    else
+// //    {
+// //     return false;
+// //    }
+//   });
+
+//   function progress_bar_process(percentage, timer)
+//   {
+//    $('.progress-bar').css('width', percentage + '%');
+//    if(percentage > 100)
+//    {
+//     clearInterval(timer);
+//     $('#frm1')[0].reset();
+//     $('#process').css('display', 'none');
+//     $('.progress-bar').css('width', '0%');
+//     $('#save').attr('disabled', false);
+//     $('#success_message').html("<div class='alert alert-success'>Data Saved</div>");
+//     setTimeout(function(){
+//      $('#success_message').html('');
+//     }, 5000);
+//    }
+//   }
+
+//  });
+</script>
