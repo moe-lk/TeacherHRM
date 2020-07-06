@@ -55,6 +55,14 @@
     include '../db_config/connectionNEW.php';
     $SchType = $_REQUEST['SchType'];
     $NICUser = $_REQUEST['NICUser'];
+    $accLevel = $_REQUEST["accLevel"];
+    $loggedPositionName = $_REQUEST['loggedPositionName'];
+    $accessRoleType = $_REQUEST['accessRoleType'];
+    $ProCode = $_REQUEST['ProCode'];
+    $District = $_REQUEST['District'];
+    $ZONECODE = $_REQUEST['ZONECODE'];
+
+    // var_dump($_REQUEST);
 
     $sql = "SELECT CenCode, TchSubject1, Medium1, Count(TeachingDetails.NIC) AS AvailableTCH
     INTO #Table2$NICUser
@@ -62,7 +70,20 @@
     INNER JOIN TeacherMast ON TeachingDetails.NIC = TeacherMast.NIC
     INNER JOIN StaffServiceHistory ON StaffServiceHistory.ID = TeacherMast.CurServiceRef
     INNER JOIN CD_CensesNo ON CD_CensesNo.CenCode = StaffServiceHistory.InstCode
-    GROUP BY CenCode, TchSubject1, Medium1";
+	INNER JOIN CD_Districts ON CD_CensesNo.DistrictCode = CD_Districts.DistCode
+	INNER JOIN CD_Provinces ON CD_Districts.ProCode = CD_Provinces.ProCode
+	WHERE CD_CensesNo.InstType = '$SchType'";
+    if($ProCode != ''){
+        $sql .= " AND CD_Provinces.ProCode = '$ProCode'";
+    }
+    if($District != ''){
+        $sql .= " AND CD_CensesNo.DistrictCode = '$District'";
+    }
+    if($ZONECODE != ''){
+        $sql .= " AND CD_CensesNo.ZoneCode = '$ZONECODE'";
+    }
+    $sql .=" GROUP BY CenCode, TchSubject1, Medium1";
+
 
     $sqlu = "UPDATE AvailableTeachers 
     SET 
@@ -84,10 +105,17 @@
         die( print_r( sqlsrv_errors(), true) );
     }
     else{
-        echo "<script LANGUAGE='JavaScript'>
-        window.alert('Succesfully Updated');
-        window.location.href='index.php';
-        </script>"; 
-    }
-    
+        $sqld = "DROP TABLE  #Table2$NICUser";
+        $stmtd = sqlsrv_query($conn, $sqld);
+        if( $stmtd === false) {
+            // var_dump($conn);
+            die( print_r( sqlsrv_errors(), true) );
+        }
+        else{
+            echo "<script LANGUAGE='JavaScript'>
+            window.alert('Succesfully Updated');
+            window.location.href='index.php';
+            </script>"; 
+        }
+    } 
 ?>

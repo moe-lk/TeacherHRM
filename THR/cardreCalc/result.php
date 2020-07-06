@@ -164,52 +164,7 @@ if ($theam == "theam3") {
                         <div class="containerHeaderOne">
                             <div class="midArea"> 
                                 <div class="productsAreaRight">
-                                    <form action="calculation1.php" id="frm1">
-                                    <!-- <form id="frm1" method = "POST"> -->
-                                    <div class="form-group">
-                                        <label for="exampleFormControlSelect1">School Category</label>
-                                        <select class="form-control" id="SchType" name="SchType">
-                                        <?php
-                                            $sql = "SELECT * FROM [MOENational].[dbo].[CD_CensesCategory]";
-                                            $stmt = $db->runMsSqlQuery($sql);
-                                            while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-                                                $AppId = trim($row['ID']);
-                                                $AppName = $row['Category'];
-                                                $seltebr = "";
-                                                if($AppId == $AppCategory){
-                                                    $seltebr = "selected";
-                                                }
-                                                echo "<option value=" . $AppId . ">". $AppId."-".$AppName ."</option>";
-                                            }
-                                        ?>
-                                        </select>
-                                        
-                                    </div>
-                                    <input type="hidden" name="NICUser" id="NICUser" value="<?php echo $NICUser ?>">
-                                    <input type="hidden" name="accLevel" id="accLevel" value="<?php echo $accLevel ?>">
-                                    <input type="hidden" name="loggedPositionName" id="loggedPositionName" value="<?php echo $loggedPositionName ?>">
-                                    <input type="hidden" name="accessRoleType" id="accessRoleType" value="<?php echo $accessRoleType ?>">
-                                    <input type="hidden" name="ProCode" id="ProCode" value="<?php echo $ProCode ?>">
-                                    <input type="hidden" name="District" id="District" value="<?php echo $District ?>">
-                                    <input type="hidden" name="ZONECODE" id="ZONECODE" value="<?php echo $ZONECODE ?>">
-                                    <br>
-                                    <input type="submit" id="btncalc1" class="btn btn-primary" value = "calculate Available Teachers">
-                                    </form>
-                                    <br>
-                                    <div class="form-group" id="process" style="display:none;">
-                                        <div class="progress">
-                                            <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" style=""></div>
-                                        </div>
-                                    </div>
- 
-                                    <hr>
-                                    <form  action="calculation2.php">
-                                        <input type="hidden" name="NICUser2" id="NICUser2" value="<?php echo $NICUser ?>">
-
-                                        <input type="submit" id="btncalc2" class="btn btn-primary" value = "calculate Cardre">
-                                    </form>
-                                    <br>
-                                    <hr>
+                                    
 
                                 </div>
                             </div>
@@ -232,57 +187,5 @@ $District = $_SESSION['DistCodeU'];
 $ZONECODE = $_SESSION['ZoneCodeU'];
 ?>
 <script>
- 
-//  $(document).ready(function(){
-  
-//   $('#frm1').on('submit', function(event){
-//    event.preventDefault();
-// //    var count_error = 0;
 
-// //    if(count_error == 0)
-// //    {
-//     $.ajax({
-//      url:"calculation.php",
-//      method:"POST",
-//      data:$(this).serialize(),
-//      beforeSend:function()
-//      {
-//       $('#save').attr('disabled', 'disabled');
-//       $('#process').css('display', 'block');
-//      },
-//      success:function(data)
-//      {
-//       var percentage = 0;
-
-//       var timer = setInterval(function(){
-//        percentage = percentage + 20;
-//        progress_bar_process(percentage, timer);
-//       }, 1000);
-//      }
-//     })
-// //    }
-// //    else
-// //    {
-// //     return false;
-// //    }
-//   });
-
-//   function progress_bar_process(percentage, timer)
-//   {
-//    $('.progress-bar').css('width', percentage + '%');
-//    if(percentage > 100)
-//    {
-//     clearInterval(timer);
-//     $('#frm1')[0].reset();
-//     $('#process').css('display', 'none');
-//     $('.progress-bar').css('width', '0%');
-//     $('#save').attr('disabled', false);
-//     $('#success_message').html("<div class='alert alert-success'>Data Saved</div>");
-//     setTimeout(function(){
-//      $('#success_message').html('');
-//     }, 5000);
-//    }
-//   }
-
-//  });
 </script>

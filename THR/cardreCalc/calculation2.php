@@ -1,48 +1,16 @@
 <!DOCTYPE html>
 <html>
 <style>
-#myProgress {
-  width: 100%;
-  background-color: #ddd;
-}
-
-#myBar {
-  width: 1%;
-  height: 30px;
-  background-color: #4CAF50;
+.img-box{
+    text-align: center;
+    padding: 50px; 
 }
 </style>
 <body onload="move()">
 
-<h1>Processing...</h1>
-
-<div id="myProgress">
-  <div id="myBar"></div>
-</div>
-
-<!-- <br>
-<button onclick="move()">Click Me</button>  -->
-
-<script>
-var i = 0;
-function move() {
-  if (i == 0) {
-    i = 1;
-    var elem = document.getElementById("myBar");
-    var width = 1;
-    var id = setInterval(frame, 10);
-    function frame() {
-      if (width >= 100) {
-        clearInterval(id);
-        i = 0;
-      } else {
-        width++;
-        elem.style.width = width + "%";
-      }
-    }
-  }
-}
-</script>
+<div class="img-box"> 
+    <img src="images/unnamed.gif";>
+<div>
 
 </body>
 </html>
@@ -72,7 +40,7 @@ function move() {
     }else{
         echo "<script LANGUAGE='JavaScript'>
         window.alert('Succesfully Updated');
-        window.location.href='index.php';
+        window.location.href='result.php';
         </script>"; 
     }
 
