@@ -163,9 +163,36 @@ if ($theam == "theam3") {
                     <div class="mcib_middle">
                         <div class="containerHeaderOne">
                             <div class="midArea"> 
-                                <div class="productsAreaRight">
-                                    
-
+                                <div class="productsAreaRight" style="padding: 10px;">
+                                    <h3>Sinhala Medium</h3>
+                                    <table class="table">
+                                        <tr>
+                                            <td>
+                                            
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <br>
+                                    <h3>Tamil Medium</h3>
+                                    <table class="table">
+                                        <tr>
+                                            <td>
+                                            
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <br>
+                                    <h3>English Medium</h3>
+                                    <table class="table">
+                                        <tr>
+                                            <td>
+                                            
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <hr>
+                                    <button type="button" class="btn btn-primary btn-lg" onclick="document.location.href='import-excell.php'">Import to Excell</button>
+                                    <button type="button" class="btn btn-secondary btn-lg" onclick="document.location.href='import-pdf.php'">Import to PDF</button>
                                 </div>
                             </div>
                         </div>
@@ -176,15 +203,7 @@ if ($theam == "theam3") {
     </body>
 </html>
 <?php
-$SchType = $_POST['SchType'];
-$NICUser = $_POST['NICUser'];
-$NICUser2 = $_POST['NICUser2'];
-$accLevel = $_SESSION["accLevel"];
-$loggedPositionName = $_SESSION['loggedPositionName'];
-$accessRoleType = $_SESSION['AccessRoleType'];
-$ProCode = $_SESSION['ProCodeU'];
-$District = $_SESSION['DistCodeU'];
-$ZONECODE = $_SESSION['ZoneCodeU'];
+
 ?>
 <script>
 

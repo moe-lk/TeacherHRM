@@ -110,6 +110,10 @@ if (isset($_POST["FrmSubmit"])) {
     $EmpTypeCode = "";
     $AssignInstDetails = "";
 
+    if($AppDateF == ''){
+        $AppDateF = $AppDateAddT; //Check this 
+    }
+    // var_dump($AppDateF);
     //service history current
     $DistrictCode = $_REQUEST['DistrictCode'];
     $ZoneCode = $_REQUEST['ZoneCode'];

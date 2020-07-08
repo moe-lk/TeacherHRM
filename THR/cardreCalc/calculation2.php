@@ -18,9 +18,9 @@
     include '../db_config/connectionNEW.php';
     $NICUser = $_REQUEST['NICUser2'];
 
-    $sqlc2 = "UPDATE ExcessDeposit
-    SET ExcDep = a.ApprCardre - p.AvailableTch
-    FROM ExcessDeposit ed
+    $sqlc2 = "UPDATE ExcessDeficit
+    SET ExcDef = a.ApprCardre - p.AvailableTch
+    FROM ExcessDeficit ed
     INNER JOIN AvailableTeachers p
     ON ed.CenCode = p.CenCode 
     Inner Join AvailableTeachers q
