@@ -20,3 +20,13 @@ ON av.Medium = r.Medium1
  SELECT * FROM #Table2 WHERE CenCode = 'SC07105'
 
 DROP TABLE  #Table2
+
+SELECT DISTINCT AC.CenCode, AC.SubCode, AC.Medium, AT1.AvailableTch , ApprCardre, (AC.ApprCardre - AT1.AvailableTch) AS EXCDEF
+INTO #tablec 
+FROM ApprovedCardre AC
+INNER JOIN AvailableTeachers AT1 
+ON AC.CenCode = AT1.CenCode
+INNER JOIN AvailableTeachers AT2
+ON AC.SubCode = AT2.SubCode
+INNER JOIN AvailableTeachers AT3
+ON AC.Medium = AT3.Medium
