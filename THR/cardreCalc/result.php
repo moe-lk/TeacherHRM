@@ -148,7 +148,7 @@ if ($theam == "theam3") {
                             </div>
                         </div>
                         <div id="header_logo" style="margin-top:0px;"><img src="../images/header.png" width="960" height="150" /></div>
-
+                            
                         <div style="clear:both"></div>
                     </div>
                 </div>
@@ -192,7 +192,7 @@ if ($theam == "theam3") {
                                     </table>
                                     <hr>
                                     <button type="button" class="btn btn-primary btn-lg" onclick="document.location.href='import-excell.php'">Import to Excell</button>
-                                    <button type="button" class="btn btn-secondary btn-lg" onclick="document.location.href='import-pdf.php'">Import to PDF</button>
+                                    <!-- <button type="button" class="btn btn-secondary btn-lg" onclick="document.location.href='import-pdf.php'">Import to PDF</button> -->
                                 </div>
                             </div>
                         </div>
