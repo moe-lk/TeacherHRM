@@ -69,7 +69,7 @@ if($q=='censesList'){
         array($iCID, SQLSRV_PARAM_IN)
     );
 	$sql = "{call SP_TG_GetSchoolsFor_SelectedDivision(?)}";
-    $details="<select class=\"divSimple\" id=\"cmbSchool\" name=\"cmbSchool\">
+    $details="<select class=\"select2a_n\" id=\"InstCode\" name=\"InstCode\">
 			  <option value=\"\">-Select-</option>";
 	
     $stmt = $db->runMsSqlQuery($sql, $params1);

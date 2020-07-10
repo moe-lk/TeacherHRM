@@ -40,6 +40,7 @@ $(document).ready(function () {
 
   var x = document.getElementById("otherdiv");
   var y = document.getElementById("inputdiv");
+  var MedApp = document.getElementById("MedApp");
 
   $(document).on("change", "#SubApp", function () {
     var SubApp_id = $(this).val();
@@ -52,10 +53,13 @@ $(document).ready(function () {
       x.style.display = "none";
       y.style.display = "none";
     }
+    // alert(MedApp.value);
+    MedApp.value = "";
   });
 
   var x = document.getElementById("Tempotherdiv");
   var y = document.getElementById("Tempinputdiv");
+  var TempMedApp = document.getElementById("TempMedApp");
 
   $(document).on("change", "#TempSubApp", function () {
     var SubApp_id = $(this).val();
@@ -68,5 +72,6 @@ $(document).ready(function () {
       x.style.display = "none";
       y.style.display = "none";
     }
+    TempMedApp.value = "";
   });
 });

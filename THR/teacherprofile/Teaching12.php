@@ -1126,6 +1126,7 @@ while($TemprowTBL = sqlsrv_fetch_array($TempstmtTBL, SQLSRV_FETCH_ASSOC)){
         tbl.style.display = "block";
     }else{
         tbl.style.display = "none";
+        frm.style.display = "block"
     }
     if(TempTbldata == 1 ){
         Temptbl.style.display = "block";

@@ -354,7 +354,7 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                     <td>Appointed Medium: </td>
                     <td>
                         <select id="MedApp" name="MedApp">
-                            
+                            <option value=''>Select</option>
                             <?php // for meium combo box
                             if($TbLD == 0 || $MEDCode == ''){
                                 echo "<option>Select</option>";
@@ -467,7 +467,7 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                     <td>Appointed Medium: </td>
                     <td>
                         <select id="TempMedApp" name="TempMedApp">
-                            
+                            <option value=''>Select</option>
                             <?php // for meium combo box
                             if($TempTbLD == 0 || $MEDCode == ''){
                                 echo "<option>Select</option>";
@@ -504,6 +504,7 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                 <tr>
             </table>
         </form>
+        <?php // var_dump($TbLD); ?>
     </div>
 </div>
 
@@ -522,6 +523,7 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
         tbl.style.display = "block";
     }else{
         tbl.style.display = "none";
+        frm.style.display = "block";
     }
     if(TempTbldata == 1 ){
         Temptbl.style.display = "block";
@@ -553,6 +555,14 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
     }else{
         i = '1';
     }
+
+    // var TempMedApp = document.getElementById('TempMedApp')
+    // var MedApp = document.getElementById('MedApp')
+    // function MediumC(){
+    //     console.log('THIS');
+    //     TempMedApp.value = 'Select';
+    //     MedApp.value = 'Select';
+    // }
     // console.log(i);
     
     // $(document).on("change", "#MedApp", function () {
