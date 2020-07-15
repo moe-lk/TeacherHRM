@@ -33,7 +33,8 @@ if (isset($_POST["FrmSubmit"])) {
         ,Temp_AppoinmentDetails. LastUpdate
         ,Temp_AppoinmentDetails.RecordLog AS RecordLog
         FROM Temp_AppoinmentDetails
-        INNER JOIN [TeacherMast] ON Temp_AppoinmentDetails.NIC = TeacherMast.NIC WHERE Temp_AppoinmentDetails.ID='$RegID'";
+        INNER JOIN [TeacherMast] ON Temp_AppoinmentDetails.NIC = TeacherMast.NIC 
+        WHERE Temp_AppoinmentDetails.ID='$RegID'";
 
         $stmtE = $db->runMsSqlQuery($reqTab);
         $rowE = sqlsrv_fetch_array($stmtE, SQLSRV_FETCH_ASSOC);

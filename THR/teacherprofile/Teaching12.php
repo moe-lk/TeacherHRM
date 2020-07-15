@@ -406,7 +406,7 @@ while($TemprowTBL = sqlsrv_fetch_array($TempstmtTBL, SQLSRV_FETCH_ASSOC)){
                             echo "<td style='padding: 5px;'>".$TempTchSubject3."-".$TempSubj3."</td>";
                             echo "<td style='padding: 5px;'>".$TempMedium3."-".$TempMed3."</td>";
                             echo "<td style='padding: 5px;'>".$TempOtherSpecial."-".$TempOther."</td>";
-                            echo "<td style='padding: 5px;' style='text-align:center'><input type='button' value='Edit' onclick='showTempForm()'></td>";    
+                            echo "<td style='padding: 5px;' style='text-align:center'><input type='button' id='Tempbtn-frm' value='Edit' onclick='showTempForm()'></td>";    
                 ?>
                 </tr>
             </table>
@@ -455,7 +455,7 @@ while($TemprowTBL = sqlsrv_fetch_array($TempstmtTBL, SQLSRV_FETCH_ASSOC)){
                             if($TbLD == 0 || $TchSubject1 == ''){
                                 echo "<option>Select</option>";
                             } 
-                            $sql = "SELECT * FROM CD_TeachSubjects WHERE ID IS NOT NULL AND Code != '9'";
+                            $sql = "SELECT * FROM CD_TeachSubjects WHERE ID = '$TchSubject1' AND Code != '9'";
                             $stmt = $db->runMsSqlQuery($sql);
                             while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
                                 $TchSub = $row['SubjectName'];
@@ -549,7 +549,7 @@ while($TemprowTBL = sqlsrv_fetch_array($TempstmtTBL, SQLSRV_FETCH_ASSOC)){
                             if($TbLD == 0 || $TchSubject2 == ''){
                                 echo "<option>Select</option>";
                             }
-                            $sql = "SELECT * FROM CD_TeachSubjects WHERE ID IS NOT NULL AND Code != '9'";
+                            $sql = "SELECT * FROM CD_TeachSubjects WHERE ID = '$TchSubject2' AND Code != '9'";
                             $stmt = $db->runMsSqlQuery($sql);
                             while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
                                 $TchSub = $row['SubjectName'];
@@ -644,7 +644,7 @@ while($TemprowTBL = sqlsrv_fetch_array($TempstmtTBL, SQLSRV_FETCH_ASSOC)){
                             if($TbLD == 0 || $TchSubject3 == ''){
                                 echo "<option>Select</option>";
                             }
-                            $sql = "SELECT * FROM CD_TeachSubjects WHERE ID IS NOT NULL AND Code != '9'";
+                            $sql = "SELECT * FROM CD_TeachSubjects WHERE ID = '$TchSubject3' AND Code != '9'";
                             $stmt = $db->runMsSqlQuery($sql);
                             while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
                                 $TchSub = $row['SubjectName'];
@@ -710,7 +710,7 @@ while($TemprowTBL = sqlsrv_fetch_array($TempstmtTBL, SQLSRV_FETCH_ASSOC)){
                             if($TbLD == 0 || $OtherSpecial == ''){
                                 echo "<option>Select</option>";
                             }
-                            $sql = "SELECT * FROM CD_TeachSubjects WHERE Code = '9'";
+                            $sql = "SELECT * FROM CD_TeachSubjects WHERE Code = '9' AND ID = '$OtherSpecial'";
                             $stmt = $db->runMsSqlQuery($sql);
                             while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
                                 $TchGrade = $row['SubjectName'];
@@ -804,7 +804,7 @@ while($TemprowTBL = sqlsrv_fetch_array($TempstmtTBL, SQLSRV_FETCH_ASSOC)){
                             if($TempTbLD == 0 || $TempTchSubject1 == ''){
                                 echo "<option>Select</option>";
                             } 
-                            $sql = "SELECT * FROM CD_TeachSubjects WHERE ID IS NOT NULL AND Code != '9'";
+                            $sql = "SELECT * FROM CD_TeachSubjects WHERE ID = '$TempTchSubject1' AND Code != '9'";
                             $stmt = $db->runMsSqlQuery($sql);
                             while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
                                 $TchSub = $row['SubjectName'];
@@ -898,7 +898,7 @@ while($TemprowTBL = sqlsrv_fetch_array($TempstmtTBL, SQLSRV_FETCH_ASSOC)){
                             if($TempTbLD == 0 || $TempTchSubject2 == ''){
                                 echo "<option>Select</option>";
                             }
-                            $sql = "SELECT * FROM CD_TeachSubjects WHERE ID IS NOT NULL AND Code != '9'";
+                            $sql = "SELECT * FROM CD_TeachSubjects WHERE ID = '$TempTchSubject2' AND Code != '9'";
                             $stmt = $db->runMsSqlQuery($sql);
                             while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
                                 $TchSub = $row['SubjectName'];
@@ -961,27 +961,7 @@ while($TemprowTBL = sqlsrv_fetch_array($TempstmtTBL, SQLSRV_FETCH_ASSOC)){
                 
                 <tr>
                     <td class="box">Grade Span</td>
-                    <td class="box">
-                        <select id="TempGradTch3" name="TempGradTch3">
-
-                            <!-- <option>Select</option> -->
-                            <?php // for meium combo box
-                            if($TempTbLD == 0 || $TempGradeCode3 == ''){
-                                echo "<option>Select</option>";
-                            } 
-                            $sql = "SELECT * FROM CD_TeachSubCategory WHERE ID IS NOT NULL AND ID != '9'";
-                            $stmt = $db->runMsSqlQuery($sql);
-                            while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-                                $TchGrade = $row['CategoryName'];
-                                $TchGradeCode = $row['ID'];
-                                $seltebr = "";
-                                if($TchGradeCode == $TempGradeCode3){
-                                    $seltebr = "selected";
-                                }
-                                echo "<option value=" . $TchGradeCode . " $seltebr>" . $TchGrade . "</option>";
-                            }
-                            ?>
-                        </select>
+                    <td class="box">                                                  
                     </td>
                 </tr>
                 <tr>
@@ -993,7 +973,7 @@ while($TemprowTBL = sqlsrv_fetch_array($TempstmtTBL, SQLSRV_FETCH_ASSOC)){
                             if($TempTbLD == 0 || $TempTchSubject3 == ''){
                                 echo "<option>Select</option>";
                             }
-                            $sql = "SELECT * FROM CD_TeachSubjects WHERE ID IS NOT NULL AND Code != '9'";
+                            $sql = "SELECT * FROM CD_TeachSubjects WHERE ID = '$TempTchSubject3' AND Code != '9'";
                             $stmt = $db->runMsSqlQuery($sql);
                             while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
                                 $TchSub = $row['SubjectName'];
@@ -1059,7 +1039,7 @@ while($TemprowTBL = sqlsrv_fetch_array($TempstmtTBL, SQLSRV_FETCH_ASSOC)){
                             if($TempTbLD == 0 || $TempOtherSpecial == ''){
                                 echo "<option>Select</option>";
                             }
-                            $sql = "SELECT * FROM CD_TeachSubjects WHERE Code = '9'";
+                            $sql = "SELECT * FROM CD_TeachSubjects WHERE Code = '9' AND ID = '$TempOtherSpecial'";
                             $stmt = $db->runMsSqlQuery($sql);
                             while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
                                 $TchGrade = $row['SubjectName'];
@@ -1121,6 +1101,7 @@ while($TemprowTBL = sqlsrv_fetch_array($TempstmtTBL, SQLSRV_FETCH_ASSOC)){
     var Temptbl = document.getElementById("TempTblrecord");
     // console.log(itbl.style.display)
     var btn = document.getElementById("btn-frm");
+    var Tempbtn = document.getElementById("Tempbtn-frm");
 
     if(Tbldata == 1 ){
         tbl.style.display = "block";
@@ -1130,7 +1111,9 @@ while($TemprowTBL = sqlsrv_fetch_array($TempstmtTBL, SQLSRV_FETCH_ASSOC)){
     }
     if(TempTbldata == 1 ){
         Temptbl.style.display = "block";
-        btn.disabled = true;
+        Tempfrm.style.display = "none";
+        frm.style.display = "none";
+        // btn.disabled = true;
     }else{
         Temptbl.style.display = "none";
         btn.style.display = "block";

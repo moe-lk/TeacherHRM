@@ -2,6 +2,11 @@
   include '../db_config/DBManager.php';
   $db = new DBManager();
   include "../db_config/connectionNEW.php";
+
+  $medium = $_REQUEST['Medium'];
+  $grade = $_REQUEST['GradTch'];
+
+  // var_dump($_REQUEST);
   
   $sql = "SELECT ExcessDeficit.CenCode
   ,CD_CensesNo.InstitutionName
@@ -10,7 +15,8 @@
     ,[Medium]
     ,[ExcDef] 
 FROM ExcessDeficit 
-INNER JOIN CD_CensesNo ON CD_CensesNo.CenCode = ExcessDeficit.CenCode";
+INNER JOIN CD_CensesNo ON CD_CensesNo.CenCode = ExcessDeficit.CenCode 
+WHERE Medium ='$medium' AND SecCode = '$grade'";
   $stmt = $db->runMsSqlQuery($sql);
 
   function cleanData(&$str)
@@ -38,7 +44,7 @@ INNER JOIN CD_CensesNo ON CD_CensesNo.CenCode = ExcessDeficit.CenCode";
                     <x:WorksheetOptions>
                         <x:Print>
                             <x:ValidPrinterInfo/>
-                        </x:Print>
+                        </x:Print> 
                     </x:WorksheetOptions>
                 </x:ExcelWorksheet>
             </x:ExcelWorksheets>

@@ -272,7 +272,7 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                         echo "<td style='padding: 5px;'>".$TempAppCategory." - ".$TempAppointmentName."</td>";
                         echo "<td style='padding: 5px;'>".$TempAppSubject." - ".$TempSubjectName."</td>";
                         echo "<td style='padding: 5px;'>".$TempMEDCode." - ".$TempMedium."</td>";
-                        echo "<td style='text-align:center'><input type='button' value='Edit' onclick='showTempForm()'></td>";
+                        echo "<td style='text-align:center'><input type='button' id='Temp-btn-frm' value='Edit' onclick='showTempForm()'></td>";
                 ?> 
                 </tr>
             </table>
@@ -292,7 +292,7 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                 <tr>
                     <td>Appointment category: </td>
                     <td>
-                        <select id="AppCat" name="AppCat">
+                        <select id="AppCat" name="AppCat" required>
                         <?php
                             if($TbLD == 0 || $AppCategory == ''){
                                 echo "<option>Select</option>";
@@ -314,16 +314,17 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                         </select>
                     </td>
                 </tr>
+                <?php // var_dump($AppSubject) ?>
                 <tr>
                     <td style="padding-right: 50px">Subject/Degree Appointed: </td>
                     <td>
                         <div id="SubAppDiv">
-                            <select id="SubApp" name="SubApp">
+                            <select id="SubApp" name="SubApp" required>
                             <?php
                                 if($TbLD == 0 || $AppSubject == ''){
                                     echo "<option>Select</option>";
                                 }
-                                $sql = "SELECT * FROM CD_AppSubjects WHERE ID IS NOT NULL";
+                                $sql = "SELECT * FROM CD_AppSubjects WHERE ID = '$AppSubject'";
                                 $stmt = $db->runMsSqlQuery($sql);
                                 while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
                                     $AppSubId = trim($row['ID']);
@@ -345,7 +346,7 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                         <td><div style="display :none" id="otherdiv">If Other Please Specify: </div></td>
                         <td>
                         <div style="display :none" id="inputdiv">
-                            <input type="text" name="otherSub" id="otherSub">
+                            <input type="text" name="otherSub" id="otherSub" >
                             </div>
                         </td>
                     </div>
@@ -353,7 +354,7 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                 <tr>
                     <td>Appointed Medium: </td>
                     <td>
-                        <select id="MedApp" name="MedApp">
+                        <select id="MedApp" name="MedApp" required>
                             <option value=''>Select</option>
                             <?php // for meium combo box
                             if($TbLD == 0 || $MEDCode == ''){
@@ -405,7 +406,7 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                 <tr>
                     <td>Appointment category: </td>
                     <td>
-                        <select id="TempAppCat" name="TempAppCat">
+                        <select id="TempAppCat" name="TempAppCat" required>
                         <?php
                             if($TempTbLD == 0 || $TempAppCategory == ''){
                                 echo "<option>Select</option>";
@@ -431,12 +432,12 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                     <td style="padding-right: 50px">Subject/Degree Appointed: </td>
                     <td>
                         <div id="SubAppDiv">
-                            <select id="TempSubApp" name="TempSubApp">
+                            <select id="TempSubApp" name="TempSubApp" required>
                             <?php
                                 if($TempTbLD == 0 || $TempAppSubject == ''){
                                     echo "<option>Select</option>";
                                 }
-                                $sql = "SELECT * FROM CD_AppSubjects WHERE ID IS NOT NULL";
+                                $sql = "SELECT * FROM CD_AppSubjects WHERE ID = '$TempAppSubject'";
                                 $stmt = $db->runMsSqlQuery($sql);
                                 while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
                                     $AppSubId = trim($row['ID']);
@@ -466,7 +467,7 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                 <tr>
                     <td>Appointed Medium: </td>
                     <td>
-                        <select id="TempMedApp" name="TempMedApp">
+                        <select id="TempMedApp" name="TempMedApp" required>
                             <option value=''>Select</option>
                             <?php // for meium combo box
                             if($TempTbLD == 0 || $MEDCode == ''){
@@ -518,16 +519,20 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
     var Temptbl = document.getElementById("TempTblrecord");
     // console.log(TempTbldata);
     var btn = document.getElementById("btn-frm");
+    var Tempbtn = document.getElementById("Temp-btn-frm");
 
     if(Tbldata == 1 ){
         tbl.style.display = "block";
+        
     }else{
         tbl.style.display = "none";
         frm.style.display = "block";
     }
     if(TempTbldata == 1 ){
         Temptbl.style.display = "block";
-        btn.disabled = true;
+        Tempfrm.style.display = "none";
+        frm.style.display = "none";
+        // Tempbtn.disabled = true;
 
     }else{
         Temptbl.style.display = "none";
