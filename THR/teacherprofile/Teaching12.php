@@ -475,7 +475,7 @@ while($TemprowTBL = sqlsrv_fetch_array($TempstmtTBL, SQLSRV_FETCH_ASSOC)){
                 </tr> -->
                 <tr>
                     <td class="box">
-                        <div style="display :none" id="otherdiv1">If Other Please Specify: </div>
+                        <div style="display :none" id="otherdiv1"><span style="color:red">*</span>If Other Please Specify: </div>
                     </td>
                     <td class="box">
                         <input type="text" name="otherTch1" id="otherTch1" style="display:none">
@@ -569,7 +569,7 @@ while($TemprowTBL = sqlsrv_fetch_array($TempstmtTBL, SQLSRV_FETCH_ASSOC)){
                 </tr> -->
                 <tr>
                     <td class="box">
-                        <div style="display :none" id="otherdiv2">If Other Please Specify: </div>
+                        <div style="display :none" id="otherdiv2"><span style="color:red">*</span>If Other Please Specify: </div>
                     </td>
                     <td class="box">
                         <input type="text" name="otherTch2" id="otherTch2" style="display :none">
@@ -664,7 +664,7 @@ while($TemprowTBL = sqlsrv_fetch_array($TempstmtTBL, SQLSRV_FETCH_ASSOC)){
                 </tr> -->
                 <tr>
                     <td class="box">
-                        <div style="display :none" id="otherdiv3">If Other Please Specify: </div>
+                        <div style="display :none" id="otherdiv3"><span style="color:red">*</span>If Other Please Specify: </div>
                     </td>
                     <td class="box">
                         <input type="text" name="otherTch3" id="otherTch3" style="display :none">
@@ -824,7 +824,7 @@ while($TemprowTBL = sqlsrv_fetch_array($TempstmtTBL, SQLSRV_FETCH_ASSOC)){
                 </tr> -->
                 <tr>
                     <td class="box">
-                        <div style="display :none" id="Tempotherdiv1">If Other Please Specify: </div>
+                        <div style="display :none" id="Tempotherdiv1"><span style="color:red">*</span>If Other Please Specify: </div>
                     </td>
                     <td class="box">
                         <input type="text" name="TempotherTch1" id="TempotherTch1" style="display:none">
@@ -918,7 +918,7 @@ while($TemprowTBL = sqlsrv_fetch_array($TempstmtTBL, SQLSRV_FETCH_ASSOC)){
                 </tr> -->
                 <tr>
                     <td class="box">
-                        <div style="display :none" id="Tempotherdiv2">If Other Please Specify: </div>
+                        <div style="display :none" id="Tempotherdiv2"><span style="color:red">*</span>If Other Please Specify: </div>
                     </td>
                     <td class="box">
                         <input type="text" name="TempotherTch2" id="TempotherTch2" style="display :none">
@@ -993,7 +993,7 @@ while($TemprowTBL = sqlsrv_fetch_array($TempstmtTBL, SQLSRV_FETCH_ASSOC)){
                 </tr> -->
                 <tr>
                     <td class="box">
-                        <div style="display :none" id="Tempotherdiv3">If Other Please Specify: </div>
+                        <div style="display :none" id="Tempotherdiv3"><span style="color:red">*</span>If Other Please Specify: </div>
                     </td>
                     <td class="box">
                         <input type="text" name="TempotherTch3" id="TempotherTch3" style="display :none">
@@ -1113,7 +1113,7 @@ while($TemprowTBL = sqlsrv_fetch_array($TempstmtTBL, SQLSRV_FETCH_ASSOC)){
         Temptbl.style.display = "block";
         Tempfrm.style.display = "none";
         frm.style.display = "none";
-        // btn.disabled = true;
+        btn.disabled = true;
     }else{
         Temptbl.style.display = "none";
         btn.style.display = "block";
