@@ -15,7 +15,6 @@ $(document).ready(function () {
       success: function (result) {
         // alert(result);
         $("#SubTch1").html(result);
-        $("#SubTch1").required = true;
       },
     });
   });
@@ -68,11 +67,10 @@ $(document).ready(function () {
 
   $(document).on("change", "#SubTch1", function () {
     var SubApp_id = $(this).val();
-    // alert(SubApp_id);
-    if (SubApp_id == "248" || SubApp_id == "456" || SubApp_id == "455") {
+    // console.log(SubApp_id)
+    if (SubApp_id == "248" || SubApp_id == "456") {
       x.style.display = "block";
       y.style.display = "block";
-      y.required = true;
     } else {
       x.style.display = "none";
       y.style.display = "none";
@@ -82,10 +80,9 @@ $(document).ready(function () {
   $(document).on("change", "#SubTch2", function () {
     var SubApp_id = $(this).val();
     // console.log(SubApp_id)
-    if (SubApp_id == "248" || SubApp_id == "456" || SubApp_id == "455") {
+    if (SubApp_id == "248" || SubApp_id == "456") {
       a.style.display = "block";
       b.style.display = "block";
-      b.required = true;
     } else {
       a.style.display = "none";
       b.style.display = "none";
@@ -95,10 +92,9 @@ $(document).ready(function () {
   $(document).on("change", "#SubTch3", function () {
     var SubApp_id = $(this).val();
     // console.log(SubApp_id)
-    if (SubApp_id == "248" || SubApp_id == "456" || SubApp_id == "455") {
+    if (SubApp_id == "248" || SubApp_id == "456") {
       c.style.display = "block";
       d.style.display = "block";
-      d.required = true;
     } else {
       c.style.display = "none";
       d.style.display = "none";
@@ -107,9 +103,8 @@ $(document).ready(function () {
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   $("#TempGradTch1").change(function () {
     var GradTch1 = $(this).val();
-    var TempSubTch1 = document.getElementById("TempSubTch1");
 
-    // alert(TempSubTch1);
+    // console.log(GradTch1);
     $.ajax({
       url: "TchSubConn.php",
       type: "POST",
@@ -124,7 +119,6 @@ $(document).ready(function () {
         $("#TempSubTch1").html(result);
       },
     });
-    TempSubTch1.required = true;
   });
 
   $("#TempGradTch2").change(function () {
@@ -166,20 +160,19 @@ $(document).ready(function () {
       },
     });
   });
-  var i = document.getElementById("Tempotherdiv1");
-  var j = document.getElementById("TempotherTch1");
-  var k = document.getElementById("Tempotherdiv2");
-  var l = document.getElementById("TempotherTch2");
-  var m = document.getElementById("Tempotherdiv3");
-  var n = document.getElementById("TempotherTch3");
+  var i = document.getElementById("otherdiv1");
+  var j = document.getElementById("otherTch1");
+  var k = document.getElementById("otherdiv2");
+  var l = document.getElementById("otherTch2");
+  var m = document.getElementById("otherdiv3");
+  var n = document.getElementById("otherTch3");
 
   $(document).on("change", "#TempSubTch1", function () {
     var SubApp_id = $(this).val();
     // console.log(SubApp_id)
-    if (SubApp_id == "248" || SubApp_id == "456" || SubApp_id == "455") {
+    if (SubApp_id == "248" || SubApp_id == "456") {
       i.style.display = "block";
       j.style.display = "block";
-      j.required = true;
     } else {
       i.style.display = "none";
       j.style.display = "none";
@@ -189,10 +182,9 @@ $(document).ready(function () {
   $(document).on("change", "#TempSubTch2", function () {
     var SubApp_id = $(this).val();
     // console.log(SubApp_id)
-    if (SubApp_id == "248" || SubApp_id == "456" || SubApp_id == "455") {
+    if (SubApp_id == "248" || SubApp_id == "456") {
       k.style.display = "block";
       l.style.display = "block";
-      l.required = true;
     } else {
       k.style.display = "none";
       l.style.display = "none";
@@ -202,10 +194,9 @@ $(document).ready(function () {
   $(document).on("change", "#TempSubTch3", function () {
     var SubApp_id = $(this).val();
     // console.log(SubApp_id)
-    if (SubApp_id == "248" || SubApp_id == "456" || SubApp_id == "455") {
+    if (SubApp_id == "248" || SubApp_id == "456") {
       m.style.display = "block";
       n.style.display = "block";
-      n.required = true;
     } else {
       m.style.display = "none";
       n.style.display = "none";

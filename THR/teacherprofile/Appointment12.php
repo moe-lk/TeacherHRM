@@ -293,7 +293,6 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                     <td>Appointment category: </td>
                     <td>
                         <select id="AppCat" name="AppCat" required>
-                        <option value=''>Select</option>
                         <?php
                             if($TbLD == 0 || $AppCategory == ''){
                                 echo "<option>Select</option>";
@@ -321,7 +320,6 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                     <td>
                         <div id="SubAppDiv">
                             <select id="SubApp" name="SubApp" required>
-                            <option value=''>Select</option>
                             <?php
                                 if($TbLD == 0 || $AppSubject == ''){
                                     echo "<option>Select</option>";
@@ -409,7 +407,6 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                     <td>Appointment category: </td>
                     <td>
                         <select id="TempAppCat" name="TempAppCat" required>
-                        <option value=''>Select</option>
                         <?php
                             if($TempTbLD == 0 || $TempAppCategory == ''){
                                 echo "<option>Select</option>";
@@ -436,7 +433,6 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                     <td>
                         <div id="SubAppDiv">
                             <select id="TempSubApp" name="TempSubApp" required>
-                            <option value=''>Select</option>
                             <?php
                                 if($TempTbLD == 0 || $TempAppSubject == ''){
                                     echo "<option>Select</option>";
@@ -462,7 +458,7 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
                     <div>
                         <td><div style="display :none" id="Tempotherdiv">If Other Please Specify: </div></td>
                         <td>
-                        <div style="display :none" id="Tempinputdiv">
+                        <div style="display :none" id="inputdiv">
                             <input type="text" name="TempotherSub" id="TempotherSub">
                             </div>
                         </td>
@@ -536,7 +532,7 @@ while($rowTBL = sqlsrv_fetch_array($stmtTBL, SQLSRV_FETCH_ASSOC)){
         Temptbl.style.display = "block";
         Tempfrm.style.display = "none";
         frm.style.display = "none";
-        btn.disabled = true;
+        // Tempbtn.disabled = true;
 
     }else{
         Temptbl.style.display = "none";

@@ -1,10 +1,6 @@
 <!----><link href="../cms/css/screen.css" rel="stylesheet" type="text/css" />
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src = "SubCode.js" ></script>
 <?php 
-
 include "../db_config/connectionNEW.php";
-
 $msg="";
 if(isset($_POST["FrmSrch"])){
 	$CenCodeSrc=trim($_REQUEST['CenCodeSrc']);
@@ -38,9 +34,6 @@ if(isset($_POST["FrmSubmit"])){
   $GradeCode = $_REQUEST['SubjCatCode'];
   $SubCode = $_REQUEST['subcode'];
   $medCode = $_REQUEST['Medium'];
-  $apprcardre = $_REQUEST['ApprCardre'];
-
-  
   
   $sqlEx = "INSERT INTO [dbo].[ExcessDeficit]([CenCode],[SubCode],[SecCode],[Medium]) VALUES (?, ?, ?, ?)";
   $params1 = array($CenCode, $GradeCode, $SubCode, $medCode);
@@ -50,8 +43,8 @@ if(isset($_POST["FrmSubmit"])){
   $params2 = array($CenCode, $GradeCode, $SubCode, $medCode);
   $stmt2 = sqlsrv_query( $conn, $sqlAv, $params2 );
 
-  $sqlapp = "INSERT INTO [dbo].[ApprovedCardre]([CenCode],[SubCode],[SecCode],[Medium],[ApprCardre]) VALUES (?, ?, ?, ?, ?)";
-  $params3 = array($CenCode, $GradeCode, $SubCode, $medCode, $apprcardre);
+  $sqlapp = "INSERT INTO [dbo].[ApprovedCardre]([CenCode],[SubCode],[SecCode],[Medium]) VALUES (?, ?, ?, ?)";
+  $params3 = array($CenCode, $GradeCode, $SubCode, $medCode);
   $stmt3 = sqlsrv_query( $conn, $sqlapp, $params3 );
 
   if($stmt1 && $stmt2 && $stmt3){
@@ -170,10 +163,10 @@ if(isset($_POST["FrmSubmit"])){
                     <td><select class="select2a_n" id="SubjCatCode" name="SubjCatCode">
                       <!--<option value="">School Name</option>-->
                       <?php
-                        $sql = "SELECT ID,CategoryName FROM CD_TeachSubCategory";
+                        $sql = "SELECT GradeCode,CategoryName FROM CD_TeachSubCategory";
                         $stmt = $db->runMsSqlQuery($sql);
                         while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-                          $GradeCode=trim($row['ID']);
+                          $GradeCode=trim($row['GradeCode']);
                           $GradeName=$row['CategoryName'];
                           echo "<option value=\"$GradeCode\" >$GradeName</option>";
                         }
@@ -215,14 +208,6 @@ if(isset($_POST["FrmSubmit"])){
                         </select></div></td>
                     </tr>
                     <tr>
-                    <tr>
-                      <td>ApprCardre<span class="form_error_sched">*</span></td>
-                      <td>:</td>
-                      <td>
-                      <input name="ApprCardre" type="text" class="input4" id="ApprCardre"/>
-                     
-                    </tr> 
-
                       <td>&nbsp;</td>
                       <td>&nbsp;</td>
                       <td><input name="FrmSubmit" type="submit" id="FrmSubmit" style="background-image: url(../cms/images/saveform.jpg); width:98px; height:26px; background-color:transparent; border:none;" value="" /></td>
