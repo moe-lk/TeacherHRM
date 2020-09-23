@@ -224,7 +224,7 @@ include('../activityLog.php');
         $stmt15 = sqlsrv_query( $conn, $queryTmpDel8, $params15 );
 
 
-        
+        $msg .= "Your action was successffully submitted.<br>";
 
         $reqTabMob = "SELECT MobileTel FROM TeacherMast where NIC='$NIC'";
         $stmtMob = $db->runMsSqlQuery($reqTabMob);
@@ -237,8 +237,6 @@ include('../activityLog.php');
             echo ("<script LANGUAGE='JavaScript'>
             window.alert('Succesfully Updated');
             </script>");
-            $msg .= "Your action was successffully submitted.<br>";
-            var_dump($stmt1);
         } else {
             sqlsrv_rollback( $conn );
             echo "Updates rolled back.<br />";

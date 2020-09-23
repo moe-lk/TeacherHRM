@@ -119,7 +119,6 @@ if (isset($_POST["FrmSubmit"])) {
         // $db->runMsSqlQuery($sqlUpdateUp2);
         if($stmt1 && $stmt2 && $stmt3 && $stmt4 && $stmt5 && $stmt6 && $stmt7 && $stmt8 && $stmt9){
             sqlsrv_commit($conn);
-            var_dump($stmt1);
             echo ("<script LANGUAGE='JavaScript'>
             window.alert('Succesfully Updated');
             window.location.href='updateRequestPersonalInfo-15.html';
