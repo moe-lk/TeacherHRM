@@ -486,7 +486,7 @@ $params4 = array(
                                                 <li><a href="#teaching">Teaching</a></li>
                                                 <li><a href="#service">Service</a></li>
                                                 <li><a href="#Appointmentdetails">Appointmnet</a></li>
-                                                <!-- <li><a href="#Teachingdetails">Teaching</a></li> -->
+                                                <li><a href="#Teachingdetails">Teaching</a></li>
                                                 <!-- <li><a href="#CircularCat">Circular Category</a></li> -->
                                                 <li><a href="#outOfService">Out of Service</a></li>
                                                 <li><a href="#columns">Columns</a></li>
@@ -1112,35 +1112,172 @@ WHERE        (TG_QuerySaveTeaching.ID = '$saveQID')";
                                                                 <td width="105" align="center" bgcolor="#FFFFFF"><strong>Grade Span</strong></td>
                                                                 <td width="311" align="center" bgcolor="#FFFFFF"><strong>Subject</strong></td>
                                                                 <td width="102" align="center" bgcolor="#FFFFFF"><strong>Medium</strong></td>
-                                                                <!-- <td width="200" align="center" bgcolor="#FFFFFF"><strong>Section</strong></td> -->
-                                                                <td width="103" align="center" bgcolor="#FFFFFF"><strong>Remove</strong></td>
+                                                                <td width="200" align="center" bgcolor="#FFFFFF"><strong>Section</strong></td>
+                                                                <td width="103" align="center" bgcolor="#FFFFFF"><strong>Remove</strong></td> 
                                                             </tr>
                                                         </table>
                                                         </div>
                                                     </li>
                                                 </ul>
-                                            </div>
-                                            <!-- End Appointment Details tab -->
+                                            </div> 
+                                            <!-- End Appointment Details tab --> -->
                                             <!-- Teaching Details tab -->
-                                            <div id="Teachingdetails" class="contenttab">
+                                            <!-- <div id="Teachingdetails" class="contenttab">
                                                 <ul id="itemContainer">
                                                     <li>
                                                     <div class="productsItemBoxText">
 
-                                                        <table width="850" border="0" bgcolor="#2D65A0" id="tblMainTeachDetails" cellpadding="3" cellspacing="1">
+                                                        <table width="850" border="0" bgcolor="#2D65A0" id="tbl2MainTeachDetails" cellpadding="3" cellspacing="1">
                                                             <tr>
                                                                 <td width="105" align="center" bgcolor="#FFFFFF"><strong>Grade Span</strong></td>
                                                                 <td width="311" align="center" bgcolor="#FFFFFF"><strong>Subject</strong></td>
                                                                 <td width="102" align="center" bgcolor="#FFFFFF"><strong>Medium</strong></td>
-                                                                <!-- <td width="200" align="center" bgcolor="#FFFFFF"><strong>Section</strong></td> -->
+                                                                <td width="200" align="center" bgcolor="#FFFFFF"><strong>Section</strong></td>
                                                                 <td width="103" align="center" bgcolor="#FFFFFF"><strong>Remove</strong></td>
                                                             </tr>
                                                         </table>
                                                         </div>
                                                     </li>
                                                 </ul>
-                                            </div>
+                                                
+                                            </div> -->
                                             <!-- End Teaching Details tab -->
+
+                                             <!--Teaching Detail tab -->
+                                            <!-- <div id="Teachingdetails" class="contenttab">
+                                                <ul id="itemContainer">
+                                                    <li>
+
+                                                        <div class="productsItemBoxText">
+
+                                                            <table width="850" border="0" bgcolor="#2D65A0" id="tbl2MainTeachDetails" cellpadding="3" cellspacing="1">
+                                                                <tr>
+                                                                    <td width="105" align="center" bgcolor="#FFFFFF"><strong>Grade Span</strong></td>
+                                                                    <td width="311" align="center" bgcolor="#FFFFFF"><strong>Subject</strong></td>
+                                                                    <td width="102" align="center" bgcolor="#FFFFFF"><strong>Medium</strong></td>
+                                                                    
+                                                                    <td width="103" align="center" bgcolor="#FFFFFF"><strong>Remove</strong></td>
+                                                                </tr>
+                                                                <?php
+//                                                                 if ($querySaveVal != "") {
+//                                                                     $sql = "SELECT CD_TeachSubjects.SubjectName, CD_Medium.Medium, CD_TeachSubCategory.GradeName
+// FROM            TG_QuerySaveTeaching INNER JOIN
+//                          CD_TeachSubjects ON TG_QuerySaveTeaching.Code = CD_TeachSubjects.Code INNER JOIN
+//                          CD_Medium ON TG_QuerySaveTeaching.MediumCode = CD_Medium.Code INNER JOIN
+//                          CD_TeachSubCategory ON TG_QuerySaveTeaching.GradeCode = CD_SecGrades.GradeCode
+// WHERE        (TG_QuerySaveTeaching.ID = '$saveQID')";
+
+//                                                                     $stmt = $db->runMsSqlQuery($sql);
+//                                                                     while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+//                                                                         echo "<tr>";
+//                                                                         echo "<td width=\"105\" bgcolor=\"#FFFFFF\">" . $row["SubTypeName"] . "</td>";
+//                                                                         echo "<td width=\"311\" bgcolor=\"#FFFFFF\">" . $row["SubjectName"] . "</td>";
+//                                                                         echo "<td width=\"102\" bgcolor=\"#FFFFFF\">" . $row["GradeName"] . "</td>";
+//                                                                         echo "<td width=\"200\" bgcolor=\"#FFFFFF\">" . $row["Medium"] . "</td>";
+//                                                                         echo "<td width=\"103\" align=\"center\" bgcolor=\"#FFFFFF\"><img src=\"images/trash.png\" width=\"14\" height=\"14\" onclick=\"rmvRow(this);\"/></td>";
+//                                                                         echo "</tr>";
+//                                                                     }
+//                                                                 }
+                                                                ?>
+
+                                                            </table> -->
+
+
+                                                            <!--Item selected area-->
+                                                            <!-- <div class="divSimple" style="margin-left:0px; margin-top: 10px; width:auto;"> -->
+                                                               
+                                                                <!-- 
+                                                                
+                                                                 -->
+                                                                <!-- <div style="float:left; margin-right:30px; margin-top:8px; width:auto;"> -->
+                                                                <!-- <table><tr>
+                                                                    <div style="width:100%; float:left;">
+                                                                    <td><label style="float:left; width:auto;"><strong>Teacher Hours :</strong></label></td>
+                                                                    <td style="padding: 3px;"><select style="width: auto;" id="teaching2Type" name="teaching2Type" onchange="">
+                                                                            <option value="1">Most Teaching Hours</option>
+                                                                            <option value="2">Second Teaching Hours</option>
+                                                                            <option value="3">Capable Teaching Hours</option>
+                                                                        </select></td>
+                                                                    </div>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                    <div style="width:100%; float:left;">
+                                                                    <td><label style="float:left; width: auto;"><strong>Subject :</strong></label></td>
+                                                                    <td style="padding: 3px;"><select style="width: auto;" id="teaching2Subject" name="teaching2Subject" onchange="">
+                                                                            <option value="">All</option> -->
+                                                                            <?php
+                                                                //             $sql = "SELECT
+																//   Code,
+																//   SubjectName
+																// FROM CD_TeachSubjects
+																// WHERE (Code <> N'')
+																// ORDER BY SubjectName";
+                                                                //             $stmt = $db->runMsSqlQuery($sql);
+                                                                //             while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                                                //                 echo '<option value=' . $row['Code'] . '>' . $row['SubjectName'] . '</option>';
+                                                                //             }
+                                                                            ?>
+                                                                        <!-- </select></td>
+                                                                    </div>
+                                                                    </tr>
+                                                                    <tr>
+                                                                    <div style="width:100%; float:left;">
+                                                                    <td><label style="float:left; width:auto"><strong>Medium :</strong></label></td>
+                                                                    <td style="padding: 3px;"><select style="width: auto;" id="teaching2Medium" name="teaching2Medium" onchange="">
+                                                                            <option value="">All</option>
+                                                                            <?php
+                                                                //             $sql = "SELECT Code, LTRIM(Medium) AS Medium
+																// FROM CD_Medium
+																// WHERE (Code <> N'')
+																// ORDER BY Medium";
+                                                                //             $stmt = $db->runMsSqlQuery($sql);
+                                                                //             while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                                                //                 echo '<option value=' . $row['Code'] . '>' . $row['Medium'] . '</option>';
+                                                                //             }
+                                                                            ?>
+                                                                        </select></td>+
+                                                                    </div>
+                                                                    </tr> -->
+                                                                    <!---------> 
+                                                                    <!-- <tr>         
+                                                                    <div style="width: 100%; float:left;">
+                                                                    <td><label style="float:left; width:;150px"><strong>Section :</strong></label></td>
+                                                                    <td style="padding: 3px;"><select style="width: auto;" id="teaching2Grade" name="teaching2Grade" onchange="">
+                                                                            <option value="">All</option>
+                                                                            <?php
+                                                                //             $sql = "SELECT GradeCode, LTRIM(CategoryName) AS Grade
+																// FROM CD_TeachSubCategory
+																// WHERE (GradeCode <> N'')
+																// ORDER BY Grade";
+                                                                //             $stmt = $db->runMsSqlQuery($sql);
+                                                                //             while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                                                //                 echo '<option value=' . $row['GradeCode'] . '>' . $row['Grade'] . '</option>';
+                                                                //             }
+                                                                            ?>
+                                                                        </select></td>
+                                                                    </div>
+                                                                    </tr> -->
+                                                                    <!--------->
+                                                                    <!-- <tr><td>
+                                                                    <div style="float:left;">
+                                                                        <img src="images/add_b.png" width="48" height="19" onClick="addRowToTeachingDetailstbl();"/>
+                                                                    </div>
+                                                                    </td></tr>
+                                                                    </table>
+                                                                </div>
+
+
+                                                            </div> -->
+
+                                                            <!--End item selected area-->
+                                                        <!-- </div>
+
+                                                    </li>
+                                                </ul>
+                                            </div> -->
+                                            <!--End Teaching details tab -->
+
                                             <!--outOfService tab -->
                                             <div id="outOfService" class="contenttab">
                                                 <ul id="itemContainer">
@@ -1235,7 +1372,9 @@ WHERE        (TG_QuerySaveTeaching.ID = '$saveQID')";
                                                                     <td>&nbsp;</td>
                                                                     <td><input type="checkbox" name="selectColum[]" disabled value="Service" id="chkService"/></td>
                                                                     <td>Service</td>
-                                                                    <td>&nbsp;</td>
+                                                                    <!-- <td><input type="checkbox" name="selectColum[]" disabled value="Subject2" id="chkCat2"/></td>
+                                                                    <td>Subject2</td>
+                                                                    <td>&nbsp;</td>> -->
                                                                     
                                                                 </tr>
                                                                 <tr>
@@ -1247,7 +1386,9 @@ WHERE        (TG_QuerySaveTeaching.ID = '$saveQID')";
                                                                     <td>&nbsp;</td>
                                                                     <td><input type="checkbox" name="selectColum[]" disabled value="Medium" id="chkMed"/></td>
                                                                     <td>Medium</td>
-                                                                    <td>&nbsp;</td>
+                                                                    <!-- <td><input type="checkbox" name="selectColum[]" disabled value="Medium2" id="chkMed2"/></td>
+                                                                    <td>Medium2</td>
+                                                                    <td>&nbsp;</td> -->
                                                                 </tr>
                                                                 <tr>
                                                                     <td align="center"><input type="checkbox" name="selectColum[]"  value="Status" /></td>
@@ -1258,8 +1399,17 @@ WHERE        (TG_QuerySaveTeaching.ID = '$saveQID')";
                                                                     <td>&nbsp;</td>
                                                                     <td><input type="checkbox" name="selectColum[]" disabled value="Section" id="chksect"/></td>
                                                                     <td>Section</td>
-                                                                    <td>&nbsp;</td>
+                                                                    <!-- <td><input type="checkbox" name="selectColum[]" disabled value="Section2" id="chksect2"/></td>
+                                                                    <td>Section2</td>
+                                                                    <td>&nbsp;</td> -->
+                                                                    
                                                                 </tr>
+
+                                                                <!-- <tr>
+                                                                    <td align="center"><input type="checkbox" name="selectColum[]" disabled value="Teacher_Hours" id="chkTeach2"/></td>
+                                                                    <td>Teacher Hours</td>
+                                                                    <td>&nbsp;</td>  
+                                                                </tr> -->
                                                             </table>					
                                                         </div>
                                                     </li>

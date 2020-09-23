@@ -471,6 +471,66 @@ function addRowToTeachingtbl() {
   }
 }
 
+// function addRowToTeachingDetailstbl() {
+//   var typeVal = $("#teaching2Type").val();
+//   var typeText = $("#teaching2Type option:selected").text();
+//   var subjectVal = $("#teaching2Subject").val();
+//   var subjectText = $("#teaching2Subject option:selected").text();
+//   var MediumVal = $("#teaching2Medium").val();
+//   var MediumText = $("#teaching2Medium option:selected").text();
+//   var gradeVal = $("#teaching2Grade").val();
+//   var gradeText = $("#teaching2Grade option:selected").text();
+//   // alert(typeVal);
+
+//   if (typeVal != "") {
+//     var strTxt2 = "";
+//     strTxt2 +=
+//       '<tr height="24">' +
+//       '<td bgcolor="#FFFFFF">' +
+//       typeText +
+//       '<input type="hidden" name="txtTeach2Type[]" value="' +
+//       typeVal +
+//       '"/><input type="hidden" name="txtTeach2TypeName[]" value="' +
+//       typeText +
+//       '"/></td>' +
+//       '<td bgcolor="#FFFFFF">' +
+//       subjectText +
+//       '<input type="hidden" name="txtTeach2Subject[]" value="' +
+//       subjectVal +
+//       '"/><input type="hidden" name="txtTeach2SubjectName[]" value="' +
+//       subjectText +
+//       '"/></td>' +
+//       '<td bgcolor="#FFFFFF">' +
+//       MediumText +
+//       '<input type="hidden" name="txtTeach2Medium[]" value="' +
+//       MediumVal +
+//       '"/><input type="hidden" name="txtTeach2MediumName[]" value="' +
+//       MediumText +
+//       '"/></td>' +
+//       '<td bgcolor="#FFFFFF">' +
+//       gradeText +
+//       '<input type="hidden" name="txtTeach2Grade[]" value="' +
+//       gradeVal +
+//       '"/><input type="hidden" name="txtTeach2GradeName[]" value="' +
+//       gradeText +
+//       '"/></td>' +
+//       '<td bgcolor="#FFFFFF" align="center"><img src="images/trash.png" width="14" height="14" onclick="rmvRow(this);"/></td>' +
+//       "</tr>";
+
+//     $("#tbl2MainTeachDetails").append(strTxt2);
+//     $("#teaching2Type").val("");
+//     $("#teaching2Subject").val("");
+//     $("#teaching2Medium").val("");
+//     $("#teaching2Grade").val("");
+//     document.getElementById("chkTeach2").disabled = false;
+//     document.getElementById("chkCat2").disabled = false;
+//     document.getElementById("chkMed2").disabled = false;
+//     document.getElementById("chksect2").disabled = false;
+//   } else {
+//     alert("Please select teaching Hours");
+//   }
+// }
+
 function addRowToServicetbl() {
   var positionVal = $("#serviceposition").val();
   var positionText = $("#serviceposition option:selected").text();
