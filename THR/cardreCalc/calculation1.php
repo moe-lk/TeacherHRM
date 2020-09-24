@@ -72,7 +72,7 @@
     INNER JOIN CD_CensesNo ON CD_CensesNo.CenCode = StaffServiceHistory.InstCode
 	INNER JOIN CD_Districts ON CD_CensesNo.DistrictCode = CD_Districts.DistCode
 	INNER JOIN CD_Provinces ON CD_Districts.ProCode = CD_Provinces.ProCode
-	WHERE CD_CensesNo.InstType = '$SchType'";
+	WHERE CD_CensesNo.SchoolType = '$SchType'";
     if($ProCode != ''){
         $sql .= " AND CD_Provinces.ProCode = '$ProCode'";
     }
