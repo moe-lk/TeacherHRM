@@ -15,6 +15,7 @@ $ProCode = $_SESSION['ProCodeU'];
 $District = $_SESSION['DistCodeU'];
 $ZONECODE = $_SESSION['ZoneCodeU'];
 
+
 if ($_SESSION['NIC'] == '') {
     header("Location: ../index.php");
     exit();
@@ -154,7 +155,7 @@ if ($theam == "theam3") {
                 </div>
             </div>
         </form>
-
+<?php //var_dump($_SESSION); ?>
         <!--header end-->
         <div id="main_content_outer">
             <div id="main_content_inner">
