@@ -102,6 +102,45 @@ WHERE (TeacherSubject.NIC <> N'')";
     }
 }
 
+// if (isset($_REQUEST["txtTeach2Type"])) {
+//     $arr2TeachType = $_REQUEST["txtTeach2Type"];
+//     $arr2TeachSubject = $_REQUEST["txtTeach2Subject"];
+//     $arr2TeachGrade = $_REQUEST["txtTeach2Grade"];
+//     $arr2TeachMedium = $_REQUEST["txtTeach2Medium"];//
+
+//     $sqlTrn = "TRUNCATE TABLE TG_TeachingTemp";
+//     $stmt = $db->runMsSqlQuery($sqlTrn);
+
+//     var_dump($arr2TeachType,$arr2TeachSubject,$arr2TeachGrade,$arr2TeachMedium);
+
+//     for ($i = 0; $i < count($arr2TeachType); $i++) {
+// //         $sql = "SELECT 
+// //   TeacherSubject.NIC,   
+// //   TeacherSubject.ID,
+// // --   CD_SubjectTypes.SubTypeName,
+// //   CD_TeachSubjects.SubjectName,
+// //   CD_Medium.Medium,
+// //   CD_TeachSubCategory.GradeName
+// // FROM TeacherSubject
+// // LEFT OUTER JOIN CD_Medium
+// //   ON TeacherSubject.MediumCode = CD_Medium.Code
+// // LEFT OUTER JOIN CD_Subject
+// //   ON TeacherSubject.SubjectCode = CD_TeachSubjects.Code
+// // LEFT OUTER JOIN CD_SecGrades 
+// //   ON CD_TeachSubCategory.GradeCode = TeacherSubject.SecGradeCode
+// // WHERE (TeacherSubject.NIC <> N'')";
+// //         if ($arrTeach2Subject[$i] != "")
+// //             $sql.=" AND (TeacherSubject.SubjectCode = N'" . $arr2TeachSubject[$i] . "')";
+// //         if ($arrTeach2Grade[$i] != "")
+// //             $sql.=" AND (TeacherSubject.SecGradeCode = N'" . $arr2TeachGrade[$i] . "')";
+// //         if($arrTeach2Medium[$i] !="")
+// //             $sql.=" AND (TeacherSubject.MediumCode = N'" . $arr2TeachMedium[$i] . "')";
+// //         $sqlInsert = "INSERT INTO TG_TeachingTemp  $sql";
+
+// //         $stmt = $db->runMsSqlQuery($sqlInsert);
+//     }
+// }
+
 if (isset($_REQUEST["txtSPosition"])) {
     $arrSerPosition = $_REQUEST["txtSPosition"];
     $arrSerType = $_REQUEST["txtSType"];
@@ -333,6 +372,7 @@ if (isset($_REQUEST["selectColum"])) {
             $arrField[] = "TG_TeachingTemp.SubjectName AS Subject";
             $arrOrder[] = "TG_TeachingTemp.SubjectName";
         }
+
         if ($value == "Position") {
             $arrField[] = "TG_ServiceTemp.PositionName";
             $arrOrder[] = "TG_ServiceTemp.PositionName";

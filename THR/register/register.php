@@ -18,8 +18,9 @@
 <?php
 $curser = "document.frmSave.NIC.focus()";
 include_once '../approveProcessfunction.php';
-include('../smservices/sms.php');
-include('../activityLog.php');
+include ('../smservices/sms.php');
+include ('../activityLog.php');
+include "../db_config/connectionNEW.php";
 $msg = "";
 $success = "";
 
@@ -71,7 +72,8 @@ if (isset($_POST["FrmSubmit"])) {
     $EthnicityCode = $_REQUEST['EthnicityCode'];
     $GenderCode = $_REQUEST['GenderCode'];
     $ReligionCode = $_REQUEST['ReligionCode'];
-
+    $WnopNo = $_REQUEST['WnopNo'];
+    $RegNo = $_REQUEST['RegNo'];
     //address history
     $Address = $_REQUEST['Address'];
     $DISTCode = $_REQUEST['DISTCode'];
@@ -108,6 +110,10 @@ if (isset($_POST["FrmSubmit"])) {
     $EmpTypeCode = "";
     $AssignInstDetails = "";
 
+    if($AppDateF == ''){
+        $AppDateF = $AppDateAddT; //Check this 
+    }
+    // var_dump($AppDateF);
     //service history current
     $DistrictCode = $_REQUEST['DistrictCode'];
     $ZoneCode = $_REQUEST['ZoneCode'];
@@ -159,13 +165,19 @@ if (isset($_POST["FrmSubmit"])) {
 
     if ($msg == "") {
 
+        if( sqlsrv_begin_transaction($conn) === false )   
+        {   
+            echo "Could not begin transaction.\n";  
+            die( print_r( sqlsrv_errors(), true));  
+        }
         // Insert contact info
         $queryMainSave = "INSERT INTO ArchiveUP_StaffAddrHistory
 				   (NIC,AddrType,Address,DSCode,DISTCode,Tel,AppDate,UpdateBy,LastUpdate,RecordLog,GSDivision)
 			 VALUES
-				   ('$NIC','PER','$Address','$DSCode','$DISTCode','$Tel','$AppDateAdd','$UpdateBy','$dateU','register','$GSDivision')";
-
-        $db->runMsSqlQuery($queryMainSave);
+				   (?,'PER',?,?,?,?,?,?,?,'register',?)";
+        // $db->runMsSqlQuery($queryMainSave);
+        $params1 = array($NIC,$Address,$DSCode,$DISTCode,$Tel,$AppDateAdd,$UpdateBy,$dateU,$GSDivision);
+        $stmt1 = sqlsrv_query( $conn, $queryMainSave, $params1 );
 
         $reqTabMobAc = "SELECT ID FROM ArchiveUP_StaffAddrHistory where NIC='$NIC' and AddrType='PER' ORDER BY ID DESC";
         $stmtMobAc = $db->runMsSqlQuery($reqTabMobAc);
@@ -176,9 +188,11 @@ if (isset($_POST["FrmSubmit"])) {
         $queryMainSaveCUR = "INSERT INTO ArchiveUP_StaffAddrHistory
 				   (NIC,AddrType,Address,DSCode,DISTCode,Tel,AppDate,UpdateBy,LastUpdate,RecordLog,GSDivision)
 			 VALUES
-				   ('$NIC','CUR','$AddressT','$DSCodeT','$DISTCodeT','$TelT','$AppDateAddT','$UpdateBy','$dateU','register','$GSDivisionT')";
-
-        $db->runMsSqlQuery($queryMainSaveCUR);
+				   (?,'CUR',?,?,?,?,?,?,?,'register',?)";
+        $params2 = array($NIC,$AddressT,$DSCodeT,$DISTCodeT,$TelT,$AppDateAddT,$UpdateBy,$dateU,$GSDivisionT);
+        // $db->runMsSqlQuery($queryMainSaveCUR);
+        $stmt2 = sqlsrv_query( $conn, $queryMainSaveCUR, $params2 );
+        
 
         $reqTabMobAc = "SELECT ID FROM ArchiveUP_StaffAddrHistory where NIC='$NIC' and AddrType='CUR' ORDER BY ID DESC";
         $stmtMobAc = $db->runMsSqlQuery($reqTabMobAc);
@@ -188,29 +202,45 @@ if (isset($_POST["FrmSubmit"])) {
         // Insert service info
 
         if($firstAppStatus=="Y"){
-                $ServiceRecTypeCodeF = 'NA01';
-
-
+            $ServiceRecTypeCodeF = 'NA01';
+            
+            if( sqlsrv_begin_transaction($conn) === false ){   
+                echo "Could not begin transaction.\n";  
+                die( print_r( sqlsrv_errors(), true));  
+            }
                 //first appointment  start
-                $queryMainSave = "INSERT INTO ArchiveUP_StaffServiceHistory
-                                       (NIC,ServiceRecTypeCode,AppDate,InstCode,SecGRCode,WorkStatusCode,ServiceTypeCode,EmpTypeCode,PositionCode,Cat2003Code,Reference,UpdateBy,LastUpdate,RecordLog)
-                             VALUES
-                                       ('$NIC','$ServiceRecTypeCodeF','$AppDateF','$InstCodeF','$SecGRCodeF','$WorkStatusCode','$ServiceTypeCodeF','$EmpTypeCode','$PositionCodeF','$Cat2003CodeF','$PFReferenceF','$UpdateBy','$dateU','register')";
+            $queryMainSave = "INSERT INTO ArchiveUP_StaffServiceHistory
+                            (NIC,ServiceRecTypeCode,AppDate,InstCode,SecGRCode,WorkStatusCode,ServiceTypeCode,EmpTypeCode,PositionCode,Cat2003Code,Reference,UpdateBy,LastUpdate,RecordLog)
+                            VALUES
+                            (?,?,?,?,?,?,?,?,?,?,?,?,?,'register')";
+                // $db->runMsSqlQuery($queryMainSave);
+            $params3 = array($NIC,$ServiceRecTypeCodeF,$AppDateF,$InstCodeF,$SecGRCodeF,$WorkStatusCode,$ServiceTypeCodeF,$EmpTypeCode,$PositionCodeF,$Cat2003CodeF,$PFReferenceF,$UpdateBy,$dateU);
+            $stmt3 = sqlsrv_query( $conn, $queryMainSave, $params3);
 
-                $db->runMsSqlQuery($queryMainSave);
+            $reqTabMobAc = "SELECT ID FROM ArchiveUP_StaffServiceHistory where NIC='$NIC' ORDER BY ID DESC";
+            $stmtMobAc = $db->runMsSqlQuery($reqTabMobAc);
+            $rowMobAc = sqlsrv_fetch_array($stmtMobAc, SQLSRV_FETCH_ASSOC);
+            $FirstAppID = trim($rowMobAc['ID']);
 
-                $reqTabMobAc = "SELECT ID FROM ArchiveUP_StaffServiceHistory where NIC='$NIC' ORDER BY ID DESC";
-                $stmtMobAc = $db->runMsSqlQuery($reqTabMobAc);
-                $rowMobAc = sqlsrv_fetch_array($stmtMobAc, SQLSRV_FETCH_ASSOC);
-                $FirstAppID = trim($rowMobAc['ID']);
-
-                //first appointment assign start
-                $queryfirstAss = "INSERT INTO ArchiveUP_StaffAssignDetails			   (NIC,ServiceRecRef,AssignInstCode,AssignInstDetails,StartDate,EndDate,AssignbedPositionCode,Reference,UpdateBy,LastUpdate,RecordLog)
-                                     VALUES			   ('$NIC','$FirstAppID','$InstCodeF','$AssignInstDetails','$AppDateF','','$PositionCodeF','register','$UpdateBy','$dateU','register')";
-                $db->runMsSqlQuery($queryfirstAss);
-
-                //first appointment assign end
-
+            //first appointment assign start
+            $queryfirstAss = "INSERT INTO ArchiveUP_StaffAssignDetails (NIC,ServiceRecRef,AssignInstCode,AssignInstDetails,StartDate,EndDate,AssignbedPositionCode,Reference,UpdateBy,LastUpdate,RecordLog)
+                            VALUES	(?,?,?,?,?,'',?,'register',?,?,'register')";
+            // $db->runMsSqlQuery($queryfirstAss);
+            $params4 = array($NIC,$FirstAppID,$InstCodeF,$AssignInstDetails,$AppDateF,$PositionCodeF,$UpdateBy,$dateU);
+            //first appointment assign end
+            $stmt4 = sqlsrv_query( $conn, $queryfirstAss, $params4);
+            if($stmt3 && $stmt4){
+                sqlsrv_commit($conn);
+                // echo ("<script LANGUAGE='JavaScript'>
+                // window.alert('Succesfully Updated');
+                // </script>");
+            } else {
+                sqlsrv_rollback( $conn );
+                echo "Updates rolled back.<br />";
+                // echo ("<script LANGUAGE='JavaScript'>
+                // window.alert('Update Failed!, Please try again.');
+                // </script>");
+            }
         }
 
 
@@ -218,12 +248,13 @@ if (isset($_POST["FrmSubmit"])) {
         //
         //current appointment start
 
-        $queryCurrentSave = "INSERT INTO ArchiveUP_StaffServiceHistory			   (NIC,ServiceRecTypeCode,AppDate,InstCode,SecGRCode,WorkStatusCode,ServiceTypeCode,EmpTypeCode,PositionCode,Cat2003Code,Reference,UpdateBy,LastUpdate,RecordLog)
+        $queryCurrentSave = "INSERT INTO ArchiveUP_StaffServiceHistory (NIC,ServiceRecTypeCode,AppDate,InstCode,SecGRCode,WorkStatusCode,ServiceTypeCode,EmpTypeCode,PositionCode,Cat2003Code,Reference,UpdateBy,LastUpdate,RecordLog)
 			 VALUES
-				   ('$NIC','$ServiceRecTypeCode','$AppDate','$InstCode','$SecGRCode','$WorkStatusCode','$ServiceTypeCode','$EmpTypeCode','$PositionCode','$Cat2003Code','$PFReference','$UpdateBy','$dateU','register')";
-
-        $db->runMsSqlQuery($queryCurrentSave);
-
+			(?,?,?,?,?,?,?,?,?,?,?,?,?,'register')";
+        $params5 = array($NIC,$ServiceRecTypeCode,$AppDate,$InstCode,$SecGRCode,$WorkStatusCode,$ServiceTypeCode,$EmpTypeCode,$PositionCode,$Cat2003Code,$PFReference,$UpdateBy,$dateU);
+        // $db->runMsSqlQuery($queryCurrentSave);
+        $stmt5 = sqlsrv_query( $conn, $queryCurrentSave, $params5);
+        
         $reqTabMobAc = "SELECT ID FROM ArchiveUP_StaffServiceHistory where NIC='$NIC' ORDER BY ID DESC";
         $stmtMobAc = $db->runMsSqlQuery($reqTabMobAc);
         $rowMobAc = sqlsrv_fetch_array($stmtMobAc, SQLSRV_FETCH_ASSOC);
@@ -231,10 +262,11 @@ if (isset($_POST["FrmSubmit"])) {
 
 
         //current appointment assign start
-        $querycurrentAss = "INSERT INTO ArchiveUP_StaffAssignDetails				   (NIC,ServiceRecRef,AssignInstCode,AssignInstDetails,StartDate,EndDate,AssignbedPositionCode,Reference,UpdateBy,LastUpdate,RecordLog)
-				 VALUES				   ('$NIC','$CurServiceRefID','$InstCode','$AssignInstDetails','$AppDate','','$PositionCode','register','$UpdateBy','$dateU','register')";
-        $db->runMsSqlQuery($querycurrentAss);
-
+        $querycurrentAss = "INSERT INTO ArchiveUP_StaffAssignDetails (NIC,ServiceRecRef,AssignInstCode,AssignInstDetails,StartDate,EndDate,AssignbedPositionCode,Reference,UpdateBy,LastUpdate,RecordLog)
+				 VALUES	(?,?,?,?,?,'',?,'register',?,?,'register')";
+        // $db->runMsSqlQuery($querycurrentAss);
+        $params6 = array($NIC,$CurServiceRefID,$InstCode,$AssignInstDetails,$AppDate,$PositionCode,$UpdateBy,$dateU);
+        $stmt6 = sqlsrv_query( $conn, $querycurrentAss, $params6);
         //current appointment assign end
         // End insert service info
 
@@ -256,6 +288,8 @@ if (isset($_POST["FrmSubmit"])) {
 	GenderCode,
 	EthnicityCode,
 	ReligionCode,
+    WNOPNo,
+    RegNo,
 	CivilStatusCode,
 	CurServiceRef,
 	LastUpdate,
@@ -266,44 +300,40 @@ if (isset($_POST["FrmSubmit"])) {
         DOACAT
 )
 VALUES
-	(
-		'$NIC',
-		'$SurnameWithInitials',
-		'$FullName',
-		'$Title',
-		'$PerResRefID',
-		'$MobileTel',
-		'$emailaddr',
-		'$DOB',
-		'$GenderCode',
-		'$EthnicityCode',
-		'$ReligionCode',
-		'$CivilStatusCode',
-		'$CurServiceRefID',
-		'$dateU',
-		'$UpdateBy',
-		'register',
-		'$CurResRefID',
-                '$AppDateF',
-                '$Cat2003CodeF'
-	)";
+	(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,'register',?,?,?)";
 
-        $db->runMsSqlQuery($queryMainSavex);
+    // $db->runMsSqlQuery($queryMainSavex);
+    $params7 = array($NIC,$SurnameWithInitials,$FullName,$Title,$PerResRefID,$MobileTel,$emailaddr,$DOB,$GenderCode,$EthnicityCode,$ReligionCode,$WnopNo,$RegNo,$CivilStatusCode,$CurServiceRefID,$dateU,$UpdateBy,$CurResRefID,$AppDateF,$Cat2003CodeF);
+    $stmt7 = sqlsrv_query( $conn, $queryMainSavex, $params7);
 
-        $reqTabMobAc = "SELECT ID FROM ArchiveUP_TeacherMast where NIC='$NIC'";
-        $stmtMobAc = $db->runMsSqlQuery($reqTabMobAc);
-        $rowMobAc = sqlsrv_fetch_array($stmtMobAc, SQLSRV_FETCH_ASSOC);
-        $newIDMast = trim($rowMobAc['ID']);
+    if($stmt1 && $stmt2 && $stmt5 && $stmt6 && $stmt7){
+        sqlsrv_commit($conn);
+        echo ("<script LANGUAGE='JavaScript'>
+        window.alert('Succesfully Updated');
+        </script>");
+    } else {
+        sqlsrv_rollback( $conn );
+        echo "Updates rolled back.<br />";
+        echo ("<script LANGUAGE='JavaScript'>
+        window.alert('Update Failed!, Please try again.');
+        </script>");
+    }
 
-        if ($newIDMast == 0)
-            $msg = "Error on page. Please check your internet connection, Details without special character and try again";
+    $reqTabMobAc = "SELECT ID FROM ArchiveUP_TeacherMast where NIC='$NIC'";
+    $stmtMobAc = $db->runMsSqlQuery($reqTabMobAc);
+    $rowMobAc = sqlsrv_fetch_array($stmtMobAc, SQLSRV_FETCH_ASSOC);
+    $newIDMast = trim($rowMobAc['ID']);
+
+    if ($newIDMast == 0)
+        $msg = "Error on page. Please check your internet connection, Details without special character and try again";
 
         //}
         //teacher mast end
         if ($msg == '') {
-            $queryRegis = "INSERT INTO TG_EmployeeRegister				   (NIC,TeacherMastID,ServisHistCurrentID,ServisHistFirstID,AddressHistID,dDateTime,ZoneCode,IsApproved,ApproveComment,ApproveDate,ApprovedBy,UpdateBy,AddressHistIDCur)
-					 VALUES				   ('$NIC','$newIDMast','$CurServiceRefID','$FirstAppID','$PerResRefID','$dateU','$ZoneCode','N','','','','$NICUser','$CurResRefID')";
-            $db->runMsSqlQuery($queryRegis);
+            $queryRegis = "INSERT INTO TG_EmployeeRegister (NIC,TeacherMastID,ServisHistCurrentID,ServisHistFirstID,AddressHistID,dDateTime,ZoneCode,IsApproved,ApproveComment,ApproveDate,ApprovedBy,UpdateBy,AddressHistIDCur)
+					 VALUES	('$NIC','$newIDMast','$CurServiceRefID','$FirstAppID','$PerResRefID','$dateU','$ZoneCode','N','','','','$NICUser','$CurResRefID')";
+            // $db->runMsSqlQuery($queryRegis);
+
 
             $success = "Form submitted successfully. Data will be appeared after the management approvals";
 
@@ -338,7 +368,7 @@ VALUES
         <div class="mcib_middleReg"><form method="post" action="" name="frmSrch" id="frmSrch"><table width="100%" cellspacing="1" cellpadding="1">
                     <tr>
                         <td width="19%">Check Availability</td>
-                        <td width="27%"><input name="NICSearch" type="text" class="input2_n" id="NICSearch" value="" placeholder="NIC"/></td>
+                        <td width="27%"><input name="NICSearch" type="text" class="input2_n" id="NICSearch" value="" placeholder="NIC" /></td>
                         <td width="11%"><div style="margin-top:5px;"><a onClick="Javascript:show_available('availabaleS', document.frmSrch.NICSearch.value, '');"><img src="../cms/images/searchN.png" width="84" height="26" /></a></div></td>
                         <td width="43%"><div id="txt_available" style="font-weight:bold;"></div></td>
                     </tr>
@@ -384,7 +414,7 @@ VALUES
                                     <tr>
                                         <td width="30%" align="left" valign="top">NIC <span class="form_error_sched">*</span> </td>
                                         <td width="3%" align="left" valign="top"><strong>:</strong></td>
-                                        <td width="67%" align="left" valign="top"><input name="NIC" type="text" class="input2_n" id="NIC" value="" tabindex="1"/>
+                                        <td width="67%" align="left" valign="top"><input name="NIC" type="text" class="input2_n" id="NIC" value="" tabindex="1" onchange="CheckNIC()"/>
                                             <input type="hidden" name="perAddStatus" value="<?php echo $perAddStatus ?>" />
                                             <input type="hidden" name="curAddStatus" value="<?php echo $curAddStatus ?>" />
                                             <input type="hidden" name="pMastStatus" value="<?php echo $pMastStatus ?>" />
@@ -542,11 +572,21 @@ VALUES
                                             </select></td>
                                     </tr>
                                     <tr>
-                                        <td align="left" valign="top">&nbsp;</td>
-                                        <td align="left" valign="top">&nbsp;</td>
-                                        <td align="left" valign="top">&nbsp;</td>
+                                        <td align="left" valign="top">W & OP Number</td>
+                                        <td align="left" valign="top"><strong>:</strong></td>
+                                        <td align="left" valign="top">
+                                        <input name="WnopNo" type="text" class="input2_n" id="WnopNo" tabindex="10"/>
+                                        </td>
                                     </tr>
-                                </table></td>
+                                    <tr>
+                                        <td align="left" valign="top">Registration Number</td>
+                                        <td align="left" valign="top"><strong>:</strong></td>
+                                        <td align="left" valign="top">
+                                        <input name="RegNo" type="text" class="input2_n" id="RegNo" tabindex="11"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
                         </tr>
                         <tr>
                             <td valign="top">&nbsp;</td>
@@ -1252,10 +1292,66 @@ VALUES
 
         </form>
         <script>
-            console.log(AppDateF);
+            // console.log(AppDateF);
         </script>
 
         <script>
+        // $(document).ready(function () {
+        //     $("#NIC").change(function () {
+        //         var NicNo = $(this).val();
+        //         alert(NicNo.length);
+        //     });
+        // });
+
+        document.getElementById("NIC").addEventListener("change",CheckNIC);  
+                                         
+        function CheckNIC(){
+            var NicNo = document.getElementById("NIC").value;
+            // alert(NicNo.charAt(1)*2);
+            if(NicNo != "") {
+                if(NicNo.length < 10){
+                    alert("Please Enter a valid NIC");
+                    document.getElementById("NIC").value = "";
+                }else if(NicNo.legth == 11){
+                    alert("Please Enter a valid NIC");
+                    document.getElementById("NIC").value = "";
+                }else if(NicNo.length > 12){
+                    alert("Please Enter a valid NIC");
+                    document.getElementById("NIC").value = "";
+                }else{
+                    if(NicNo.length == 10){
+                        var res = 11 - (NicNo.charAt(0)*3 + NicNo.charAt(1)*2 + NicNo.charAt(2)*7 + NicNo.charAt(3)*6 + NicNo.charAt(4)*5 + NicNo.charAt(5)*4 + NicNo.charAt(6)*3 + NicNo.charAt(7)*2) % 11;
+
+                        if(res == 11){
+                            res = 0;
+                        }else if(res == 10){
+                            res = 0;
+                        }
+                        if((res == NicNo.charAt(8)) && ((NicNo.charAt(9) == 'v') || (NicNo.charAt(9) == 'x') || (NicNo.charAt(9) == 'V') || (NicNo.charAt(9) == 'X'))){
+                            console.log("1");
+                        }else{
+                            alert("Please Enter a valid NIC");
+                            document.getElementById("NIC").value = "";
+                        }
+                        
+                    }else if(NicNo.length == 12){
+                        var res = 11 - (NicNo.charAt(0)*8 + NicNo.charAt(1)*4 + NicNo.charAt(2)*3 + NicNo.charAt(3)*2 + NicNo.charAt(4)*7 + NicNo.charAt(5)*6 + NicNo.charAt(6)*5 + NicNo.charAt(7)*8 + NicNo.charAt(8)*4 + NicNo.charAt(9)*3 + NicNo.charAt(10)*2) % 11;
+
+                        if(res == 11){
+                            res = 0;
+                        }else if(res == 10){
+                            res = 0;
+                        }
+                        if(res == NicNo.charAt(11)){
+                            console.log("1");
+                        }else{
+                            alert("Please Enter a valid NIC");
+                            document.getElementById("NIC").value = "";
+                        }
+                    }
+                }                    
+            } 
+        }
 
             $("#frmSave").submit(function (event) {
                 //alert('hi');
@@ -1276,7 +1372,8 @@ VALUES
                 var EthnicityCode = trim($("#EthnicityCode").val());
                 var GenderCode = trim($("#GenderCode").val());
                 var ReligionCode = trim($("#ReligionCode").val());
-
+                var WnopNo = trim($("#WnopNo").val());
+                var RegNo = trim($("#RegNo").val());
 
                 var SecGRCode = trim($("#SecGRCode").val());
                 var PositionCode = trim($("#PositionCode").val());
@@ -1584,7 +1681,7 @@ VALUES
                 if (e.which == 13) {
                     e.preventDefault();
                     var $next = $('[tabIndex=' + (+this.tabIndex + 1) + ']');
-                    console.log($next.length);
+                    // console.log($next.length);
                     if (!$next.length) {
                         $next = $('[tabIndex=1]');
                     }

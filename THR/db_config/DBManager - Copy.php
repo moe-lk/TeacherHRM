@@ -6,8 +6,8 @@
 
 class DBManager {
 
-    private $server = "SRVEMISDB\SQLEXPRESS";
-    private $connectionInfo = array("UID" => "wamplogin", "PWD" => "HOsd@0117213133", "Database"=>"MOENational");
+    private $server = "DESKTOP-L8I7S0M";
+    private $connectionInfo = array("UID" => "wamplogin", "PWD" => "sa1234", "Database"=>"MOENational");
    // private $server = 'DUMINDA-PC\SQLEXPRESS';
    // private $connectionInfo = array("UID" => "sa", "PWD" => "duminda", "DATABASE" => "MOENational");
     private $conn = null;

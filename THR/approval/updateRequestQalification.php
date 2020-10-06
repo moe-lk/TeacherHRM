@@ -1,5 +1,6 @@
 <link href="../cms/css/screen.css" rel="stylesheet" type="text/css" />
 <?php
+include "../db_config/connectionNEW.php";
 $msg = "";
 $success = "";
 
@@ -39,28 +40,34 @@ if (isset($_POST["FrmSubmit"])) {
           //update data into archive table - End
          */
         //update data into master table - Start
-        $sqlCopyMaster = "INSERT INTO StaffQualification (
-	NIC,
-	QCode,
-	EffectiveDate,
-	Reference,
-	LastUpdate,
-	UpdateBy,
-	RecordLog
-) SELECT
-	NIC,
-	QCode,
-	EffectiveDate,
-	Reference,
-	LastUpdate,
-	UpdateBy,
-	RecordLog
-FROM
-	UP_StaffQualification
-WHERE
-	ID = '$QualificationID'";
+        if( sqlsrv_begin_transaction($conn) === false )   {   
+            echo "Could not begin transaction.\n";  
+            die( print_r( sqlsrv_errors(), true));  
+        }
 
-        $db->runMsSqlQuery($sqlCopyMaster);
+        $sqlCopyMaster = "INSERT INTO StaffQualification (
+                            NIC,
+                            QCode,
+                            EffectiveDate,
+                            Reference,
+                            LastUpdate,
+                            UpdateBy,
+                            RecordLog
+                        ) SELECT
+                            NIC,
+                            QCode,
+                            EffectiveDate,
+                            Reference,
+                            LastUpdate,
+                            UpdateBy,
+                            RecordLog
+                        FROM
+                            UP_StaffQualification
+                        WHERE
+                            ID = ?";
+        // $db->runMsSqlQuery($sqlCopyMaster);
+        $params1 = array($QualificationID);
+        $stmt1 = sqlsrv_query($conn, $sqlCopyMaster, $params1 );
 
         $reqTabMobAc = "SELECT ID FROM StaffQualification where NIC='$NIC'  ORDER BY ID DESC";
         $stmtMobAc = $db->runMsSqlQuery($reqTabMobAc);
@@ -77,34 +84,74 @@ WHERE
          */
         //
         //update data into master table - Start
-        $sqlCopyMaster = "INSERT INTO QualificationSubjects	(NIC,QualificationID,SubjectCode,RecordLog)
-SELECT NIC,QualificationID,SubjectCode,RecordLog FROM UP_QualificationSubjects where QualificationID='$QualificationID'";
-
-        $db->runMsSqlQuery($sqlCopyMaster);
+        $sqlCopyMaster2 = "INSERT INTO QualificationSubjects	(NIC,QualificationID,SubjectCode,RecordLog)
+SELECT NIC,QualificationID,SubjectCode,RecordLog FROM UP_QualificationSubjects where QualificationID= ?";
+        $params2 = array($QualificationID);
+        $stmt2 = sqlsrv_query($conn, $sqlCopyMaster2, $params2 );
+        // $db->runMsSqlQuery($sqlCopyMaster);
         //update data into master table - End
 
-        $queryMainUpdate = "UPDATE QualificationSubjects SET QualificationID='$qualifyMasterID' WHERE QualificationID='$QualificationID' and NIC='$NIC'";
-        $db->runMsSqlQuery($queryMainUpdate);
+        $queryMainUpdate = "UPDATE QualificationSubjects SET QualificationID=? WHERE QualificationID=? and NIC=?";
+        $params3 = array($qualifyMasterID, $QualificationID, $NIC);
+        $stmt3 = sqlsrv_query($conn, $queryMainUpdate, $params3 );
+        // $db->runMsSqlQuery($queryMainUpdate);
         ///////////////////////////////////////////////
         //TeacherMastID='$TeacherMastID',PermResiID='$PermResiID',CurrResID='$CurrResID',
-        $queryMainUpdate = "UPDATE TG_EmployeeUpdateQualification SET IsApproved='Y',ApproveDate='$dateU',ApprovedBy='$NICUser', ApproveComment='$ApproveComment',QualificationID='$qualifyMasterID' WHERE id='$RegID'";
-        $db->runMsSqlQuery($queryMainUpdate);
+        $queryMainUpdate2 = "UPDATE TG_EmployeeUpdateQualification SET IsApproved='Y',ApproveDate=?,ApprovedBy=?, ApproveComment=?,QualificationID=? WHERE id='$RegID'";
+        $params4 = array($dateU, $NICUser, $ApproveComment, $qualifyMasterID, $RegID);
+        $stmt4 = sqlsrv_query($conn, $queryMainUpdate2, $params4 );
+        // $db->runMsSqlQuery($queryMainUpdate);
 
         //Delete temp record
 
 
-        $queryTmpDel = "DELETE FROM UP_QualificationSubjects WHERE QualificationID='$QualificationID'";
-        $db->runMsSqlQuery($queryTmpDel);
+        $queryTmpDel = "DELETE FROM UP_QualificationSubjects WHERE QualificationID=?";
+        $params5 = array($QualificationID);
+        $stmt5 = sqlsrv_query($conn, $queryTmpDel, $params5 );
+        // $db->runMsSqlQuery($queryTmpDel);
 
-        $queryTmpDel = "DELETE FROM UP_StaffQualification WHERE ID='$QualificationID'";
-        $db->runMsSqlQuery($queryTmpDel);
+        $queryTmpDel1 = "DELETE FROM UP_StaffQualification WHERE ID=?";
+        $params6 = array($QualificationID);
+        $stmt6 = sqlsrv_query($conn, $queryTmpDel, $params6 );
+        // $db->runMsSqlQuery($queryTmpDel);
+
+        if($stmt1 && $stmt2 && $stmt3 && $stmt4 && $stmt5 && $stmt6){
+            sqlsrv_commit($conn);
+            echo ("<script LANGUAGE='JavaScript'>
+            window.alert('Succesfully Updated');
+            window.location.href='updateRequestQalification-18.html';
+            </script>");
+        } else {
+            sqlsrv_rollback( $conn );
+            echo "Updates rolled back.<br />";
+            echo ("<script LANGUAGE='JavaScript'>
+            window.alert('Update Failed!, Please try again.');
+            window.location.href='updateRequestQalification-18.html';
+            </script>");
+        }
 
         audit_trail($NIC, $_SESSION["NIC"], 'approval\updateRequestQalification.php', 'Insert', 'StaffQualification,QualificationSubjects', 'Approve user qualification.');
 
         $msg .= "Your action(Approve) was successffully submitted.<br>";
     } else {
-        $queryMainUpdate = "UPDATE TG_EmployeeUpdateQualification SET IsApproved='R',ApproveDate='$dateU',ApprovedBy='$NICUser', ApproveComment='$ApproveComment' WHERE id='$RegID'";
-        $db->runMsSqlQuery($queryMainUpdate);
+        $queryMainUpdate = "UPDATE TG_EmployeeUpdateQualification SET IsApproved='R',ApproveDate=?,ApprovedBy=?, ApproveComment=? WHERE id=?";
+        $params = array($dateU, $NICUser,$ApproveComment, $RegID);
+        $stmt = sqlsrv_query($conn, $queryMainUpdate, $params);
+        // $db->runMsSqlQuery($queryMainUpdate);
+        if($stmt){
+            sqlsrv_commit($conn);
+            echo ("<script LANGUAGE='JavaScript'>
+            window.alert('Succesfully Updated');
+            window.location.href='updateRequestQalification-18.html';
+            </script>");
+        } else {
+            sqlsrv_rollback( $conn );
+            echo "Updates rolled back.<br />";
+            echo ("<script LANGUAGE='JavaScript'>
+            window.alert('Update Failed!, Please try again.');
+            window.location.href='updateRequestQalification-18.html';
+            </script>");
+        }
 
         audit_trail($NIC, $_SESSION["NIC"], 'approval\updateRequestQalification.php', 'Update', 'TG_EmployeeUpdateQualification', 'Reject user qualification.');
 

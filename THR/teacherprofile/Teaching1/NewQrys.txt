@@ -157,3 +157,28 @@ ADD TchSubject2 nvarchar(20), OtherSub2 nvarchar(20),
 		   TchSubject3 nvarchar(20), OtherSub3 nvarchar(20),
            Medium3 nvarchar(150),
            GradeName3 nvarchar(150);
+
+-----------------------------------Cardre Calc-------------------------------------------------------------
+USE [MOENational]
+GO
+
+/****** Object:  Table [dbo].[ApprovedCardre]    Script Date: 11-Jun-20 3:28:26 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[ApprovedCardre](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[CenCode] [nchar](12) NOT NULL,
+	[SubCode] [nchar](5) NOT NULL,
+	[SecCode] [nchar](5) NOT NULL,
+	[ApprCardre] [nvarchar](5) NULL,
+	[RecordLog] [varchar](max) NOT NULL,
+	[RecordStatus] [int] NULL,
+	[ApprovedDate] [datetime] NULL
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+

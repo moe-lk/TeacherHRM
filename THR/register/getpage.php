@@ -14,17 +14,70 @@ $brnd = $_REQUEST['brnd'];
 $usr = $_REQUEST['usr'];
 $id1=$_SESSION['uID_cp'];
 $replace_data_new=array("'","/","!","&","*"," ","-","@",'"',"?",":","�","�",".");
-if($q=='availabaleS'){
+if($q=='availabaleS'){//Check if NIC is in TeacherMast
 	$sqlTmast = "SELECT * FROM TeacherMast where NIC='$iCID'";
 	$isAvailablePmast=$db->rowAvailable($sqlTmast);
 	
 	$sqlTmastTemp = "SELECT * FROM ArchiveUP_TeacherMast where NIC='$iCID'";
 	$isAvailableTemp=$db->rowAvailable($sqlTmastTemp);
+
+	if(strlen($iCID) == 10){
+		$nici = "19". $iCID[0] . $iCID[1]. $iCID[2]. $iCID[3]. $iCID[4]."0". $iCID[5] .$iCID[6]. $iCID[7]. $iCID[8];
+		
+		$sqlTmast = "SELECT * FROM TeacherMast where NIC='$nici'";
+		$isAvailablePmast2=$db->rowAvailable($sqlTmast);	
+		$sqlTmastTemp = "SELECT * FROM ArchiveUP_TeacherMast where NIC='$nici'";
+		$isAvailableTemp2=$db->rowAvailable($sqlTmastTemp);
+
+		if($iCID[9] == "v"){
+			$nicix = $iCID[0] . $iCID[1]. $iCID[2]. $iCID[3]. $iCID[4]. $iCID[5] .$iCID[6]. $iCID[7]. $iCID[8]. "x";
+			$sqlTmast = "SELECT * FROM TeacherMast where NIC='$nici'";
+			$isAvailablePmastxx=$db->rowAvailable($sqlTmast);
+		}else if($iCID[9] == "x"){
+			$niciv = $iCID[0] . $iCID[1]. $iCID[2]. $iCID[3]. $iCID[4]. $iCID[5] .$iCID[6]. $iCID[7]. $iCID[8]. "v";
+			$sqlTmast = "SELECT * FROM TeacherMast where NIC='$niciv'";
+			$isAvailablePmastvv=$db->rowAvailable($sqlTmast);
+		}
+		
+
+	}else if(strlen($iCID) == 12){
+		$nici = $iCID[2]. $iCID[3]. $iCID[4].$iCID[5] .$iCID[6].$iCID[8].$iCID[9].$iCID[10].$iCID[11]."v";
+		$nici2 = $iCID[2]. $iCID[3]. $iCID[4].$iCID[5] .$iCID[6].$iCID[8].$iCID[9].$iCID[10].$iCID[11]."x";
+
+		$sqlTmast = "SELECT * FROM TeacherMast where NIC='$nici'";
+		$sqlTmastx = "SELECT * FROM TeacherMast where NIC='$nici2'";
+
+		$isAvailablePmast2=$db->rowAvailable($sqlTmast);
+
+		$isAvailablePmastx=$db->rowAvailable($sqlTmastx);
+	
+		$sqlTmastTemp = "SELECT * FROM ArchiveUP_TeacherMast where NIC='$nici'";
+		$isAvailableTemp2=$db->rowAvailable($sqlTmastTemp);
+
+		$sqlTmastTempx = "SELECT * FROM ArchiveUP_TeacherMast where NIC='$nici2'";
+		$isAvailableTempx=$db->rowAvailable($sqlTmastTempx);
+
+	}
 	if($isAvailablePmast==1){//green 060 //blue 03C //red 900
 		echo "<span style=\"color:#900;\">Already registered.</span>";
 	}else if($isAvailableTemp==1){
 		echo "<span style=\"color:#03C;\">Pending for approval.</span>";
-	}else{
+	}else if($isAvailablePmast2==1){//green 060 //blue 03C //red 900
+		echo "<span style=\"color:#900;\">Already registered as ".$nici.".</span>";
+	}else if($isAvailableTemp2==1){
+		echo "<span style=\"color:#03C;\">Pending for approval as ".$nici.".</span>";
+	}else if($isAvailablePmastx == 1){
+		echo "<span style=\"color:#03C;\">Pending for approval as ".$nici2.".</span>";
+	}else if($sqlTmastTempx == 1){
+		echo "<span style=\"color:#03C;\">Pending for approval as ".$nici2.".</span>";
+	}else if($isAvailablePmastvv == 1){
+		echo "<span style=\"color:#03C;\">Pending for approval as ".$niciv.".</span>";
+	}else if($isAvailablePmastxx == 1){
+		echo "<span style=\"color:#03C;\">Pending for approval as ".$nicix.".</span>";
+	}
+
+
+	else{
 		echo "<span style=\"color:#060;\">Not available.</span>";
 	}
 }

@@ -69,7 +69,7 @@ if($q=='censesList'){
         array($iCID, SQLSRV_PARAM_IN)
     );
 	$sql = "{call SP_TG_GetSchoolsFor_SelectedDivision(?)}";
-    $details="<select class=\"divSimple\" id=\"cmbSchool\" name=\"cmbSchool\">
+    $details="<select class=\"select2a_n\" id=\"InstCode\" name=\"InstCode\">
 			  <option value=\"\">-Select-</option>";
 	
     $stmt = $db->runMsSqlQuery($sql, $params1);
@@ -137,7 +137,6 @@ if($q=='change_pw'){
 }
 // ADDED TO GET SUBJECTS
 if($q=='AppSublst'){
-	?><script>window.alert('This');</script><?ph
 	$details = "<select id=\"SubApp\">
 					<option>Select</option>";
 	$sql = "SELECT SubjectName FROM CD_AppSubjects WHERE Category = '$AppId' IS NOT NULL";

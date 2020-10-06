@@ -255,6 +255,14 @@ function get_records_count($pageId, $db, $loggedSchool, $nicNO, $accLevel) {
         if ($_SESSION['AccessRoleType'] == 'ZN') {
             $sql .= " and TG_EmployeeRegister.ZoneCode='$loggedSchool'";
         }
+
+        if ($_SESSION['AccessRoleType'] == 'PD') {
+            $sql .= " and TG_EmployeeRegister.ZoneCode IN ( SELECT CD_Zone.CenCode
+                        FROM CD_Provinces INNER JOIN CD_Districts ON CD_Provinces.ProCode = CD_Districts.ProCode
+                        INNER JOIN CD_Zone ON CD_Zone.DistrictCode = CD_Districts.DistCode
+                        WHERE CD_provinces.ProCode = CONCAT('P', SUBSTRING('$loggedSchool',3,2)))";
+        }
+
         $rowCount = $db->rowCount($sql);
         if ($rowCount > 0) {
             return $rowCount;
@@ -276,6 +284,14 @@ function get_records_count($pageId, $db, $loggedSchool, $nicNO, $accLevel) {
         if ($_SESSION['AccessRoleType'] == 'ZN') {
             $sql .= " and TG_EmployeeUpdatePersInfo.ZoneCode='$loggedSchool'";
         }
+
+        if ($_SESSION['AccessRoleType'] == 'PD') {
+            $sql .= " and TG_EmployeeUpdatePersInfo.ZoneCode IN ( SELECT CD_Zone.CenCode
+                        FROM CD_Provinces INNER JOIN CD_Districts ON CD_Provinces.ProCode = CD_Districts.ProCode
+                        INNER JOIN CD_Zone ON CD_Zone.DistrictCode = CD_Districts.DistCode
+                        WHERE CD_provinces.ProCode = CONCAT('P', SUBSTRING('$loggedSchool',3,2)))";
+        }
+
         $rowCount = $db->rowCount($sql);
         if ($rowCount > 0) {
             return $rowCount;
@@ -294,6 +310,14 @@ WHERE        (TG_EmployeeUpdateFamilyInfo.IsApproved = 'N')";
         if ($_SESSION['AccessRoleType'] == 'ZN') {
             $sql .= " and TG_EmployeeUpdateFamilyInfo.ZoneCode='$loggedSchool'";
         }
+
+        if ($_SESSION['AccessRoleType'] == 'PD') {
+            $sql .= " and TG_EmployeeUpdateFamilyInfo.ZoneCode IN ( SELECT CD_Zone.CenCode
+                        FROM CD_Provinces INNER JOIN CD_Districts ON CD_Provinces.ProCode = CD_Districts.ProCode
+                        INNER JOIN CD_Zone ON CD_Zone.DistrictCode = CD_Districts.DistCode
+                        WHERE CD_provinces.ProCode = CONCAT('P', SUBSTRING('$loggedSchool',3,2)))";
+        }
+
         $rowCount = $db->rowCount($sql);
         if ($rowCount > 0) {
             return $rowCount;
@@ -302,16 +326,24 @@ WHERE        (TG_EmployeeUpdateFamilyInfo.IsApproved = 'N')";
     // Child Info
     if ($pageId == '17a') {
         $sql = "SELECT TG_EmployeeUpdateChildInfo.NIC
-FROM
-	TG_EmployeeUpdateChildInfo
-WHERE
-	(
-		TG_EmployeeUpdateChildInfo.IsApproved = 'N'
-	)";
+FROM TG_EmployeeUpdateChildInfo INNER JOIN
+                         CD_Zone INNER JOIN
+                         CD_Districts ON CD_Zone.DistrictCode = CD_Districts.DistCode ON TG_EmployeeUpdateChildInfo.ZoneCode = CD_Zone.CenCode INNER JOIN
+                         UP_StaffChildren INNER JOIN
+                         TeacherMast ON UP_StaffChildren.NIC = TeacherMast.NIC ON TG_EmployeeUpdateChildInfo.StaffChildID = UP_StaffChildren.ID
+WHERE (		TG_EmployeeUpdateChildInfo.IsApproved = 'N'	)";
 
         if ($_SESSION['AccessRoleType'] == 'ZN') {
             $sql .= " and TG_EmployeeUpdateChildInfo.ZoneCode='$loggedSchool'";
         }
+
+        if ($_SESSION['AccessRoleType'] == 'PD') {
+            $sql .= " and TG_EmployeeUpdateChildInfo.ZoneCode IN ( SELECT CD_Zone.CenCode
+                        FROM CD_Provinces INNER JOIN CD_Districts ON CD_Provinces.ProCode = CD_Districts.ProCode
+                        INNER JOIN CD_Zone ON CD_Zone.DistrictCode = CD_Districts.DistCode
+                        WHERE CD_provinces.ProCode = CONCAT('P', SUBSTRING('$loggedSchool',3,2)))";
+        }
+
         $rowCount = $db->rowCount($sql);
         if ($rowCount > 0) {
             return $rowCount;
@@ -329,6 +361,14 @@ FROM            TG_EmployeeUpdateQualification INNER JOIN
         if ($_SESSION['AccessRoleType'] == 'ZN') {
             $sql .= " and TG_EmployeeUpdateQualification.ZoneCode='$loggedSchool'";
         }
+
+        if ($_SESSION['AccessRoleType'] == 'PD') {
+            $sql .= " and TG_EmployeeUpdateQualification.ZoneCode IN ( SELECT CD_Zone.CenCode
+                        FROM CD_Provinces INNER JOIN CD_Districts ON CD_Provinces.ProCode = CD_Districts.ProCode
+                        INNER JOIN CD_Zone ON CD_Zone.DistrictCode = CD_Districts.DistCode
+                        WHERE CD_provinces.ProCode = CONCAT('P', SUBSTRING('$loggedSchool',3,2)))";
+        }
+
       //  echo $sql;
         $rowCount = $db->rowCount($sql);
         if ($rowCount > 0) {
@@ -348,11 +388,108 @@ WHERE        (TG_EmployeeUpdateTeaching.IsApproved = 'N')";
         if ($_SESSION['AccessRoleType'] == 'ZN') {
             $sql .= " and TG_EmployeeUpdateTeaching.ZoneCode='$loggedSchool'";
         }
+
+        if ($_SESSION['AccessRoleType'] == 'PD') {
+            $sql .= " and TG_EmployeeUpdateTeaching.ZoneCode IN ( SELECT CD_Zone.CenCode
+                        FROM CD_Provinces INNER JOIN CD_Districts ON CD_Provinces.ProCode = CD_Districts.ProCode
+                        INNER JOIN CD_Zone ON CD_Zone.DistrictCode = CD_Districts.DistCode
+                        WHERE CD_provinces.ProCode = CONCAT('P', SUBSTRING('$loggedSchool',3,2)))";
+        }
+
         $rowCount = $db->rowCount($sql);
         if ($rowCount > 0) {
             return $rowCount;
         }
     }
+// var_dump($_SESSION);
+$Procode = $_SESSION['ProCodeU'];
+$ZoneCode = $_SESSION['ZoneCodeU']; 
+//appointment_new from 2020-07-01
+    if ($pageId == '32') {
+        $sql = "SELECT Temp_AppoinmentDetails.ID
+        ,Temp_AppoinmentDetails.NIC
+        ,[SurnameWithInitials]
+        ,[FullName]
+        ,[AppCategory]
+        ,[AppSubject]
+        ,[Medium]
+        ,Temp_AppoinmentDetails.SchoolType
+        ,[OtherSub]
+        ,[RecordStatus]
+        ,Temp_AppoinmentDetails.LastUpdate
+        ,Temp_AppoinmentDetails.RecordLog
+        ,CD_Zone.InstitutionName
+        ,CD_Provinces.ProCode
+    FROM Temp_AppoinmentDetails
+    INNER JOIN [TeacherMast] ON Temp_AppoinmentDetails.NIC = TeacherMast.NIC 
+    INNER JOIN StaffServiceHistory ON TeacherMast.CurServiceRef = StaffServiceHistory.ID 
+    INNER JOIN CD_CensesNo ON StaffServiceHistory.InstCode = CD_CensesNo.CenCode
+    INNER JOIN CD_Zone ON CD_CensesNo.ZoneCode = CD_Zone.CenCode
+    INNER JOIN CD_Districts ON CD_Zone.DistrictCode = CD_Districts.DistCode
+	INNER JOIN CD_Provinces ON CD_Districts.ProCode = CD_Provinces.ProCode
+    WHERE RecordStatus = '0'";
+
+        if ($_SESSION['AccessRoleType'] == 'ZN') {
+            $sql .= " and TG_EmployeeUpdateTeaching.ZoneCode='$ZoneCode'";
+        }
+
+        if ($_SESSION['AccessRoleType'] == 'PD') {
+            $sql .= " and CD_Provinces.ProCode = '$Procode'";
+        }
+
+        $rowCount = $db->rowCount($sql);
+        if ($rowCount > 0) {
+            return $rowCount;
+        }
+    }
+// teaching new from 2020-07-01
+    if ($pageId == '33') {
+        $sql = "SELECT Temp_TeachingDetails.ID
+        ,Temp_TeachingDetails.NIC
+        ,[SurnameWithInitials]
+        ,[FullName]
+        ,[TchSubject1]
+        ,[TchSubject2]
+        ,[TchSubject3]
+        ,[Other1]
+        ,[Other2]
+        ,[Other3]
+        ,[Medium1]
+        ,[Medium2]
+        ,[Medium3]
+        ,[GradeCode1]
+        ,[GradeCode2]
+        ,[GradeCode3]
+        ,[OtherSpecial]
+        ,Temp_TeachingDetails.SchoolType
+        ,Temp_TeachingDetails.RecStatus
+        ,Temp_TeachingDetails.RecordLog
+        ,Temp_TeachingDetails.LastUpdate
+        ,CD_Zone.InstitutionName
+		,CD_Provinces.ProCode
+    FROM [MOENational].[dbo].[Temp_TeachingDetails] 
+    INNER JOIN [TeacherMast] ON Temp_TeachingDetails.NIC = TeacherMast.NIC
+    INNER JOIN StaffServiceHistory ON TeacherMast.CurServiceRef = StaffServiceHistory.ID 
+    INNER JOIN CD_CensesNo ON StaffServiceHistory.InstCode = CD_CensesNo.CenCode
+    INNER JOIN CD_Zone ON CD_CensesNo.ZoneCode = CD_Zone.CenCode
+	INNER JOIN CD_Districts ON CD_Zone.DistrictCode = CD_Districts.DistCode
+	INNER JOIN CD_Provinces ON CD_Districts.ProCode = CD_Provinces.ProCode
+    WHERE Temp_TeachingDetails.RecStatus = '0'";
+
+        if ($_SESSION['AccessRoleType'] == 'ZN') {
+            $sql .= " and CD_CensesNo.ZoneCode='$ZoneCode'";
+        }
+
+        if ($_SESSION['AccessRoleType'] == 'PD') {
+            $sql .= " and CD_Provinces.ProCode = '$Procode'";
+        }
+
+        $rowCount = $db->rowCount($sql);
+        if ($rowCount > 0) {
+            return $rowCount;
+        }
+    }
+
     // Services
     if ($pageId == '22') {
         $sql = "SELECT     UP_StaffServiceHistory.ID
@@ -364,8 +501,15 @@ FROM            UP_StaffServiceHistory INNER JOIN
                          CD_Zone ON CD_CensesNo.ZoneCode = CD_Zone.CenCode INNER JOIN
                          TG_Approval ON UP_StaffServiceHistory.ID = TG_Approval.RequestID";
 
-        if ($_SESSION['AccessRoleType'] != 'NC') {
+        if ($_SESSION['AccessRoleType'] == 'ZN') {
             $sql .= " WHERE        (UP_StaffServiceHistory.NIC <> '') AND (TG_Approval.RequestType = 'ServiceUpdate') AND (TG_Approval.ApprovedStatus = N'P') AND (TG_Approval.ApproveInstCode = '$loggedSchool')"; /* //last AND added on 15th Aug 2016 */
+        }
+
+        if ($_SESSION['AccessRoleType'] == 'PD') {
+            $sql .= " WHERE        (UP_StaffServiceHistory.NIC <> '') AND (TG_Approval.RequestType = 'ServiceUpdate') AND (TG_Approval.ApprovedStatus = N'P') AND (TG_Approval.ApproveInstCode IN ( SELECT CD_Zone.CenCode
+                        FROM CD_Provinces INNER JOIN CD_Districts ON CD_Provinces.ProCode = CD_Districts.ProCode
+                        INNER JOIN CD_Zone ON CD_Zone.DistrictCode = CD_Districts.DistCode
+                        WHERE CD_provinces.ProCode = CONCAT('P', SUBSTRING('$loggedSchool',3,2))))"; /* //last AND added on 15th Aug 2016 */
         }
 
         if ($_SESSION['AccessRoleType'] == 'NC') {

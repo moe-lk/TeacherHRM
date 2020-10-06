@@ -1,5 +1,5 @@
 <?php
-
+// phpinfo();
 // Modification history
 // 17 May 2018: Dr Chandana Gamage: 12-digit NIC verification code added. Code formatting re-adjusted
 
