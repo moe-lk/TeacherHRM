@@ -2,3 +2,6 @@
 THR/teacherprofile/======================================CR.txt
 THR/db_config/DBManager.php
 THR/db_config/DBManager.php
+THR/db_config/connectionNEW.php
+THR/db_config/connectionPDO.php
+THR/db_config/DBManager.php
