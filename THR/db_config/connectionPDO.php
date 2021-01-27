@@ -1,5 +1,5 @@
 <?php
-$conn = new PDO("sqlsrv:Server= TYRFING;Database=MOENational", "na", "na1234");
+$conn = new PDO("sqlsrv:Server= DESKTOP-7CGB28J;Database=MOENational", "sa", "sa1234");
 
 
 ?>

@@ -156,7 +156,6 @@ if ($theam == "theam3") {
                 </div>
             </div>
         </form>
-<?php //var_dump($_SESSION); ?>
         <!--header end-->
         <div id="main_content_outer">
             <div id="main_content_inner">
@@ -166,81 +165,11 @@ if ($theam == "theam3") {
                         <div class="containerHeaderOne">
                             <div class="midArea"> 
                                 <div class="productsAreaRight" style="padding: 10px;">
-                                    <!-- <h3>Sinhala Medium</h3>
-                                    <table class="table">
-                                        <tr>
-                                            <td>
-                                            
-                                            </td>
-                                        </tr>
-                                    </table>
-                                    <br>
-                                    <h3>Tamil Medium</h3>
-                                    <table class="table">
-                                        <tr>
-                                            <td>
-                                            
-                                            </td>
-                                        </tr>
-                                    </table>
-                                    <br>
-                                    <h3>English Medium</h3>
-                                    <table class="table">
-                                        <tr>
-                                            <td>
-                                            
-                                            </td>
-                                        </tr>
-                                    </table>
-                                    <hr> -->
-                                    <form method='POST' action='import-excell.php'>
-                                        <!-- <table>
-                                        <tr style="padding: 5px; text-align: left;">
-                                        <td>Medium: </td>
-                                        <td>
-                                            <select id="Medium" name="Medium">
-                                                <option value=''>Select</option> -->
-                                                <?php // for meium combo box
-                                                // $sql = "SELECT * FROM CD_Medium WHERE Code != ''";
-                                                // $stmt = $db->runMsSqlQuery($sql);
-                                                // while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-                                                //     $MedID = trim($row['Code']);
-                                                //     $AppMeduim = $row['Medium'];
-                                                //     // $seltebr = "";
-                                                //     // if($MedID == $MEDCode){
-                                                //     //     $seltebr = "selected";
-                                                //     // }
-                                                //     echo "<option value=" . $MedID . ">" . $AppMeduim . "</option>";
-                                                // }
-                                                ?>
-                                            <!-- </select>
-                                        </td>
-                                        </tr>
-                                        <tr style="padding: 5px; text-align: left;">
-                                        <td>Grade Span: </td>
-                                        <td>
-                                        <select id="GradTch" name="GradTch"> -->
-                                        <?php // for meium combo box 
-                                        // $sql = "SELECT * FROM CD_TeachSubCategory WHERE ID IS NOT NULL";
-                                        // $stmt = $db->runMsSqlQuery($sql);
-                                        // while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-                                        //     $TchGrade = $row['CategoryName'];
-                                        //     $TchGradeCode = $row['ID'];
-                                        //     // $seltebr = "";
-                                        //     // if($TchGradeCode == $TempGradeCode3){
-                                        //     //     $seltebr = "selected";
-                                        //     // }
-                                        //     echo "<option value=" . $TchGradeCode . ">" . $TchGrade . "</option>";
-                                        // }
-                                        ?>
-                                        <!-- </select>
-                                        </td>
-                                        </tr>
-                                        </table> -->
-                                        <input type='submit' class="btn btn-primary btn-lg" value="Import to Excell">
+
+                                    <form method='POST' action='incomplete.php'>
+                                        
+                                        <input type='submit' class="btn btn-primary btn-lg" value="Import teachers list">
                                     </form>
-                                    <!-- <button type="button" class="btn btn-primary btn-lg" onclick="document.location.href='import-excell.php'">Import to Excell</button> -->
-                                    <!-- <button type="button" class="btn btn-secondary btn-lg" onclick="document.location.href='import-pdf.php'">Import to PDF</button> -->
                                 </div>
                             </div>
                         </div>

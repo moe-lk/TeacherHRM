@@ -182,8 +182,8 @@ if(isset($_POST["FrmSubmit"])){
                             $sql = "SELECT Code, SubjectName FROM CD_TeachSubjects";
                             $stmt = $db->runMsSqlQuery($sql);
                             while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-								            $SubCode=$row['Code'];
-                            $SubName=$row['SubjectName'];
+								              $SubCode=$row['Code'];
+                              $SubName=$row['SubjectName'];
                             
                                 echo "<option value=\"$SubCode\">$SubName</option>";
                             }

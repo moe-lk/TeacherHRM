@@ -6,7 +6,7 @@ session_start();
 include '../db_config/DBManager.php';
 $db = new DBManager();
 include '../db_config/connectionNEW.php';
-
+// var_dump($_SESSION);
 $NICUser = $_SESSION["NIC"];
 $accLevel = $_SESSION["accLevel"];
 $loggedPositionName = $_SESSION['loggedPositionName'];
@@ -170,7 +170,7 @@ if ($theam == "theam3") {
                                         <label for="exampleFormControlSelect1">School Category</label>
                                         <select class="form-control" id="SchType" name="SchType">
                                         <?php
-                                            $sql = "SELECT * FROM [MOENational].[dbo].[CD_CensesCategory]";
+                                            $sql = "SELECT * FROM CD_CensesCategory WHERE ID IN ('1','3')";
                                             $stmt = $db->runMsSqlQuery($sql);
                                             while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
                                                 $AppId = trim($row['ID']);
@@ -193,7 +193,7 @@ if ($theam == "theam3") {
                                     <input type="hidden" name="District" id="District" value="<?php echo $District ?>">
                                     <input type="hidden" name="ZONECODE" id="ZONECODE" value="<?php echo $ZONECODE ?>">
                                     <br>
-                                    <input type="submit" id="btncalc1" class="btn btn-primary" value = "calculate Available Teachers">
+                                    <input type="submit" id="btncalc1" class="btn btn-primary" value = "Calculate Available Teachers">
                                     </form>
                                     <br>
                                     <div class="form-group" id="process" style="display:none;">
@@ -203,10 +203,53 @@ if ($theam == "theam3") {
                                     </div>
  
                                     <hr>
-                                    <form  action="calculation2.php">
+                                    <form  action="calculation2.php" method='POST'>
+                                    <table>
+                                        <tr style="padding: 5px; text-align: left;">
+                                        <td>Medium: </td>
+                                        <td>
+                                            <select id="Medium" name="Medium">
+                                                <option value=''>Select</option>
+                                                <?php // for meium combo box
+                                                $sql = "SELECT * FROM CD_Medium WHERE Code != ''";
+                                                $stmt = $db->runMsSqlQuery($sql);
+                                                while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                                    $MedID = trim($row['Code']);
+                                                    $AppMeduim = $row['Medium'];
+                                                    // $seltebr = "";
+                                                    // if($MedID == $MEDCode){
+                                                    //     $seltebr = "selected";
+                                                    // }
+                                                    echo "<option value=" . $MedID . ">" . $AppMeduim . "</option>";
+                                                }
+                                                ?>
+                                            </select>
+                                        </td>
+                                        </tr>
+                                        <tr style="padding: 5px; text-align: left;">
+                                        <td>Grade Span: </td>
+                                        <td>
+                                        <select id="GradTch" name="GradTch">
+                                        <?php // for meium combo box 
+                                        $sql = "SELECT * FROM CD_TeachSubCategory WHERE ID IS NOT NULL";
+                                        $stmt = $db->runMsSqlQuery($sql);
+                                        while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                            $TchGrade = $row['CategoryName'];
+                                            $TchGradeCode = $row['ID'];
+                                            // $seltebr = "";
+                                            // if($TchGradeCode == $TempGradeCode3){
+                                            //     $seltebr = "selected";
+                                            // }
+                                            echo "<option value=" . $TchGradeCode . ">" . $TchGrade . "</option>";
+                                        }
+                                        ?>
+                                        </select>
+                                        </td>
+                                        </tr>
+                                        </table>
                                         <input type="hidden" name="NICUser2" id="NICUser2" value="<?php echo $NICUser ?>">
 
-                                        <input type="submit" id="btncalc2" class="btn btn-primary" value = "calculate Cardre">
+                                        <input type="submit" id="btncalc2" class="btn btn-primary" value = "Calculate Cardre">
                                     </form>
                                     <br>
                                     <hr>
@@ -224,12 +267,17 @@ if ($theam == "theam3") {
 $SchType = $_POST['SchType'];
 $NICUser = $_POST['NICUser'];
 $NICUser2 = $_POST['NICUser2'];
+$medium = $_POST['Medium'];
+$grade = $_POST['GradTch'];
+
 $accLevel = $_SESSION["accLevel"];
 $loggedPositionName = $_SESSION['loggedPositionName'];
 $accessRoleType = $_SESSION['AccessRoleType'];
 $ProCode = $_SESSION['ProCodeU'];
 $District = $_SESSION['DistCodeU'];
 $ZONECODE = $_SESSION['ZoneCodeU'];
+
+
 ?>
 <script>
  
