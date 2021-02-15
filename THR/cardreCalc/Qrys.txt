@@ -1,0 +1,87 @@
+Use MOENational
+SELECT CenCode, TchSubject1, Medium1, Count(TeachingDetails.NIC) AS AvailableTCH
+    INTO #Table2
+    FROM TeachingDetails 
+    INNER JOIN TeacherMast ON TeachingDetails.NIC = TeacherMast.NIC
+    INNER JOIN StaffServiceHistory ON StaffServiceHistory.ID = TeacherMast.CurServiceRef
+    INNER JOIN CD_CensesNo ON CD_CensesNo.CenCode = StaffServiceHistory.InstCode
+    GROUP BY CenCode, TchSubject1, Medium1
+
+UPDATE AvaliableTeachers 
+SET AvaliableTeachers.AvailableTch = p.AvailableTCH
+FROM AvaliableTeachers av
+INNER JOIN #Table2 p
+ON av.CenCode = p.CenCode 
+Inner Join #Table2 q
+ON av.SubCode = q.TchSubject1
+Inner JOIN #Table2 r
+ON av.Medium = r.Medium1
+ 
+ SELECT * FROM #Table2 WHERE CenCode = 'SC07105'
+
+DROP TABLE  #Table2
+
+SELECT DISTINCT AC.CenCode, AC.SubCode, AC.Medium, AT1.AvailableTch , ApprCardre, (AC.ApprCardre - AT1.AvailableTch) AS EXCDEF
+INTO #tablec 
+FROM ApprovedCardre AC
+INNER JOIN AvailableTeachers AT1 
+ON AC.CenCode = AT1.CenCode
+INNER JOIN AvailableTeachers AT2
+ON AC.SubCode = AT2.SubCode
+INNER JOIN AvailableTeachers AT3
+ON AC.Medium = AT3.Medium
+
+SELECT A1.[ID] ,
+A1.[CenCode] AS school_id ,
+A1.[SubCode] AS subject_id ,
+A1.[SecCode] ,A1.[Medium] ,
+A1.[AvailableTch] ,
+A2.[ApprCardre] ,
+E1.[ExcDef] AS excess_dificit
+INTO #tempcardre1$NIC
+FROM AvailableTeachers AS A1
+INNER JOIN ExcessDeficit AS E1
+ON A1.SubCode = E1.SubCode
+INNER JOIN ApprovedCardre AS A2 ON A1.SubCode = A2.SubCode
+
+SELECT * FROM #tempcardre1$NIC
+
+select * FROM
+(
+SELECT rc.school_id, rc.school_name, rc.subject_name, rc.ZoneCode, rc.SchoolType,
+rc.subject_name+'(1)' AS subject_name1,
+rc.subject_name+'(2)' AS subject_name2,
+rd.excess_dificit,
+rd.AvailableTch,
+rd.ApprCardre
+FROM
+(
+	SELECT sch.CenCode AS school_id,
+	sch.InstitutionName AS school_name,
+	sch.ZoneCode AS ZoneCode,
+	sub.id AS subject_id,
+	sub.SubjectName AS subject_name,
+	sch.SchoolType AS SchoolType
+	FROM CD_CensesNo sch
+	CROSS JOIN CD_TeachSubjects sub
+) rc
+	LEFT JOIN 
+	(
+		SELECT * FROM #tempcardre1$NIC)
+		rd ON rc.school_id = rc.school_id 
+		AND rc.subject_id = rd.subject_id
+	)
+report
+PIVOT (COUNT(excess_dificit)
+FOR subject_name IN([Sub1],[Sub2],[Sub3],[Sub4],[Sub5]))
+AS Pivot_tbl
+
+PIVOT (COUNT(AvailableTch)
+FOR subject_name1 IN([Sub1(1)],[Sub2(1)],[Sub3(1)],[Sub4(1)],[Sub5(1)]))
+AS Pivot_tbl
+
+PIVOT (COUNT(ApprCardre)
+FOR subject_name2 IN([Sub1(2)],[Sub2(2)],[Sub3(2)],[Sub4(2)],[Sub5(2)]))
+AS Pivot_tbl
+
+https://docs.google.com/document/d/1e0uiXwW9J0inE4KyAr4OP1O_XbWb5PoJ0SYWt49HII8/edit?usp=sharing

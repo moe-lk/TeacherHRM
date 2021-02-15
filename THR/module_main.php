@@ -514,11 +514,16 @@ $theamPath = "cms/images/";
                         $is_parent = $row['IsParent'];
                         $show_menu = $row['ShowMenu'];
                         
+
+                        // var_dump($rowid);
                         if($rowid==4){
                             $url = "myprofile/personalInfo-1--".$NICUser.".html";
                         }
+                        // if($rowid==15){
+                        //     $url = "myprofileTCH/personalInfo-23--".$NICUser.".html";
+                        // }
                         if($rowid==74){
-                            $url = "myprofileTCH/personalInfo-1--".$NICUser.".html";
+                            $url = "myprofileTCH/personalInfo-23--".$NICUser.".html";
                         }
                         ?>
 

@@ -39,7 +39,7 @@ if ($pageid == '')
 $loggedPositionName = $_SESSION['loggedPositionName'];
 $accLevel = trim($_SESSION["accLevel"]);
 $AccessRoleType = $_SESSION['AccessRoleType'];
-// var_dump($AccessRoleType);
+
 $querySaveVal = "";
 
 $theamPath = "../cms/images/";
@@ -62,30 +62,8 @@ $url = (!empty($_SERVER['HTTPS'])) ? "https://" . $_SERVER['SERVER_NAME'] . $_SE
 $exUrl = explode('/', $url);
 $folderLocation = count($exUrl) - 2;
 $ModuleFolder = $exUrl[$folderLocation];
+//echo $accLevel;
 $CenCodex = trim($_SESSION['loggedSchool']);
-$nicNO = $_SESSION["NIC"];
-
-$loggedPositionName = $_SESSION['loggedPositionName'];
-$accLevel = trim($_SESSION["accLevel"]);
-$AccessRoleType = $_SESSION['AccessRoleType'];
-//$nicNO = '791231213V';
-$querySaveVal = "";
-
-$theamPath = "../cms/images/";
-$theam = "theam1";
-if ($theam == "theam1") {
-    $theamMenuFontColor = "#0888e2";
-    $theamMenuButtonColor = "#3973b1";
-}
-if ($theam == "theam2") {
-    $theamMenuFontColor = "#d98813";
-    $theamMenuButtonColor = "#3a2a07";
-}
-if ($theam == "theam3") {
-    $theamMenuFontColor = "#c2379b";
-    $theamMenuButtonColor = "#8839b1";
-}
-
 if (isset($_POST["FrmSubmit"])) {
     $msg = "";
     $InstCode = $_REQUEST['InstCode'];
@@ -106,6 +84,7 @@ if (isset($_POST["FrmSubmit"])) {
     if ($msg == '') {
         //if($accLevel=='1000'){
         header("Location:teacherList-0.html");
+        // var_dump($_REQUEST['InstCode']);
         /* }else if($accLevel=='3000'){
           header("Location:grade-1.html");
           }else{
@@ -145,9 +124,9 @@ WHERE
     $restZone = substr($CenCodex, -4, 4);
     $divCodeLoged = "ED" . $restZone;
 
-    $sql = "SELECT CD_Division.CenCode, CD_Division.DistrictCode, CD_Division.ZoneCode, CD_Districts.ProCode
-FROM CD_Division INNER JOIN
-  CD_Districts ON CD_Division.DistrictCode = CD_Districts.DistCode
+    $sql = "SELECT     CD_Division.CenCode, CD_Division.DistrictCode, CD_Division.ZoneCode, CD_Districts.ProCode
+FROM         CD_Division INNER JOIN
+                      CD_Districts ON CD_Division.DistrictCode = CD_Districts.DistCode
 WHERE        (CD_Division.CenCode = N'$divCodeLoged')";
     $stmt = $db->runMsSqlQuery($sql);
     $rowA = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
@@ -221,6 +200,8 @@ WHERE
 }
 
 
+///echo $accLevel;
+//echo $AccessRoleType;
 ?>
 
 <!DOCTYPE html>
@@ -269,7 +250,7 @@ WHERE
         </style>
         <script src="js/jquery-1.9.1.js"></script>
         <script src="js/jquery.tabify.js" type="text/javascript" charset="utf-8"></script>
-        <script src="js/FilterDB.js" language="javascript"></script>
+        <script src="js/FilterDB.js"  language="javascript"></script>
         <script type="text/javascript">
             $(document).ready(function () {
                 $('#menu').tabify();
@@ -395,9 +376,9 @@ WHERE
                                                                     <td width="27%">Province</td>
                                                                     <td width="2%">:</td>
                                                                     <td width="71%"><select class="select2a_n" id="ProCode" name="ProCode" onchange="Javascript:show_district('districtList', this.options[this.selectedIndex].value, '');" <?php echo $disaTxt ?><?php echo $disaTxtPro ?><?php echo $disaTxtDiv ?>>
-                                                                            <option value="">Province Name</option>
+                                                                            <!--<option value="">Select Province</option>-->
                                                                             <?php
-                                                                            $sql = "SELECT ProCode,Province FROM CD_Provinces WHERE ProCode<>'' order by Province asc";
+                                                                            $sql = "SELECT ProCode,Province FROM CD_Provinces order by Province asc";
                                                                             $stmt = $db->runMsSqlQuery($sql);
                                                                             while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
                                                                                 $DistCoded = trim($row['ProCode']);
@@ -411,12 +392,10 @@ WHERE
                                                                             ?>
                                                                         </select></td>
                                                                 </tr>
-                                                                
                                                                 <tr>
                                                                     <td>District</td>
                                                                     <td>:</td>
-                                                                    <td><div id="txt_district">
-                                                                            <select class="select2a_n" id="DistrictCode" name="DistrictCode" onchange="Javascript:show_zone('zonelist', this.options[this.selectedIndex].value, '');" <?php echo $disaTxt ?><?php echo $disaTxtDiv ?> <?php echo $disaTxtDis ?>>
+                                                                    <td><div id="txt_district"><select class="select2a_n" id="DistrictCode" name="DistrictCode" onchange="Javascript:show_zone('zonelist', this.options[this.selectedIndex].value, '');" <?php echo $disaTxt ?><?php echo $disaTxtDiv ?> <?php echo $disaTxtDis ?>>
                                                                                 <option value="">District Name</option>
                                                                                 <?php
                                                                                  $sql = "SELECT DistCode,DistName FROM CD_Districts where ProCode='$ProCodex' order by DistName asc";
@@ -436,14 +415,8 @@ WHERE
                                                                                     }
                                                                                 }
                                                                                 ?>
-                                                                            </select>
-                                                                        </div>
-                                                                    </td>
+                                                                            </select></div></td>
                                                                 </tr>
-                                                                <?php 
-                                                                    // var_dump($DistCoded);
-                                                                    // var_dump($DistrictCodex); 
-                                                                ?>
                                                                 <tr>
                                                                     <td>Zone</td>
                                                                     <td>:</td>
@@ -466,14 +439,10 @@ WHERE
                                                                                     }else{
                                                                                        echo "<option value=\"$DSCoded\" $seltebr>$DSNamed</option>"; 
                                                                                     }
+                                                                                    
                                                                                 }
                                                                                 ?>
                                                                             </select>
-                                                                            <?php 
-                                                                                // var_dump($disaTxt);
-                                                                                // var_dump($disaTxtPro); 
-                                                                                // var_dump($disaTxtDiv);
-                                                                            ?>
                                                                         </div></td>
                                                                 </tr>
                                                                 <tr>

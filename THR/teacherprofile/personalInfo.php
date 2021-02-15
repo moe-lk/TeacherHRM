@@ -22,6 +22,8 @@ if (isset($_POST["FrmSubmit"])) {
     $EthnicityCode = $_REQUEST['EthnicityCode'];
     $GenderCode = $_REQUEST['GenderCode'];
     $ReligionCode = $_REQUEST['ReligionCode'];
+    $WNOPNo = $_REQUEST['WNOPNo'];
+    $RegNo = $_REQUEST['RegNo'];
     $emailaddr = $_REQUEST['emailaddr'];
     $MobileTel = $_REQUEST['MobileTel'];
     $LastUpdate = date('Y-m-d H:i:s');
@@ -129,9 +131,9 @@ WHERE (TeacherMast.NIC = '$NICUser')";
         $TeacherMastID = 0;
         if ($TeacherMastIDA == '') {
             $queryMainSave = "INSERT INTO UP_TeacherMast
-			   (NIC,Title,SurnameWithInitials,FullName,DOB,EthnicityCode,PerResRef,CurResRef,CurServiceRef,GenderCode,ReligionCode,emailaddr,MobileTel,RecStatus,LastUpdate,UpdateBy,RecordLog)
+			   (NIC,Title,SurnameWithInitials,FullName,DOB,EthnicityCode,PerResRef,CurResRef,CurServiceRef,GenderCode,ReligionCode, WNOPNo, RegNo,emailaddr,MobileTel,RecStatus,LastUpdate,UpdateBy,RecordLog)
 		 VALUES
-			   ('$NICUser','$Title','$SurnameWithInitials','$FullName','$DOB','$EthnicityCode','$PermResiID','$CurrResID','$CurServiceRef','$GenderCode','$ReligionCode','$emailaddr','$MobileTel','0','$LastUpdate','$NICUserUpdate','First change')";
+			   ('$NICUser','$Title','$SurnameWithInitials','$FullName','$DOB','$EthnicityCode','$PermResiID','$CurrResID','$CurServiceRef','$GenderCode', '$WNOPNo', '$RegNo','$ReligionCode','$emailaddr','$MobileTel','0','$LastUpdate','$NICUserUpdate','First change')";
             //$db->runMsSqlQuery($queryMainSave);	
             $db->runMsSqlQuery($queryMainSave);
 
@@ -225,7 +227,7 @@ if ($menu == 'E') {
     $GSDivisionC = $rowABC['GSDivision'];
 
     $sqlPmast = "SELECT        UP_TeacherMast.ID, UP_TeacherMast.NIC, UP_TeacherMast.SurnameWithInitials, UP_TeacherMast.FullName, UP_TeacherMast.Title, UP_TeacherMast.MobileTel, CONVERT(varchar(20), 
-                         UP_TeacherMast.DOB, 121) AS DOB, CD_nEthnicity.EthnicityName, CD_Religion.ReligionName, CD_Gender.[Gender Name], UP_TeacherMast.emailaddr, CD_Title.TitleName,
+                         UP_TeacherMast.DOB, 121) AS DOB, CD_nEthnicity.EthnicityName, CD_Religion.ReligionName, WNOPNo, RegNo, CD_Gender.[Gender Name], UP_TeacherMast.emailaddr, CD_Title.TitleName,
                           UP_TeacherMast.GenderCode, UP_TeacherMast.EthnicityCode, UP_TeacherMast.ReligionCode
 FROM            UP_TeacherMast LEFT JOIN
                          CD_Gender ON UP_TeacherMast.GenderCode = CD_Gender.GenderCode LEFT JOIN
@@ -244,6 +246,10 @@ WHERE  UP_TeacherMast.ID='$TeacherMastIDA'"; //     (UP_TeacherMast.NIC = N'$NIC
     $DOB = $rowPm['DOB'];
     $EthnicityName = $rowPm['EthnicityName'];
     $ReligionName = $rowPm['ReligionName'];
+    
+    $WNOPNo = $rowPm['WNOPNo'];
+    $RegNo = $rowPm['RegNo'];
+
     $GenderName = $rowPm['Gender Name'];
     $emailaddr = $rowPm['emailaddr'];
     $TitleName = $rowPm['TitleName'];
@@ -256,7 +262,7 @@ WHERE  UP_TeacherMast.ID='$TeacherMastIDA'"; //     (UP_TeacherMast.NIC = N'$NIC
 if ($isAvailablePmast != 1) {
     $pMastStatus = "Add";
     $sqlPers = "SELECT        TeacherMast.ID, TeacherMast.NIC, TeacherMast.SurnameWithInitials, TeacherMast.FullName, TeacherMast.Title, TeacherMast.MobileTel, CONVERT(varchar(20), 
-							 TeacherMast.DOB, 121) AS DOB, CD_nEthnicity.EthnicityName, CD_Religion.ReligionName, CD_Gender.[Gender Name], TeacherMast.emailaddr, CD_Title.TitleName,
+							 TeacherMast.DOB, 121) AS DOB, CD_nEthnicity.EthnicityName, CD_Religion.ReligionName, WNOPNo, RegNo, CD_Gender.[Gender Name], TeacherMast.emailaddr, CD_Title.TitleName,
 							  TeacherMast.GenderCode, TeacherMast.EthnicityCode, TeacherMast.ReligionCode
 	FROM            TeacherMast LEFT JOIN
 							 CD_Gender ON TeacherMast.GenderCode = CD_Gender.GenderCode LEFT JOIN
@@ -274,6 +280,10 @@ if ($isAvailablePmast != 1) {
     $DOB = $rowA['DOB'];
     $EthnicityName = $rowA['EthnicityName'];
     $ReligionName = $rowA['ReligionName'];
+
+    $WNOPNo = $rowA['WNOPNo'];
+    $RegNo = $rowA['RegNo'];
+
     $GenderName = $rowA['Gender Name'];
     $emailaddr = $rowA['emailaddr'];
     $TitleName = $rowA['TitleName'];
@@ -361,7 +371,11 @@ if ($isAvailableCurAdd != 1) {
                                 <td align="left" valign="top"><strong>:</strong></td>
                                 <td align="left" valign="top"><?php echo $DOB ?></td>
                             </tr>
-
+                            <tr>
+                                <td align="left" valign="top"><strong>W & OP No.</strong></td>
+                                <td align="left" valign="top"><strong>:</strong></td>
+                                <td align="left" valign="top"><?php echo $WNOPNo ?></td>
+                            </tr>
                         </table>
                     </td>
                     <td width="50%" valign="top"><table width="100%" cellspacing="2" cellpadding="2">
@@ -389,6 +403,11 @@ if ($isAvailableCurAdd != 1) {
                                 <td align="left" valign="top"><strong>Mobile Number</strong></td>
                                 <td align="left" valign="top"><strong>:</strong></td>
                                 <td align="left" valign="top"><?php echo $MobileTel ?></td>
+                            </tr>
+                            <tr>
+                                <td align="left" valign="top"><strong>Registration No.</strong></td>
+                                <td align="left" valign="top"><strong>:</strong></td>
+                                <td align="left" valign="top"><?php echo $RegNo ?></td>
                             </tr>
                         </table></td>
                 </tr>
@@ -511,7 +530,7 @@ if ($isAvailableCurAdd != 1) {
     $CurrResIDA = trim($rowAllready['CurrResID']);
 
     $sqlPmast = "SELECT        UP_TeacherMast.ID, UP_TeacherMast.NIC, UP_TeacherMast.SurnameWithInitials, UP_TeacherMast.FullName, UP_TeacherMast.Title, UP_TeacherMast.MobileTel, CONVERT(varchar(20), 
-                         UP_TeacherMast.DOB, 121) AS DOB, CD_nEthnicity.EthnicityName, CD_Religion.ReligionName, CD_Gender.[Gender Name], UP_TeacherMast.emailaddr, CD_Title.TitleName,
+                         UP_TeacherMast.DOB, 121) AS DOB, CD_nEthnicity.EthnicityName, CD_Religion.ReligionName, WNOPNo, RegNo,CD_Gender.[Gender Name], UP_TeacherMast.emailaddr, CD_Title.TitleName,
                           UP_TeacherMast.GenderCode, UP_TeacherMast.EthnicityCode, UP_TeacherMast.ReligionCode
 FROM            UP_TeacherMast LEFT JOIN
                          CD_Gender ON UP_TeacherMast.GenderCode = CD_Gender.GenderCode LEFT JOIN
@@ -534,6 +553,9 @@ WHERE  (UP_TeacherMast.ID='$TeacherMastIDA')";
         $DOB = $rowPm['DOB'];
         $EthnicityName = $rowPm['EthnicityName'];
         $ReligionName = $rowPm['ReligionName'];
+
+        $WNOPNo = $rowPm['WNOPNo'];
+        $RegNo = $rowPm['RegNo'];
         $GenderName = $rowPm['Gender Name'];
         $emailaddr = $rowPm['emailaddr'];
         $TitleName = $rowPm['TitleName'];

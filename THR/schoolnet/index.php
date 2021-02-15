@@ -485,6 +485,8 @@ $params4 = array(
                                                 <li><a href="#qualifications">Qualifications</a></li>   
                                                 <li><a href="#teaching">Teaching</a></li>
                                                 <li><a href="#service">Service</a></li>
+                                                <li><a href="#Appointmentdetails">Appointmnet</a></li>
+                                                <li><a href="#Teachingdetails">Teaching</a></li>
                                                 <!-- <li><a href="#CircularCat">Circular Category</a></li> -->
                                                 <li><a href="#outOfService">Out of Service</a></li>
                                                 <li><a href="#columns">Columns</a></li>
@@ -1099,7 +1101,46 @@ WHERE        (TG_QuerySaveTeaching.ID = '$saveQID')";
                                                 </ul>
                                             </div>
                                             <!--End Service tab -->
-                                            
+                                            <!-- Appointment Details tab -->
+                                            <div id="Appointmentdetails" class="contenttab">
+                                                <ul id="itemContainer">
+                                                    <li>
+                                                    <div class="productsItemBoxText">
+
+                                                        <table width="850" border="0" bgcolor="#2D65A0" id="tblMainTeachDetails" cellpadding="3" cellspacing="1">
+                                                            <tr>
+                                                                <td width="105" align="center" bgcolor="#FFFFFF"><strong>Grade Span</strong></td>
+                                                                <td width="311" align="center" bgcolor="#FFFFFF"><strong>Subject</strong></td>
+                                                                <td width="102" align="center" bgcolor="#FFFFFF"><strong>Medium</strong></td>
+                                                                <!-- <td width="200" align="center" bgcolor="#FFFFFF"><strong>Section</strong></td> -->
+                                                                <td width="103" align="center" bgcolor="#FFFFFF"><strong>Remove</strong></td>
+                                                            </tr>
+                                                        </table>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <!-- End Appointment Details tab -->
+                                            <!-- Teaching Details tab -->
+                                            <div id="Teachingdetails" class="contenttab">
+                                                <ul id="itemContainer">
+                                                    <li>
+                                                    <div class="productsItemBoxText">
+
+                                                        <table width="850" border="0" bgcolor="#2D65A0" id="tblMainTeachDetails" cellpadding="3" cellspacing="1">
+                                                            <tr>
+                                                                <td width="105" align="center" bgcolor="#FFFFFF"><strong>Grade Span</strong></td>
+                                                                <td width="311" align="center" bgcolor="#FFFFFF"><strong>Subject</strong></td>
+                                                                <td width="102" align="center" bgcolor="#FFFFFF"><strong>Medium</strong></td>
+                                                                <!-- <td width="200" align="center" bgcolor="#FFFFFF"><strong>Section</strong></td> -->
+                                                                <td width="103" align="center" bgcolor="#FFFFFF"><strong>Remove</strong></td>
+                                                            </tr>
+                                                        </table>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <!-- End Teaching Details tab -->
                                             <!--outOfService tab -->
                                             <div id="outOfService" class="contenttab">
                                                 <ul id="itemContainer">
@@ -1137,9 +1178,7 @@ WHERE        (TG_QuerySaveTeaching.ID = '$saveQID')";
                                                 </ul>
                                             </div>
                                             <!--End serviceType tab -->
-
                                             
-
                                             <!--Select Colum-->
                                             <div id="columns" class="contenttab">
                                                 <ul id="itemContainer" style="list-style-type:none;">

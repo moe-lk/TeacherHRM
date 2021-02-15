@@ -64,6 +64,10 @@
                     $url = "myprofile/personalInfo-1--" . $NICUser . ".html";
                 }
 
+                if ($rowid == 74) {
+                    $url = "myprofileTCH/personalInfo-23--" . $NICUser . ".html";
+                }
+
                 $url = '../' . $url;
 
 

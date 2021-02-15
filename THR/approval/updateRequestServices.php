@@ -58,24 +58,22 @@ if ($id == '') {
       CD_Districts ON CD_CensesNo.DistrictCode = CD_Districts.DistCode INNER JOIN
       CD_Zone ON CD_CensesNo.ZoneCode = CD_Zone.CenCode
       WHERE        (UP_StaffServiceHistory.NIC <> '')"; */
-    $approvSql = "WITH LIMIT AS(SELECT        CD_CensesNo.InstitutionName, TeacherMast.SurnameWithInitials, CD_CensesNo.ZoneCode, CONVERT(varchar(20), UP_StaffServiceHistory.LastUpdate, 121) AS LastUpdate, TeacherMast.NIC, UP_StaffServiceHistory.ID,
-                         CD_Districts.DistName, CD_Zone.InstitutionName AS Expr1, TG_Approval.RequestType, TG_Approval.ApprovedByNIC, ROW_NUMBER() OVER (ORDER BY UP_StaffServiceHistory.ID ASC) AS 'RowNumber'
-FROM            UP_StaffServiceHistory INNER JOIN
-
-                         CD_CensesNo ON UP_StaffServiceHistory.InstCode = CD_CensesNo.CenCode INNER JOIN
-						 TeacherMast ON UP_StaffServiceHistory.NIC = TeacherMast.NIC INNER JOIN
-                         CD_Districts ON CD_CensesNo.DistrictCode = CD_Districts.DistCode INNER JOIN
-
-                         CD_Zone ON CD_CensesNo.ZoneCode = CD_Zone.CenCode INNER JOIN
-                         TG_Approval ON UP_StaffServiceHistory.ID = TG_Approval.RequestID";
+    $approvSql = "WITH LIMIT AS(SELECT CD_CensesNo.InstitutionName, TeacherMast.SurnameWithInitials, CD_CensesNo.ZoneCode, CONVERT(varchar(20), UP_StaffServiceHistory.LastUpdate, 121) AS LastUpdate, TeacherMast.NIC, UP_StaffServiceHistory.ID,
+                        CD_Districts.DistName, CD_Zone.InstitutionName AS Expr1, TG_Approval.RequestType, TG_Approval.ApprovedByNIC, ROW_NUMBER() OVER (ORDER BY UP_StaffServiceHistory.ID ASC) AS 'RowNumber'
+                        FROM UP_StaffServiceHistory INNER JOIN
+                        CD_CensesNo ON UP_StaffServiceHistory.InstCode = CD_CensesNo.CenCode INNER JOIN
+						TeacherMast ON UP_StaffServiceHistory.NIC = TeacherMast.NIC INNER JOIN
+                        CD_Districts ON CD_CensesNo.DistrictCode = CD_Districts.DistCode INNER JOIN
+                        CD_Zone ON CD_CensesNo.ZoneCode = CD_Zone.CenCode INNER JOIN
+                        TG_Approval ON UP_StaffServiceHistory.ID = TG_Approval.RequestID";
 
 
 
     if ($AccessRoleType != "NC") {
-        $approvSql .= " WHERE        (UP_StaffServiceHistory.NIC <> '') AND (TG_Approval.RequestType = 'ServiceUpdate') AND (TG_Approval.ApprovedStatus = N'P') AND (TG_Approval.ApproveInstCode = '$loggedSchool')"; /* //last AND added on 15th Aug 2016 */
+        $approvSql .= " WHERE (UP_StaffServiceHistory.NIC <> '') AND (TG_Approval.RequestType = 'ServiceUpdate') AND (TG_Approval.ApprovedStatus = N'P') AND (TG_Approval.ApproveInstCode = '$loggedSchool')"; /* //last AND added on 15th Aug 2016 */
     }
     if ($AccessRoleType == "NC") {
-        $approvSql .= " WHERE        (UP_StaffServiceHistory.NIC <> '') AND (TG_Approval.RequestType = 'ServiceUpdate') AND (TG_Approval.ApprovedStatus = N'RQ') AND (UP_StaffServiceHistory.IsApproved='N')";
+        $approvSql .= " WHERE (UP_StaffServiceHistory.NIC <> '') AND (TG_Approval.RequestType = 'ServiceUpdate') AND (TG_Approval.ApprovedStatus = N'RQ') AND (UP_StaffServiceHistory.IsApproved='N')";
     }
     if ($NICSearch)
         $approvSql .= " and (UP_StaffServiceHistory.NIC like '%$NICSearch%')";
@@ -92,13 +90,11 @@ FROM            UP_StaffServiceHistory INNER JOIN
 
 
     $countTotal = "SELECT  UP_StaffServiceHistory.ID
-FROM            UP_StaffServiceHistory INNER JOIN
-
-                         CD_CensesNo ON UP_StaffServiceHistory.InstCode = CD_CensesNo.CenCode INNER JOIN
-
-                         CD_Districts ON CD_CensesNo.DistrictCode = CD_Districts.DistCode INNER JOIN
-                         CD_Zone ON CD_CensesNo.ZoneCode = CD_Zone.CenCode INNER JOIN
-                         TG_Approval ON UP_StaffServiceHistory.ID = TG_Approval.RequestID";
+                    FROM UP_StaffServiceHistory INNER JOIN
+                    CD_CensesNo ON UP_StaffServiceHistory.InstCode = CD_CensesNo.CenCode INNER JOIN
+                    CD_Districts ON CD_CensesNo.DistrictCode = CD_Districts.DistCode INNER JOIN
+                    CD_Zone ON CD_CensesNo.ZoneCode = CD_Zone.CenCode INNER JOIN
+                    TG_Approval ON UP_StaffServiceHistory.ID = TG_Approval.RequestID";
 
     /* $countTotal="SELECT  UP_StaffServiceHistory.ID
       FROM            StaffServiceHistory INNER JOIN

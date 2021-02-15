@@ -48,6 +48,7 @@ $msg = "";
   }
   //sqlsrv_query($queryGradeSave);
   } */
+//   var_dump($loggedSchool);
 
 $sqlList = "SELECT        TeacherMast.SurnameWithInitials, TeacherMast.NIC AS Expr1, TeacherMast.MobileTel, TeacherMast.CurServiceRef, StaffServiceHistory.InstCode
 FROM            StaffServiceHistory INNER JOIN
